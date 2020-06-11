@@ -3,7 +3,7 @@
 
 #include "Engine.h"
 #include "Game.h"
-
+#include "Common/CommonEngine.h"
 
 void Engine::exe() {
 	std::cout << "Engine::exe()" << std::endl;
@@ -12,4 +12,5 @@ void Engine::exe() {
 
 void Engine::exeForGame() {
 	std::cout << "Engine::exeForGame()" << std::endl;
+	CommonEngineFun();
 }
