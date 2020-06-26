@@ -1,11 +1,11 @@
 
-//#include <glm/glm.hpp>
+#include <glm/glm.hpp>
 #include "Help.h"
 #include "FileManager.h"
 
 #include <iostream>
 
-//using namespace glm;
+using namespace glm;
 
 bool help::loadJson(const std::string& fileName, Json::Value& value)
 {
@@ -34,7 +34,7 @@ std::string help::stringFroJson(const Json::Value& value, const std::string& ind
 	return Json::writeString(writerBuilder, value);
 }
 
-/*bool help::intersection(vec3 start1, vec3 end1, vec3 start2, vec3 end2, vec3* out_intersection)
+bool help::intersection(vec3 start1, vec3 end1, vec3 start2, vec3 end2, vec3& out_intersection)
 {
 	vec3 dir1 = end1 - start1;
 	vec3 dir2 = end2 - start2;
@@ -60,7 +60,7 @@ std::string help::stringFroJson(const Json::Value& value, const std::string& ind
 		return false;
 
 	float u = seg1_line2_start / (seg1_line2_start - seg1_line2_end);
-	*out_intersection = start1 + u * dir1;
+	out_intersection = start1 + u * dir1;
 
 	return true;
-}*/
+}

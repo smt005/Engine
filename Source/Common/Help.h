@@ -5,8 +5,8 @@
 #include <vector>
 #include <algorithm>
 #include "json/json.h"
-//#include "glm/vec2.hpp"
-//#include "glm/vec3.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 #include <corecrt_math_defines.h>
 
 namespace help
@@ -15,7 +15,7 @@ namespace help
 	bool saveJson(const std::string& fileName, const Json::Value& value, const std::string& indentation = "\t");
 	std::string stringFroJson(const Json::Value& value, const std::string& indentation = "\t");
 
-	//bool intersection(glm::vec3 start1, glm::vec3 end1, glm::vec3 start2, glm::vec3 end2, glm::vec3 *out_intersection);
+	bool intersection(glm::vec3 start1, glm::vec3 end1, glm::vec3 start2, glm::vec3 end2, glm::vec3& out_intersection);
 
 	/*
 	v1 = rand() % 100;         // v1 in the range 0 to 99
