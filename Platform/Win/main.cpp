@@ -4,6 +4,9 @@
 #include "main.h"
 #include "Engine.h"
 
+#include "Core.h"
+#include "GamesManager.h"
+
 int main(int argc, char** argv)
 {
 	std::cout << "Hello, World!" << std::endl;
@@ -11,5 +14,7 @@ int main(int argc, char** argv)
 	
 	Engine::exe();
 	
-	return 0;
+	Engine::GamePtr gamePtr;
+	gamePtr = game::getGame(argc > 1 ? argv[1] : "MapExample");
+	return Engine::Core::execution(gamePtr);
 }

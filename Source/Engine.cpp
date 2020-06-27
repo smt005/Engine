@@ -1,6 +1,6 @@
 
 #include "Engine.h"
-#include "Game.h"
+#include "GameTest.h"
 #include "Common/CommonEngine.h"
 
 #include <iostream>
@@ -17,7 +17,7 @@ std::string stringFroJson(const Json::Value& value, const std::string& indentati
 
 void Engine::exe() {
 	std::cout << "Engine::exe()" << std::endl;
-	Game::exe();
+	GameTest::exe();
 }
 
 void Engine::exeForGame() {
