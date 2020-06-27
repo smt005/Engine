@@ -7,7 +7,7 @@
 
 #include "Window.h"
 #include "Core.h"
-//#include "Draw/Draw.h"
+#include "Draw/Draw.h"
 //#include "Callback/Callback.h"
 
 int windowWidth = 960;
