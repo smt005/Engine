@@ -8,7 +8,7 @@
 #include "Window.h"
 #include "Core.h"
 #include "Draw/Draw.h"
-//#include "Callback/Callback.h"
+#include "Callback/Callback.h"
 
 int windowWidth = 960;
 int windowHeight = 540;
@@ -60,7 +60,7 @@ bool Window::create()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		//Callback::update();
+		Callback::update();
 		Core::update();
 		Core::draw();
 
@@ -94,7 +94,7 @@ float Window::aspect()
 
 void cursorPositionCallback(GLFWwindow* Window, double x, double y)
 {
-	//Callback::onMove(static_cast<float>(x), static_cast<float>(y));
+	Callback::onMove(static_cast<float>(x), static_cast<float>(y));
 }
 
 void mouseButtonCallback(GLFWwindow* Window, int Button, int Action, int mods)
@@ -102,12 +102,12 @@ void mouseButtonCallback(GLFWwindow* Window, int Button, int Action, int mods)
 	switch (Action)
 	{
 	case GLFW_PRESS: {
-		//Callback::onPressTap(Button);
+		Callback::onPressTap(Button);
 	}
 	break;
 
 	case GLFW_RELEASE: {
-		//Callback::onReleaseTap(Button);
+		Callback::onReleaseTap(Button);
 	}
 	break;
 	}
@@ -118,12 +118,12 @@ void keyCallback(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods
 	switch (Action)
 	{
 	case GLFW_PRESS: {
-		//Callback::onPressKey(Key);
+		Callback::onPressKey(Key);
 	}
 	break;
 
 	case GLFW_RELEASE: {
-		//Callback::onReleaseKey(Key);
+		Callback::onReleaseKey(Key);
 	}
 	break;
 	}
