@@ -1,5 +1,5 @@
 
-// GLEW #include "GL/glew.h"
+#include "GL/glew.h"
 
 #include "Draw.h"
 #include "Camera.h"
@@ -20,7 +20,6 @@ TexturePtr texture;
 unsigned int curentBufer = 0;
 unsigned int currentTexture = 0;
 
-/* GLEW
 struct {
 	unsigned int program = 0;
 	GLuint u_matProjectionView = 0;
@@ -30,7 +29,6 @@ struct {
 	GLuint s_baseMap = 0;
 	GLuint u_color = 0;
 } baseShader;
-GLEW */
 
 void Draw::setClearColor(const float r, const float g, const float b, const float a)
 {
@@ -39,7 +37,7 @@ void Draw::setClearColor(const float r, const float g, const float b, const floa
 	_clearColor[2] = b;
 	_clearColor[3] = a;
 
-	// GLEW glClearColor(r, g, b, a);
+	glClearColor(r, g, b, a);
 }
 
 const float * const Draw::getClearColor()
@@ -49,19 +47,18 @@ const float * const Draw::getClearColor()
 
 void Draw::clearColor()
 {
-	// GLEW glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Draw::viewport()
 {
 	int widthScreen = Engine::Window::width();
 	int heightScreen = Engine::Window::height();
-	// GLEW glViewport(0, 0, widthScreen, heightScreen);
+	glViewport(0, 0, widthScreen, heightScreen);
 }
 
 void Draw::prepare()
 {
-	/* GLEW 
 	if (baseShader.program == 0) {
 		baseShader.program = Shader::getProgram("Shaders/Base.vert", "Shaders/Base.frag");
 	
@@ -93,7 +90,6 @@ void Draw::prepare()
 
 	curentBufer = 0;
 	currentTexture = 0;
-	GLEW */
 }
 
 void Draw::draw(Mesh& mesh)
@@ -106,7 +102,6 @@ void Draw::draw(Mesh& mesh)
 	{
 		curentBufer = mesh.bufferIndexes();
 
-		/* GLEW
 		glBindBuffer(GL_ARRAY_BUFFER, mesh.bufferVertexes());
 		glVertexAttribPointer(baseShader.a_position, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 
@@ -114,10 +109,8 @@ void Draw::draw(Mesh& mesh)
 		glVertexAttribPointer(baseShader.a_texCoord, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.bufferIndexes());
-		GLEW */
 	}
-
-	// GLEW glDrawElements(GL_TRIANGLES, mesh.countIndex(), GL_UNSIGNED_SHORT, 0);
+	glDrawElements(GL_TRIANGLES, mesh.countIndex(), GL_UNSIGNED_SHORT, 0);
 }
 
 void Draw::draw(Model& model)
@@ -127,11 +120,11 @@ void Draw::draw(Model& model)
 	{
 		currentTexture = textureId;
 		
-		// GLEW glUniform1i(baseShader.s_baseMap, 0);
-		// GLEW glBindTexture(GL_TEXTURE_2D, currentTexture);
+		glUniform1i(baseShader.s_baseMap, 0);
+		glBindTexture(GL_TEXTURE_2D, currentTexture);
 	}
 
-	// GLEW glUniform4fv(baseShader.u_color, 1, model.getDataPtr());
+	glUniform4fv(baseShader.u_color, 1, model.getDataPtr());
 
 	Mesh& mesh = model.getMesh();
 	draw(mesh);
@@ -140,7 +133,7 @@ void Draw::draw(Model& model)
 void Draw::draw(Object& object)
 {	
 	const glm::mat4x4& matrix = object.getMatrix();
-	// GLEW glUniformMatrix4fv(baseShader.u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
+	glUniformMatrix4fv(baseShader.u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
 
 	Model& model = object.getModel();
 	draw(model);
@@ -163,42 +156,41 @@ void Draw::draw(Map& map)
 
 void Draw::draw(const Triangle& triangle)
 {
-	//glUniformMatrix4fv(baseShader.u_matViewModel, 1, GL_FALSE, triangle.getMatrixFloat());
+	glUniformMatrix4fv(baseShader.u_matViewModel, 1, GL_FALSE, triangle.getMatrixFloat());
 
 	const glm::mat4x4& mat = triangle.getMatrix();
 	const float* matrix = triangle.getMatrixFloat();
-	// GLEW glUniformMatrix4fv(baseShader.u_matViewModel, 1, GL_FALSE, matrix);
+	glUniformMatrix4fv(baseShader.u_matViewModel, 1, GL_FALSE, matrix);
 
 	unsigned int textureId = triangle.textureId();
 	if (currentTexture != textureId)
 	{
 		currentTexture = textureId;
 
-		// GLEW glUniform1i(baseShader.s_baseMap, 0);
-		// GLEW glBindTexture(GL_TEXTURE_2D, currentTexture);
+		glUniform1i(baseShader.s_baseMap, 0);
+		glBindTexture(GL_TEXTURE_2D, currentTexture);
 
-		// GLEW glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		// GLEW glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}
 
 	if (!triangle.hasVBO()) {
 		if (!triangle.initVBO()) return;
 	}
-
-	// GLEW glUniform4fv(baseShader.u_color, 1, triangle.getDataPtr());
+	glUniform4fv(baseShader.u_color, 1, triangle.getDataPtr());
 
 	if (curentBufer != triangle.bufferVertexes())
 	{
 		curentBufer = triangle.bufferVertexes();
 
-		// GLEW glBindBuffer(GL_ARRAY_BUFFER, triangle.bufferVertexes());
-		// GLEW glEnableVertexAttribArray(baseShader.a_position);
-		// GLEW glVertexAttribPointer(baseShader.a_position, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+		glBindBuffer(GL_ARRAY_BUFFER, triangle.bufferVertexes());
+		glEnableVertexAttribArray(baseShader.a_position);
+		glVertexAttribPointer(baseShader.a_position, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 
-		// GLEW glBindBuffer(GL_ARRAY_BUFFER, triangle.bufferTexCoords());
-		// GLEW glEnableVertexAttribArray(baseShader.a_texCoord);
-		// GLEW glVertexAttribPointer(baseShader.a_texCoord, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
+		glBindBuffer(GL_ARRAY_BUFFER, triangle.bufferTexCoords());
+		glEnableVertexAttribArray(baseShader.a_texCoord);
+		glVertexAttribPointer(baseShader.a_texCoord, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
 	}
 
-	// GLEW glDrawArrays(GL_TRIANGLES, 0, triangle.countVertex());
+	glDrawArrays(GL_TRIANGLES, 0, triangle.countVertex());
 }

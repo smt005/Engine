@@ -1,5 +1,5 @@
 
-// GLEW #include "GL/glew.h"
+#include "GL/glew.h"
 #include <functional>
 
 #include "Common/Help.h"
@@ -31,19 +31,19 @@ bool Triangle::initVBO() const
 {
 	unsigned int* buffer = const_cast<unsigned int*>(_buffer);
 
-	// GLEW glDeleteBuffers(2, buffer);
-	// GLEW glGenBuffers(2, buffer);
+	glDeleteBuffers(2, buffer);
+	glGenBuffers(2, buffer);
 
 	if (_count == 0 || !_points) {
 		return false;
 	}
 
-	// GLEW glBindBuffer(GL_ARRAY_BUFFER, _buffer[0]);
-	// GLEW glBufferData(GL_ARRAY_BUFFER, _count * 3 * sizeof(GLfloat), _points, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, _buffer[0]);
+	glBufferData(GL_ARRAY_BUFFER, _count * 3 * sizeof(GLfloat), _points, GL_STATIC_DRAW);
 
 	if (_texCoord) {
-		// GLEW glBindBuffer(GL_ARRAY_BUFFER, _buffer[1]);
-		// GLEW glBufferData(GL_ARRAY_BUFFER, _count * 2 * sizeof(GLfloat), _texCoord, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, _buffer[1]);
+		glBufferData(GL_ARRAY_BUFFER, _count * 2 * sizeof(GLfloat), _texCoord, GL_STATIC_DRAW);
 	}
 
 	bool* hasVBO = const_cast<bool*>(&_hasVBO);

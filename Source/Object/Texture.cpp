@@ -1,6 +1,6 @@
 
-// GLEW #include "GL/glew.h"
-// GLEW #include "FreeImage/Source/FreeImage.h"
+#include "GL/glew.h"
+// FREEIMAGE #include "FreeImage/Source/FreeImage.h"
 
 #include <filesystem>
 
@@ -9,7 +9,7 @@
 
 Texture::~Texture()
 {
-	// GLEW glDeleteTextures(1, &_id);
+	glDeleteTextures(1, &_id);
 }
 
 Texture::Texture(const string &name, bool needLoad)
@@ -46,7 +46,7 @@ unsigned int Texture::loadTexture(const char* fileName)
 {
 	std::filesystem::path fullFileName = Engine::FileManager::fullPath(fileName);
 
-	/* GLEW
+	/* FREEIMAGE
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *dib(0);
 	BYTE* bits(0);
@@ -92,7 +92,7 @@ unsigned int Texture::loadTexture(const char* fileName)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	return _textureId;
-	GLEW */
+	FREEIMAGE */
 
 	return 0;
 }

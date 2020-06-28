@@ -1,5 +1,5 @@
 
-// GLEW #include "GL/glew.h"
+#include "GL/glew.h"
 
 #include "Draw.h"
 #include "Camera.h"
@@ -10,7 +10,6 @@
 
 using namespace draw;
 
-/* GLEW
 struct {
 	unsigned int program = 0;
 	GLuint u_matProjectionView = 0;
@@ -19,11 +18,9 @@ struct {
 	GLuint u_matrix = 0;
 	GLuint u_color = 0;
 } lineShader;
-GLEW */
 
 void DrawLine::prepare()
 {
-	/* GLEW
 	if (lineShader.program == 0) {
 		lineShader.program = Shader::getProgram("Shaders/Line.vert", "Shaders/Line.frag");
 
@@ -50,12 +47,10 @@ void DrawLine::prepare()
 	glEnableVertexAttribArray(lineShader.a_position);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
-	GLEW */
 }
 
 void DrawLine::draw(const Line& line, const glm::mat4x4& matrix)
 {
-	/* GLEW
 	glUniformMatrix4fv(lineShader.u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
 
 	glUniform4fv(lineShader.u_color, 1, line.color.getDataPtr());
@@ -63,23 +58,19 @@ void DrawLine::draw(const Line& line, const glm::mat4x4& matrix)
 
 	glVertexAttribPointer(lineShader.a_position, 3, GL_FLOAT, GL_FALSE, 0, line.getData());
 	glDrawArrays(line.getType(), 0, line.getCount());
-	GLEW */
 }
 
 void DrawLine::draw(const Line& line)
 {
-	/* GLEW
 	glUniform4fv(lineShader.u_color, 1, line.color.getDataPtr());
 	glLineWidth(line.getLineWidth());
 
 	glVertexAttribPointer(lineShader.a_position, 3, GL_FLOAT, GL_FALSE, 0, line.getData());
 	glDrawArrays(line.getType(), 0, line.getCount());
-	GLEW */
 }
 
 void DrawLine::draw(const Greed& greed)
 {
-	/* GLEW
 	glUniformMatrix4fv(lineShader.u_matViewModel, 1, GL_FALSE, greed.getMatrixFloat());
 
 	draw::DrawLine::draw(greed.lineX);
@@ -88,5 +79,4 @@ void DrawLine::draw(const Greed& greed)
 	draw::DrawLine::draw(greed.heavyLineX);
 	draw::DrawLine::draw(greed.heavyLineY);
 	draw::DrawLine::draw(greed.heavyLineZ);
-	GLEW */
 }

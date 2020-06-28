@@ -1,6 +1,6 @@
 
 #include "Mesh.h"
-// GLEW #include "GL/glew.h"
+#include "GL/glew.h"
 #include <memory>
 
 Mesh::~Mesh()
@@ -34,33 +34,32 @@ Mesh::~Mesh()
 	}
     
     if (_buffer[0]) {
-		// GLEW glDeleteBuffers(1, &_buffer[0]);
+		glDeleteBuffers(1, &_buffer[0]);
     }
     
     if (_buffer[1]) {
-		// GLEW glDeleteBuffers(1, &_buffer[1]);
+		 glDeleteBuffers(1, &_buffer[1]);
     }
     
     if (_buffer[2]) {
-		// GLEW glDeleteBuffers(1, &_buffer[2]);
+		glDeleteBuffers(1, &_buffer[2]);
     }
     
     if (_buffer[3]) {
-		// GLEW glDeleteBuffers(1, &_buffer[3]);
+		glDeleteBuffers(1, &_buffer[3]);
     }
 }
 
 bool Mesh::initVBO()
 {
-	// GLEW glDeleteBuffers(4, _buffer);
+	glDeleteBuffers(4, _buffer);
 
-	// GLEW glGenBuffers(4, _buffer);
+	glGenBuffers(4, _buffer);
 
 	if (_countVertex == 0 || !_aVertex || _countIndex == 0 && !_aIndex) {
 		return false;
 	}
 
-	/* GLEW 
 	glBindBuffer(GL_ARRAY_BUFFER, _buffer[0]);
 	glBufferData(GL_ARRAY_BUFFER, _countVertex * 3 * sizeof(GLfloat), _aVertex, GL_STATIC_DRAW);
 
@@ -82,7 +81,7 @@ bool Mesh::initVBO()
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer[3]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _countIndex * sizeof(GLushort), _aIndex, GL_STATIC_DRAW);
-	GLEW */
+
 	_hasVBO = true;
 	return _hasVBO;
 }

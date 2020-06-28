@@ -1,12 +1,12 @@
 
-// GLEW #include "GL/glew.h"
+#include "GL/glew.h"
 
 #include "Shader.h"
 #include "FileManager.h"
 
 unsigned int Shader::getProgram(const std::string& vertexFileName, const std::string& fragmentFileName)
 {
-	// GLEW if (glewInit() != GLEW_OK)
+	if (glewInit() != GLEW_OK)
 	{
 		return 0;
 	}
@@ -21,7 +21,6 @@ unsigned int Shader::getProgram(const std::string& vertexFileName, const std::st
 		return 0;
 	}
 
-	/* GLEW
 	GLuint _fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
     const char* shaderSource = fragmentShaderSource.c_str();
@@ -98,7 +97,4 @@ unsigned int Shader::getProgram(const std::string& vertexFileName, const std::st
 	}
 	
 	return program;
-	GLEW */
-
-	return 0;
 }

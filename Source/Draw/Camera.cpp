@@ -1,7 +1,7 @@
 
 #include "Camera.h"
 #include "Window.h"
-// GLEW #include "Callback/Callback.h"
+#include "Callback/Callback.h"
 #include "Object/PhysicPlane.h"
 
 #include <corecrt_math_defines.h>
@@ -383,7 +383,7 @@ void Camera::getJsonData(Json::Value& data)
 
 glm::vec3 Camera::corsorCoord()
 {
-	glm::vec2 mousePos; // GLEW = Engine::Callback::mousePos();
+	glm::vec2 mousePos = Engine::Callback::mousePos();
 	glm::vec3 wincoord = glm::vec3(mousePos.x, (Engine::Window::height() - mousePos.y), 1.0f);
 	glm::vec4 viewport = glm::vec4(0, 0, Engine::Window::width(), Engine::Window::height());
 
