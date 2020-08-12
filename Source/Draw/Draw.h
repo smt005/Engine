@@ -19,6 +19,7 @@ public:
 	static void clearColor();
 	static void viewport();
 	static void prepare();
+	static void prepare2D();
 
 	static void draw(Mesh& mesh);
 	static void draw(Model& model);

@@ -12,22 +12,24 @@ TexturePtr Triangle::textureStatic;
 Triangle::~Triangle() {
 	if (_points) {
 		delete[] _points;
+		_points = nullptr;
 	}
 
 	if (_texCoord) {
 		delete[] _texCoord;
+		_texCoord = nullptr;
 	}
 }
 
 void Triangle::setData(unsigned short int type, unsigned int count, Point* points, TexCoord* texCoord)
 {
-	type = _type;
+	_type = type;
 	_count = count;
 	_points = points;
 	_texCoord = texCoord;
 }
 
-bool Triangle::initVBO() const
+const bool Triangle::initVBO() const
 {
 	unsigned int* buffer = const_cast<unsigned int*>(_buffer);
 

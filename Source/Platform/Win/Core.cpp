@@ -1,10 +1,12 @@
 
 #include "Core.h"
+#include "Callback/Callback.h"
 #include "Game.h"
-#include "Window.h"
+#include "Screen.h"
 #include "Common/Help.h"
 #include "json/json.h"
 
+#include "GLFW/glfw3.h"
 #include <chrono>
 #include <iostream>
 
@@ -14,6 +16,11 @@ GamePtr _game = nullptr;
 Json::Value _settingJson;
 float _deltaTime = 0.0f;
 double _lastTime = Core::currentTime();
+
+void cursorPositionCallback(GLFWwindow* Window, double x, double y);
+void mouseButtonCallback(GLFWwindow* Window, int Button, int Action, int mods);
+void keyCallback(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods);
+void windowSizeCallback(GLFWwindow* window, int width, int height);
 
 int Core::execution(const GamePtr& game)
 {
@@ -30,9 +37,49 @@ int Core::execution(const GamePtr& game)
 	}
 
 	_game = game;
-	Window::create();
+
+	main();
 
 	return 0;
+}
+
+bool Core::main() {
+	GLFWwindow* window;
+
+	if (!glfwInit())
+		return false;
+
+	Screen::init();
+
+	window = glfwCreateWindow(Screen::width(), Screen::height(), Screen::title().c_str(), NULL, NULL);
+	if (!window)
+	{
+		glfwTerminate();
+		return false;
+	}
+
+	glfwSetCursorPosCallback(window, cursorPositionCallback);
+	glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	glfwSetKeyCallback(window, keyCallback);
+	glfwSetWindowSizeCallback(window, windowSizeCallback);
+
+	glfwMakeContextCurrent(window);
+
+	Core::init();
+
+	while (!glfwWindowShouldClose(window))
+	{
+		Callback::update();
+		Core::update();
+		Core::draw();
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+	glfwTerminate();
+
+	return true;
 }
 
 void Core::close()
@@ -62,6 +109,12 @@ void Core::draw()
 {
 	if (!_game) return;
 	_game->draw();
+}
+
+void Core::resize()
+{
+	if (!_game) return;
+	_game->resize();
 }
 
 void Core::log(const std::string& text)
@@ -95,4 +148,52 @@ double Core::currentTime()
 
 float Core::deltaTime() {
 	return _deltaTime;
+}
+
+//...
+
+void cursorPositionCallback(GLFWwindow* Window, double x, double y)
+{
+	Callback::onMove(static_cast<float>(x), static_cast<float>(y));
+}
+
+void mouseButtonCallback(GLFWwindow* Window, int Button, int Action, int mods)
+{
+	switch (Action)
+	{
+	case GLFW_PRESS: {
+		Callback::onPressTap(Button);
+	}
+					 break;
+
+	case GLFW_RELEASE: {
+		Callback::onReleaseTap(Button);
+	}
+					   break;
+	}
+}
+
+void keyCallback(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods)
+{
+	switch (Action)
+	{
+	case GLFW_PRESS: {
+		Callback::onPressKey(Key);
+	}
+					 break;
+
+	case GLFW_RELEASE: {
+		Callback::onReleaseKey(Key);
+	}
+					   break;
+	}
+}
+
+void windowSizeCallback(GLFWwindow* window, int width, int height)
+{
+	Screen::setWidth(width);
+	Screen::setHeight(height);
+
+	Core::resize();
+	Screen::resize();
 }

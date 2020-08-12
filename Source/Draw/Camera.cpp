@@ -1,10 +1,11 @@
 
 #include "Camera.h"
-#include "Window.h"
+#include "Screen.h"
 #include "Callback/Callback.h"
 #include "Object/PhysicPlane.h"
 
-#include <corecrt_math_defines.h>
+//#include <corecrt_math_defines.h>
+#define M_PI 3.14159265359
 
 Camera::Camera()
 {
@@ -76,7 +77,7 @@ void Camera::makeFrustum()
 
 void Camera::setDefault()
 {
-	_matProject = perspective(45.0f, Engine::Window::aspect(), 0.1f, 1000.0f);
+	_matProject = perspective(45.0f, Engine::Screen::aspect(), 0.1f, 1000.0f);
 	setLookAt(vec3(25.0f, 25.0f, 25.0f), vec3(0.0f, 0.0f, 0.0f));
 }
 
@@ -384,8 +385,8 @@ void Camera::getJsonData(Json::Value& data)
 glm::vec3 Camera::corsorCoord()
 {
 	glm::vec2 mousePos = Engine::Callback::mousePos();
-	glm::vec3 wincoord = glm::vec3(mousePos.x, (Engine::Window::height() - mousePos.y), 1.0f);
-	glm::vec4 viewport = glm::vec4(0, 0, Engine::Window::width(), Engine::Window::height());
+	glm::vec3 wincoord = glm::vec3(mousePos.x, (Engine::Screen::height() - mousePos.y), 1.0f);
+	glm::vec4 viewport = glm::vec4(0, 0, Engine::Screen::width(), Engine::Screen::height());
 
 	glm::vec3 coord = glm::unProject(wincoord, _matView, _matProject, viewport);
 
@@ -409,5 +410,9 @@ Camera Camera::current;
 Camera& Camera::setCurrent(Camera& camera)
 {
 	current = camera;
+	return current;
+}
+
+Camera& Camera::getCurrent() {
 	return current;
 }

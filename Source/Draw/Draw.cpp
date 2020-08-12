@@ -3,7 +3,7 @@
 
 #include "Draw.h"
 #include "Camera.h"
-#include "Window.h"
+#include "Screen.h"
 #include "Shader.h"
 #include "Object/Mesh.h"
 #include "Object/Shape.h"
@@ -52,8 +52,8 @@ void Draw::clearColor()
 
 void Draw::viewport()
 {
-	int widthScreen = Engine::Window::width();
-	int heightScreen = Engine::Window::height();
+	int widthScreen = Engine::Screen::width();
+	int heightScreen = Engine::Screen::height();
 	glViewport(0, 0, widthScreen, heightScreen);
 }
 
@@ -77,7 +77,42 @@ void Draw::prepare()
 	}
 
 	glUseProgram(baseShader.program);
-	glUniformMatrix4fv(baseShader.u_matProjectionView, 1, GL_FALSE, Camera::current.matPV());
+	glUniformMatrix4fv(baseShader.u_matProjectionView, 1, GL_FALSE, Camera::getCurrent().matPV());
+
+	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glEnableVertexAttribArray(baseShader.a_position);
+	glEnableVertexAttribArray(baseShader.a_texCoord);
+
+	curentBufer = 0;
+	currentTexture = 0;
+}
+
+void Draw::prepare2D()
+{
+	if (baseShader.program == 0) {
+		baseShader.program = Shader::getProgram("Shaders/Base.vert", "Shaders/Base.frag");
+
+		if (!baseShader.program) {
+			return;
+		}
+
+		baseShader.u_matProjectionView = glGetUniformLocation(baseShader.program, "u_matProjectionView");
+		baseShader.u_matViewModel = glGetUniformLocation(baseShader.program, "u_matViewModel");
+
+		baseShader.a_position = glGetAttribLocation(baseShader.program, "a_position");
+		baseShader.a_texCoord = glGetAttribLocation(baseShader.program, "a_texCoord");
+
+		baseShader.s_baseMap = glGetUniformLocation(baseShader.program, "s_baseMap");
+		baseShader.u_color = glGetUniformLocation(baseShader.program, "u_color");
+	}
+
+	glUseProgram(baseShader.program);
+	glUniformMatrix4fv(baseShader.u_matProjectionView, 1, GL_FALSE, Camera::getCurrent().matPV());
 
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
@@ -158,9 +193,9 @@ void Draw::draw(const Triangle& triangle)
 {
 	glUniformMatrix4fv(baseShader.u_matViewModel, 1, GL_FALSE, triangle.getMatrixFloat());
 
-	const glm::mat4x4& mat = triangle.getMatrix();
-	const float* matrix = triangle.getMatrixFloat();
-	glUniformMatrix4fv(baseShader.u_matViewModel, 1, GL_FALSE, matrix);
+	//const glm::mat4x4& mat = triangle.getMatrix();
+	//const float* matrix = triangle.getMatrixFloat();
+	//glUniformMatrix4fv(baseShader.u_matViewModel, 1, GL_FALSE, matrix);
 
 	unsigned int textureId = triangle.textureId();
 	if (currentTexture != textureId)
@@ -192,5 +227,5 @@ void Draw::draw(const Triangle& triangle)
 		glVertexAttribPointer(baseShader.a_texCoord, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
 	}
 
-	glDrawArrays(GL_TRIANGLES, 0, triangle.countVertex());
+	glDrawArrays(triangle.type(), 0, triangle.countVertex());
 }

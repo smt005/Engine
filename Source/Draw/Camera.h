@@ -87,5 +87,5 @@ public:
 	static mat4x4 _matPVM;
 	static Camera current;
 	static Camera& setCurrent(Camera& camera);
-
+	static Camera& getCurrent();
 };

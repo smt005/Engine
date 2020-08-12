@@ -36,7 +36,7 @@ void DrawLine::prepare()
 	}
 
 	glUseProgram(lineShader.program);
-	glUniformMatrix4fv(lineShader.u_matProjectionView, 1, GL_FALSE, Camera::current.matPV());
+	glUniformMatrix4fv(lineShader.u_matProjectionView, 1, GL_FALSE, Camera::getCurrent().matPV());
 
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);
