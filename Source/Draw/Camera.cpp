@@ -3,8 +3,8 @@
 #include "Window.h"
 #include "Callback/Callback.h"
 #include "Object/PhysicPlane.h"
-
-#include <corecrt_math_defines.h>
+//#include <corecrt_math_defines.h>
+#define M_PI 3.14159265359
 
 Camera::Camera()
 {

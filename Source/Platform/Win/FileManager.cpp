@@ -5,27 +5,27 @@
 
 using namespace Engine;
 
-std::filesystem::path FileManager::_resourcesDir = std::filesystem::current_path();
+std::experimental::filesystem::path FileManager::_resourcesDir = std::experimental::filesystem::current_path();
 
-void FileManager::setResourcesDir(const std::filesystem::path& resourcesDir)
+void FileManager::setResourcesDir(const std::experimental::filesystem::path& resourcesDir)
 {
-	std::filesystem::path currentPath = std::filesystem::current_path();
-	_resourcesDir = std::filesystem::absolute(currentPath / resourcesDir);
+	std::experimental::filesystem::path currentPath = std::experimental::filesystem::current_path();
+	_resourcesDir = std::experimental::filesystem::absolute(currentPath / resourcesDir);
 }
 
-const std::filesystem::path& FileManager::getResourcesDir()
+const std::experimental::filesystem::path& FileManager::getResourcesDir()
 {
 	return _resourcesDir;
 }
 
-std::filesystem::path FileManager::fullPath(const std::filesystem::path& fileName) {
+std::experimental::filesystem::path FileManager::fullPath(const std::experimental::filesystem::path& fileName) {
 	return _resourcesDir / fileName;
 }
 
-bool FileManager::readTextFile(const std::filesystem::path& fileName, char*& data, int& lenght)
+bool FileManager::readTextFile(const std::experimental::filesystem::path& fileName, char*& data, int& lenght)
 {
 	FILE* file;
-	std::filesystem::path fullFilePath = _resourcesDir / fileName;
+	std::experimental::filesystem::path fullFilePath = _resourcesDir / fileName;
 
 	if (fopen_s(&file, fullFilePath.string().c_str(), "r") == NULL)
 	{
@@ -50,7 +50,7 @@ bool FileManager::readTextFile(const std::filesystem::path& fileName, char*& dat
 	return false;
 }
 
-std::string FileManager::readTextFile(const std::filesystem::path& fileName)
+std::string FileManager::readTextFile(const std::experimental::filesystem::path& fileName)
 {
 	char* data = nullptr;
 	int lenght = 0;
@@ -62,16 +62,16 @@ std::string FileManager::readTextFile(const std::filesystem::path& fileName)
 	return std::string();
 }
 
-bool FileManager::writeFile(const std::filesystem::path& fileName, const char* data)
+bool FileManager::writeFile(const std::experimental::filesystem::path& fileName, const char* data)
 {
-	std::filesystem::path fullFilePath = _resourcesDir / fileName;
-	std::filesystem::path realFileName;
-	std::filesystem::path fullPath;
+	std::experimental::filesystem::path fullFilePath = _resourcesDir / fileName;
+	std::experimental::filesystem::path realFileName;
+	std::experimental::filesystem::path fullPath;
 
 	fullPath = fullFilePath.parent_path();
 
-	if (!std::filesystem::exists(fullPath)) {
-		std::filesystem::create_directory(fullPath);
+	if (!std::experimental::filesystem::exists(fullPath)) {
+		std::experimental::filesystem::create_directory(fullPath);
 	}
 
 	FILE* file;
@@ -84,7 +84,7 @@ bool FileManager::writeFile(const std::filesystem::path& fileName, const char* d
 	return true;
 }
 
-bool FileManager::writeTextFile(const std::filesystem::path& fileName, const std::string& text)
+bool FileManager::writeTextFile(const std::experimental::filesystem::path& fileName, const std::string& text)
 {
 	return writeFile(fileName, text.c_str());
 }

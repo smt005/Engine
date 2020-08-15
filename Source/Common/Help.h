@@ -7,7 +7,8 @@
 #include "json/json.h"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
-#include <corecrt_math_defines.h>
+//#include <corecrt_math_defines.h>
+#define M_PI 3.14159265359
 
 namespace help
 {

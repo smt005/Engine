@@ -2,7 +2,7 @@
 #include "GL/glew.h"
 #include "FreeImage.h"
 
-#include <filesystem>
+#include <experimental\filesystem>
 
 #include "Texture.h"
 #include "FileManager.h"
@@ -44,7 +44,7 @@ unsigned int Texture::load(const string &newName)
 
 unsigned int Texture::loadTexture(const char* fileName)
 {
-	std::filesystem::path fullFileName = Engine::FileManager::fullPath(fileName);
+	std::experimental::filesystem::path fullFileName = Engine::FileManager::fullPath(fileName);
 
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *dib(0);
