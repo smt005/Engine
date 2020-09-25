@@ -20,12 +20,20 @@ public:
 		_matrix[3][2] = pos[2];
 	}
 
+	void setRotate(const float angle,  const float(&vector)[3]) {
+		_matrix = glm::rotate(_matrix, angle, glm::vec3(vector[0], vector[1], vector[2]));
+	}
+
 	void setMatrix(const float (&matrix)[16]);
 
 	inline void setPos(const glm::vec3& pos) {
 		_matrix[3][0] = pos.x;
 		_matrix[3][1] = pos.y;
 		_matrix[3][2] = pos.z;
+	}
+
+	inline void setScale(const glm::vec3& scale) {
+		_matrix = glm::scale(_matrix, scale);
 	}
 
 	inline void set(const glm::mat4x4& matrix) { _matrix = matrix; }

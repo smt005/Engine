@@ -16,11 +16,13 @@ class Core
 {
 public:
 	static int execution(const GamePtr& game);
+	static bool main();
 	static void close();
 
 	static void init();
 	static void update();
 	static void draw();
+	static void resize();
 	static void log(const std::string& text);
 	static const Json::Value& settingJson(const std::string& key);
 	static double currentTime();

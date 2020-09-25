@@ -21,9 +21,9 @@ public:
 	enum
 	{
 		NONE = 0x0000,
-		TRIANGLES = 0x0004,
-		STRIP = 0x0005,
-		FAN = 0x0006
+		TRIANGLES = 0x0004,	// GL_TRIANGLES
+		STRIP = 0x0005,		// GL_TRIANGLE_STRIP
+		FAN = 0x0006		// GL_TRIANGLE_FAN
 	};
 
 public:
@@ -49,15 +49,16 @@ public:
 
 	const Triangle& getSelf() const { return *this; }
 
-	inline unsigned short int countVertex() const { return _count * 3; }
+	inline unsigned short int countVertex() const { return _count; }
 	inline const float* const aVertex() const { return (float*)_points; }
 	inline const float* const aTexCoord() const { return (float*)_texCoord; }
+	inline const unsigned short int type() const { return _type; }
 
 	inline bool hasVBO() const { return _hasVBO; }
-	inline unsigned int bufferVertexes() const { return _buffer[0]; }
-	inline unsigned int bufferTexCoords() const { return _buffer[1]; }
+	inline const unsigned int bufferVertexes() const { return _buffer[0]; }
+	inline const unsigned int bufferTexCoords() const { return _buffer[1]; }
 
-	bool initVBO() const;
+	bool const initVBO() const;
 
 protected:
 	unsigned short int _type;	//	GL_TRIANGLES 0x0004, GL_TRIANGLE_STRIP 0x0005, GL_TRIANGLE_FAN 0x0006

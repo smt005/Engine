@@ -23,7 +23,12 @@ void Callback::addObject(Callback& object)
 void Callback::removeObject(Callback& object)
 {
 	int id = object.getId();
-	auto it = _objects.find(id);
+
+	if (_objects.empty()) {
+		return;
+	}
+
+	auto it = _objects.find(id); // Ќужна проверка на то что массив пустой?
 
 	if (it != _objects.end()) {
 		_objects.erase(it);
