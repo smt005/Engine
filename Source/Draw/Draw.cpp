@@ -3,7 +3,7 @@
 
 #include "Draw.h"
 #include "Camera.h"
-#include "Window.h"
+#include "Screen.h"
 #include "Shader.h"
 #include "Object/Mesh.h"
 #include "Object/Shape.h"
@@ -52,8 +52,8 @@ void Draw::clearColor()
 
 void Draw::viewport()
 {
-	int widthScreen = Engine::Window::width();
-	int heightScreen = Engine::Window::height();
+	int widthScreen = Engine::Screen::width();
+	int heightScreen = Engine::Screen::height();
 	glViewport(0, 0, widthScreen, heightScreen);
 }
 

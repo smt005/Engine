@@ -16,6 +16,7 @@ constexpr int CALLBACK_COUNT_KEY = 1024;
 constexpr int CALLBACK_COUNT_TAP = 10;
 
 class Callback;
+typedef std::shared_ptr<Callback> CallbackPtr;
 
 enum class CallbackType
 {

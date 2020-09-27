@@ -22,6 +22,10 @@ void Callback::addObject(Callback& object)
 
 void Callback::removeObject(Callback& object)
 {
+	if (_objects.empty()) {
+		return;
+	}
+
 	int id = object.getId();
 	auto it = _objects.find(id);
 
