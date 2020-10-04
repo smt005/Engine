@@ -13,7 +13,7 @@ struct BlockTemporary
 
 	int _count = 0;
 	float* _floatArray = nullptr;
-	unsigned short int* _intArray = nullptr;
+	unsigned int* _intArray = nullptr;
 
 	BlockTemporary()
 	{
@@ -57,7 +57,7 @@ struct BlockTemporary
 		}
 		else if (_countNumber == 9)
 		{
-			_intArray = new unsigned short int[_count];
+			_intArray = new unsigned int[_count];
 
 			for (int i = 0; i < _countLine; ++i)
 			{
@@ -78,7 +78,7 @@ struct BlockTemporary
 
 				for (int i2 = 0; i2 < 9; ++i2)
 				{
-					_intArray[index + i2] = static_cast<unsigned short int>(intTemp[i2] - 1);
+					_intArray[index + i2] = static_cast<unsigned int>(intTemp[i2] - 1);
 				}
 			}
 		}
@@ -112,7 +112,7 @@ struct BlockTemporary
 		}
 
 		// TODO
-		unsigned short* aIndexNew = new unsigned short[countIndexT * 3];
+		unsigned int* aIndexNew = new unsigned int[countIndexT * 3];
 		float* aVertexNew = new float[countIndexT * 3];
 		float* aNormalNew = new float[countIndexT * 3];
 		float* aTextureNew = new float[countIndexT * 2];
@@ -127,17 +127,17 @@ struct BlockTemporary
 		for (int iT = 0; iT < countIndexTemporary; ++iT)
 		{
 			BlockTemporary& indexTemporary = indexTemporarys[iT];
-			unsigned short* aIndexT = indexTemporary._intArray;
+			unsigned int* aIndexT = indexTemporary._intArray;
 			
 			for (int i = 0; i < indexTemporary._count; i+=3)
 			{
-				unsigned short indexV = aIndexT[i];
+				unsigned int indexV = aIndexT[i];
 				float* vertex = &aVertexT[indexV * 3];
 
-				unsigned short indexT = aIndexT[i + 1];
+				unsigned int indexT = aIndexT[i + 1];
 				float* texCoord = &aTextureT[indexT * 2];
 
-				unsigned short indexN = aIndexT[i + 2];
+				unsigned int indexN = aIndexT[i + 2];
 				float* normal = &aNormalT[indexN * 3];
 
 				int index = foundIndex(vertex, normal, texCoord, aVertexNew, aNormalNew, aTextureNew, indexVertexNew);
@@ -164,7 +164,7 @@ struct BlockTemporary
 			}
 		}
         
-		unsigned short* _aIndex = aIndexNew;
+		unsigned int* _aIndex = aIndexNew;
 
 		float* aVertex = new float[indexVertexNew * 3];
 		float* aNormal = new float[indexVertexNew * 3];

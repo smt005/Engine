@@ -80,7 +80,7 @@ bool Mesh::initVBO()
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer[3]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _countIndex * sizeof(GLushort), _aIndex, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _countIndex * sizeof(GLuint), _aIndex, GL_STATIC_DRAW);
 
 	_hasVBO = true;
 	return _hasVBO;
@@ -104,17 +104,17 @@ void Mesh::copy(const Mesh& mesh)
 
 	_countIndex = mesh._countIndex;
 
-	_aIndex = new unsigned short[_countIndex * 3];
-	size_t sizeIndex = sizeof(unsigned short) * _countIndex * 3;
+	_aIndex = new unsigned int[_countIndex * 3];
+	size_t sizeIndex = sizeof(unsigned int) * _countIndex * 3;
 	memcpy(_aIndex, mesh._aIndex, sizeIndex);
 }
 
 void Mesh::setData(	float* const aVertex,
 					float* const aNormal,
 					float* const aTexCoord,
-					const unsigned short int countVertex,
-					unsigned short* const aIndex,
-					const unsigned short int countIndex)
+					const unsigned int countVertex,
+					unsigned int* const aIndex,
+					const unsigned int countIndex)
 {
 	_aVertex = aVertex;
 	_aNormal = aNormal;

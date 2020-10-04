@@ -31,4 +31,6 @@ public:
 	Object& addObjectToPos(const string& nameModel, const glm::vec3& pos = glm::vec3(0.0, 0.0, 0.0));
 	Object& addObject(const string& nameModel, const glm::mat4x4& mat = glm::mat4x4(1.0));
 	Object& addObject(Object* object);
+
+	Object*	getObjectByName(const std::string& name);
 };
