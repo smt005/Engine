@@ -6,6 +6,8 @@
 #include "FileManager.h"
 #include "Common/Help.h"
 
+#include <algorithm>
+
 Map::Map(const string &name)
 {
 	create(name);
@@ -116,4 +118,13 @@ Object& Map::addObject(const string& nameModel, const glm::mat4x4& mat)
 Object& Map::addObject(Object* object)
 {
 	return help::add(objects, object);
+}
+
+Object*	Map::getObjectByName(const std::string& name) {
+	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object* object) { return object->getName() == name ? true : false; });
+	if (it == objects.end()) {
+		help::log("Map::getObjectByName(" + name  + ") not found.");
+	}
+
+	return *it;
 }

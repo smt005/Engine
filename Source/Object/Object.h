@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Position.h"
 #include "Identify.h"
+#include "Physics/Physics.h"
 #include <string>
 
 using namespace std;
@@ -17,6 +18,7 @@ class Object : public Position, public Name
 {
 public:
 	int tag = 0;
+	Engine::ActorPhyscs* _actorPhyscs = nullptr;
 
 protected:
 	ModelPtr _model;

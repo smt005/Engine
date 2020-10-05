@@ -110,7 +110,7 @@ void Draw::draw(Mesh& mesh)
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.bufferIndexes());
 	}
-	glDrawElements(GL_TRIANGLES, mesh.countIndex(), GL_UNSIGNED_SHORT, 0);
+	glDrawElements(GL_TRIANGLES, mesh.countIndex(), GL_UNSIGNED_INT, 0);
 }
 
 void Draw::draw(Model& model)

@@ -11,6 +11,9 @@ public:
 	Position(const glm::vec3& pos) : _matrix(glm::mat4x4(1.0f)) {
 		setPos(pos);
 	}
+	Position(const float(&matrix)[16]) {
+		setMatrix(matrix);
+	}
 
 	virtual ~Position() {}
 
@@ -18,6 +21,10 @@ public:
 		_matrix[3][0] = pos[0];
 		_matrix[3][1] = pos[1];
 		_matrix[3][2] = pos[2];
+	}
+
+	void setPos(const Position& position) {
+		_matrix = position._matrix;
 	}
 
 	void setMatrix(const float (&matrix)[16]);

@@ -17,6 +17,8 @@ include_directories(${JSONCPP_INCLUDES})
 include_directories(${GLFW_INCLUDES})
 include_directories(${GLEW_INCLUDES})
 include_directories(${FREEIMAGE_INCLUDES})
+include_directories(${PHYSX_INCLUDES})
+include_directories(${PHYSX_INCLUDES_PXSHARED})
 
 # Создание статической библиотеки
 add_library(${ENGINE_NAME} STATIC ${INCLUDES} ${SOURCES})
