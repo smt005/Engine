@@ -31,8 +31,8 @@ public:
 	inline const unsigned int* const buffers()	{ return _buffer; }
 
 	inline unsigned int bufferVertexes()	{ return _buffer[0]; }
-	inline unsigned int bufferNormals()		{ return _buffer[1]; }
-	inline unsigned int bufferTexCoords()	{ return _buffer[2]; }
+	inline unsigned int bufferTexCoords()	{ return _buffer[1]; }
+	inline unsigned int bufferNormals()		{ return _buffer[2]; }
 	inline unsigned int bufferIndexes()		{ return _buffer[3]; }
 
 	void copy(const Mesh& mesh);

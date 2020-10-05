@@ -71,7 +71,7 @@ bool Mesh::initVBO()
 		_buffer[1] = 0;
 	}
 
-	if (_aVertex) {
+	if (_aNormal) {
 		glBindBuffer(GL_ARRAY_BUFFER, _buffer[2]);
 		glBufferData(GL_ARRAY_BUFFER, _countVertex * 3 * sizeof(GLfloat), _aNormal, GL_STATIC_DRAW);
 	}
