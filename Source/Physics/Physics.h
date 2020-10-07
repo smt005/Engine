@@ -1,25 +1,37 @@
 
 #pragma once
 
-#include "Object/Position.h"
-
-class Mesh;
+class Position;
+class Object;
 
 namespace Engine {
-	typedef void ActorPhyscs;
+	namespace physics {
+		typedef void ActorPhyscs;
+	};
 
-	bool initPhysics();
-	void releasePhysics();
+	class Physics {
+		friend Object;
+
+	public:
+		enum class Type
+		{
+			NONE,
+			CONVEX,
+			TRIANGLE
+		};
+
+	public:
+		static bool init();
+		static void release();
+
+		static bool createScene();
+		static void releaseScene();
+		static bool updateScene(const float dt);
+
+	private:
+		static bool createActor(Object& object);
+		static void updateMatrixActor(Object& object);
+		static void releaseActor(Object& object);
+	};
 	
-	bool createScene();
-	bool updateScene(const float dt);
-	void fetchResultsScene();
-
-	ActorPhyscs* createActorConvex(Mesh* mesh, const float pos[3]);
-	ActorPhyscs* createActorTriangle(Mesh* mesh, const float pos[3]);
-	ActorPhyscs* createActorBox(const float rect[3], const float pos[3]);
-
-	Position getActorPos();
-	Position getActorPos(ActorPhyscs* actorPhyscs);
-
 };	// Engine

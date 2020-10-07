@@ -16,13 +16,19 @@ typedef std::shared_ptr<Model> ModelPtr;
 
 class Object : public Position, public Name
 {
+	friend Engine::Physics;
+
 public:
 	int tag = 0;
-	Engine::ActorPhyscs* _actorPhyscs = nullptr;
 
 protected:
 	ModelPtr _model;
 	bool _visible = true;
+
+private:
+	// Physics
+	Engine::Physics::Type _typePhysics;
+	Engine::physics::ActorPhyscs* _actorPhyscs;
 
 public:
 	Object();
@@ -36,6 +42,12 @@ public:
 
 	void set(const string &name, const string &modelName, const vec3 &pos = vec3(0.0f), const Json::Value& data = Json::Value());
 	void setHeight(const float &height);
+	
+	// Physics
+	void setTypeActorPhysics(const Engine::Physics::Type typePhysics) {_typePhysics = typePhysics; }
+	void updateMatrixPhysics();
+	bool createActorPhysics();
+	void releaseActorPhysics();
 
 	inline bool visible() { return _visible; }
 	inline void setVisible(const bool visible) { _visible = visible; }

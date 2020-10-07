@@ -3,18 +3,19 @@
 #include "Object.h"
 #include "Glider.h"
 #include "Model.h"
+#include "Physics/Physics.h"
 #include "FileManager.h"
 #include "Common/Help.h"
 
 #include <algorithm>
 
 Map::Map(const string &name)
+	: _physicsState(false)
 {
 	create(name);
 }
 
-Map::~Map()
-{
+Map::~Map() {
 	help::clear(objects);
 	help::clear(gliders);
 }
@@ -27,6 +28,22 @@ bool Map::create(const string &name)
 	Json::Value data;
 	help::loadJson(fileName, data);
 
+	// Параметры
+	{
+		int index = 0;
+		float color[4];
+		auto elementColor = data["backColor"];
+		for (auto it = elementColor.begin(); it != elementColor.end(); ++it) {
+			color[index] = it->asFloat();
+			++index;
+			if (index > 4) {
+				break;
+			}
+		}
+		setColor(color);
+	}
+
+	// Объекты
 	for (auto element : data["objects"])
 	{
 		const string &name = element["name"].asString();
@@ -42,11 +59,21 @@ bool Map::create(const string &name)
 			++index;
 		}
 
+		const string &physicsType = element["physics"].asString();
+		Engine::Physics::Type typeActorPhysics = Engine::Physics::Type::NONE;
+		if (physicsType == "convex") {
+			typeActorPhysics = Engine::Physics::Type::CONVEX;
+		} else if (physicsType == "triangle") {
+			typeActorPhysics = Engine::Physics::Type::TRIANGLE;
+		}
+
 		Object& object = help::add(objects);
 		object.set(name, modelName, pos);
 		object.setVisible(visible);
+		object.setTypeActorPhysics(typeActorPhysics);
 	}
 
+	// Глайдеры
 	for (auto element : data["gliders"])
 	{
 		const string &name = element["name"].asString();
@@ -86,6 +113,30 @@ void Map::getDataJson(Json::Value& dataJson)
 		Json::Value dataObject;
 		glider->getDataJson(dataObject);
 		dataJson["gliders"].append(dataObject);
+	}
+}
+
+void Map::initPhysixs() {
+	if (!_physicsState) {
+		for (auto object : objects) {
+			object->createActorPhysics();
+		}
+		_physicsState = true;
+	}
+}
+
+void Map::releasePhysixs() {
+
+}
+
+void Map::updatePhysixs() {
+	if (!_physicsState) {
+		return;
+	}
+
+
+	for (auto object : objects) {
+		object->updateMatrixPhysics();
 	}
 }
 

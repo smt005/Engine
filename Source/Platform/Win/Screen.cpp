@@ -11,8 +11,8 @@
 
 using namespace Engine;
 
-float Screen::_width = 960;
-float Screen::_height = 540;
+float Screen::_width = 1280;
+float Screen::_height = 720;
 std::string Screen::_title = "Window";
 
 void Screen::init() {

@@ -1,7 +1,9 @@
-
 #include "Physics/Physics.h"
 #include "Common/Help.h"
+#include "Object/Object.h"
+#include "Object/Model.h"
 #include "Object/Mesh.h"
+#include "Object/Position.h"
 
 #include <memory>
 
@@ -9,122 +11,109 @@
 #include "PxPhysicsAPI.h"
 #include "cooking/PxCooking.h"
 
-// D:\CMake\CMakeProject\Source\Engine\ThirdParty\PhysX\physx\externals\physx\bin\win.x86_32.vc141.md\debug\PhysXCooking_static.lib
-// D:\CMake\CMakeProject\Source\Engine\ThirdParty\PhysX\physx\externals\physx\bin\win.x86_32.vc141.md\debug\PhysXExtensions_static.lib
-
 namespace Engine {
 	using namespace physx;
 
-	class UserErrorCallback : public PxErrorCallback
-	{
-	public:
-		virtual void reportError(PxErrorCode::Enum code, const char* message, const char* file, int line) {
-			// error processing implementation
-			
-			help::log("PhysX: " + std::string(message) + " file: " + std::string(file) + " line: " + std::to_string(line));
-		}
-	};
+	namespace physics {
+		class UserErrorCallback : public PxErrorCallback
+		{
+		public:
+			virtual void reportError(PxErrorCode::Enum code, const char* message, const char* file, int line) {
+				help::log("PhysX: " + std::string(message) + " file: " + std::string(file) + " line: " + std::to_string(line));
+			}
+		};
 
-	static UserErrorCallback gDefaultErrorCallback;
+		physics::ActorPhyscs* createActorConvex(Mesh& mesh, const glm::mat4x4& matrix);
+		physics::ActorPhyscs* createActorTriangle(Mesh& mesh, const glm::mat4x4& matrix);
+	}
+
+	// PhysX
+	static physics::UserErrorCallback gDefaultErrorCallback;
 	static PxDefaultAllocator gDefaultAllocatorCallback;
-	static PxFoundation* mFoundation = nullptr;
-	static PxPhysics* mPhysics = nullptr;
-	static PxPvd* mPvd = nullptr;
+	static PxFoundation* pFoundation = nullptr;
+	static PxPhysics* pPhysics = nullptr;
+	static PxPvd* pPvd = nullptr;
 	static bool debugVisualizing = false;
-	static PxPvdTransport* transport = nullptr;
-	static PxCooking* mCooking = nullptr;
+	static PxPvdTransport* pTransport = nullptr;
+	static PxCooking* pCooking = nullptr;
+	static bool physXInited = false;
 
+	// Scene
 	static PxVec3 gravity(0.0f, 0.0f, -9.81f);
-	static PxReal mAccumulator = 0.0f;
-	static PxReal mStepSize = 1.0f / 60.0f;
-	static PxScene* mScene = nullptr;
+	static PxReal accumulatorTime = 0.0f;
+	static PxReal stepSizeTime = 1.0f / 60.0f;
+	static PxScene* pScene = nullptr;
 
-	static PxMaterial* mMaterial = nullptr;
+	// Actor
+	static PxMaterial* pMaterial = nullptr;
 
-	static PxRigidDynamic* aLastActor = nullptr;
+	bool Physics::init() {
+		if (physXInited) {
+			return true;
+		}
 
-	bool initPhysics() {
-		help::log("Physic: init: BEGIN");
-
-		mFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
-		if (!mFoundation) {
-			help::log("Physic: init: PxCreateFoundation failed!");
+		pFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
+		if (!pFoundation) {
 			return false;
 		}
 
-		help::log("Physic: init: PxCreateFoundation OK!");
-
-		bool recordMemoryAllocations = true;
-
-		mPvd = PxCreatePvd(*mFoundation);
-		transport = PxDefaultPvdSocketTransportCreate("localhost", 5425, 10);
-		debugVisualizing = mPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
-		if (!debugVisualizing) {			
-			help::log("Physic: init: PVD FAIL");
-		}
-		else {
-			help::log("Physic: init: PVD connect");
+		pPvd = PxCreatePvd(*pFoundation);
+		pTransport = PxDefaultPvdSocketTransportCreate("localhost", 5425, 10);
+		debugVisualizing = pPvd->connect(*pTransport, PxPvdInstrumentationFlag::eALL);
+		if (!debugVisualizing) {
+			help::log("PhysX PVD connect");
+		} else {
+			help::log("PhysX PVD connect FAIL");
 		}
 
-		mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mFoundation, PxTolerancesScale(), recordMemoryAllocations, mPvd);
-		if (!mPhysics) {
-			help::log("Physic: init: PxCreatePhysics failed!");
+		pPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *pFoundation, PxTolerancesScale(), false, pPvd); // trackOutstandingAllocations, для чего этот параметр
+		if (!pPhysics) {
 			return false;
 		}
 
 		const PxTolerancesScale scale;
 		const PxCookingParams params(scale);
-		mCooking = PxCreateCooking(PX_PHYSICS_VERSION, *mFoundation, params);
-		if (!mCooking) {
-			help::log("Physic: init: PxCreateCooking failed!");
+		pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *pFoundation, params);
+		if (!pCooking) {
 			return false;
 		}
 
-		help::log("Physic: init: OK");
+		physXInited = true;
 		return true;
 	}
 
-	void releasePhysics() {
-		if (mPhysics) {
-			mPhysics->release();
-			mPhysics = nullptr;
-		}
+	void Physics::release() {
+		releaseScene();
 
-		if (mFoundation) {
-			mFoundation->release();
-			mFoundation = nullptr;
-		}
+		if (pPvd) { pPvd->release(); pPvd = nullptr; }
+		debugVisualizing = false;
+		
+		if (pTransport) { pTransport->release(); pTransport = nullptr;}
+		if (pCooking) { pCooking->release(); pCooking = nullptr; }
+		if (pPhysics) { pPhysics->release(); pPhysics = nullptr; }
+		if (pFoundation) { pFoundation->release(); pFoundation = nullptr; }
 
-		if (mPvd) {
-			mPvd->release();
-			mPvd = nullptr;
-		}
+		if (pMaterial) { pMaterial->release(); pMaterial = nullptr; }
 
-		if (transport) {
-			transport->release();
-			transport = nullptr;
-		}
-
-		mCooking = nullptr;
-		mScene = nullptr;
-		mMaterial = nullptr;
+		physXInited = false;
 	}
 
-	bool createScene() {
-		help::log("Physic: Scene: BEGIN");
 
-		if (!mPhysics) {
+	bool Physics::createScene() {
+		if (!pPhysics) {
 			return false;
 		}
 
-		PxSceneDesc sceneDesc(mPhysics->getTolerancesScale());
+		if (pScene) {
+			return true;
+		}
+
+		PxSceneDesc sceneDesc(pPhysics->getTolerancesScale());
 		sceneDesc.gravity = gravity;
 
-		if (!sceneDesc.cpuDispatcher)
-		{
+		if (!sceneDesc.cpuDispatcher) {
 			PxDefaultCpuDispatcher* mCpuDispatcher = PxDefaultCpuDispatcherCreate(1); // Что за параметро
 			if (!mCpuDispatcher) {
-				help::log("Physic: Scene: PxDefaultCpuDispatcherCreate failed!");
 				return false;
 			}
 
@@ -134,233 +123,190 @@ namespace Engine {
 				sceneDesc.filterShader = &PxDefaultSimulationFilterShader;
 			}
 
-			mScene = mPhysics->createScene(sceneDesc);
-			if (!mScene) {
-				help::log("Physic: Scene: createScene failed!");
+			pScene = pPhysics->createScene(sceneDesc);
+			if (!pScene) {
 				return false;
 			}
 		}
 
-		help::log("Physic: Scene: OK");
-
 		if (debugVisualizing) {
-			mScene->getScenePvdClient()->setScenePvdFlags(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS | PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES | PxPvdSceneFlag::eTRANSMIT_CONTACTS);
+			pScene->getScenePvdClient()->setScenePvdFlags(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS | PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES | PxPvdSceneFlag::eTRANSMIT_CONTACTS);
+		}
+	}
+
+	void Physics::releaseScene() {
+		if (pScene) {
+			pScene->release();
+			pScene = nullptr;
+		}
+	}
+
+	bool Physics::updateScene(const float dt) {
+		if (!pScene) {
+			return false;
+		}
+
+		accumulatorTime += dt;
+		if (accumulatorTime < stepSizeTime) {
+			return false;
+		}
+
+		accumulatorTime -= stepSizeTime;
+		pScene->simulate(stepSizeTime);
+		pScene->fetchResults(true);
+
+		return true;
+	}
+
+	bool Physics::createActor(Object& object) {
+		physics::ActorPhyscs* actorPhyscs = nullptr;
+
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			actorPhyscs = physics::createActorConvex(object.getModel().getMesh(), object.getMatrix());
+		} else if (object._typePhysics == Physics::Type::TRIANGLE) {
+			actorPhyscs = physics::createActorTriangle(object.getModel().getMesh(), object.getMatrix());
+		}
+
+		if (actorPhyscs) {
+			object._actorPhyscs = actorPhyscs;
+		}
+		else {
+			object._typePhysics = Physics::Type::NONE;
+			return false;
 		}
 
 		return true;
 	}
 
-	bool updateScene(const float dt) {
-		if (!mScene) {
-			return false;
-		}
+	void Physics::updateMatrixActor(Object& object) {
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			if (!object._actorPhyscs) {
+				return;
+			}
 
-		mAccumulator += dt;
-		if (mAccumulator < mStepSize) {
-			return false;
-		}
+			PxTransform transform = static_cast<PxRigidDynamic*>(object._actorPhyscs)->getGlobalPose();
+			PxMat44 mat44(transform);
+			glm::mat4x4& matrix = object._matrix;
 
-		mAccumulator -= mStepSize;
-		mScene->simulate(mStepSize);
-		fetchResultsScene();
-		return true;
+			matrix[0][0] = mat44.column0[0];
+			matrix[0][1] = mat44.column0[1];
+			matrix[0][2] = mat44.column0[2];
+			matrix[0][3] = 0;
+
+			matrix[1][0] = mat44.column1[0];
+			matrix[1][1] = mat44.column1[1];
+			matrix[1][2] = mat44.column1[2];
+			matrix[1][3] = 0;
+
+			matrix[2][0] = mat44.column2[0];
+			matrix[2][1] = mat44.column2[1];
+			matrix[2][2] = mat44.column2[2];
+			matrix[2][3] = 0;
+
+			matrix[3][0] = mat44.column3[0];
+			matrix[3][1] = mat44.column3[1];
+			matrix[3][2] = mat44.column3[2];
+			matrix[3][3] = 1;
+		}
 	}
 
-	void fetchResultsScene() {
-		if (mScene) {
-			mScene->fetchResults(true);
+	void Physics::releaseActor(Object& object) {
+		if (object._typePhysics == Physics::Type::CONVEX) {
+		}
+		else if (object._typePhysics == Physics::Type::TRIANGLE) {
 		}
 	}
 
-	ActorPhyscs* createActorConvex(Mesh* mesh, const float pos[3]) {
-		if (!mesh) {
-			help::log("Physic: Convex actor: mesh == nullptr");
+	//...
+	physics::ActorPhyscs* physics::createActorConvex(Mesh& mesh, const glm::mat4x4& matrix) {
+		if (!pPhysics || !pScene || !pCooking) {
 			return nullptr;
 		}
 
-		if (!mPhysics || !mScene) {
-			help::log("Physic: Convex actor: FAIL: mPhysics == nullptr || mScene == nullptr");
+		if (!pMaterial) {
+			pMaterial = pPhysics->createMaterial(0.5f, 0.5f, 0.1f); // Трение
 		}
-
-		if (!mMaterial) {
-			mMaterial = mPhysics->createMaterial(0.5f, 0.5f, 0.1f); // Трение
-		}
-		if (!mMaterial) {
-			help::log("Physic: Convex actor: createMaterial failed!");
+		if (!pMaterial) {
 			return nullptr;
 		}
-
-		PxRigidDynamic* aConvexActor = mPhysics->createRigidDynamic(PxTransform(pos[0], pos[1], pos[2]));
-
-		unsigned int count = mesh->countVertex();
 
 		PxConvexMeshDesc convexDesc;
-		convexDesc.points.count = count;
+		convexDesc.points.count = mesh.countVertex();
 		convexDesc.points.stride = sizeof(PxVec3);
-		convexDesc.points.data = mesh->vertexes();
+		convexDesc.points.data = mesh.vertexes();
 		convexDesc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
 
 		PxDefaultMemoryOutputStream buf;
-		if (!mCooking->cookConvexMesh(convexDesc, buf)) {
-			help::log("Physic: Convex actor: cookConvexMesh FAIL");
+		if (!pCooking->cookConvexMesh(convexDesc, buf)) {
 			return nullptr;
 		}
 
 		PxDefaultMemoryInputData input(buf.getData(), buf.getSize());
-		PxConvexMesh* convexMesh = mPhysics->createConvexMesh(input);
+		PxConvexMesh* convexMesh = pPhysics->createConvexMesh(input);
 
-		PxShape* aConvexShape = PxRigidActorExt::createExclusiveShape(*aConvexActor, PxConvexMeshGeometry(convexMesh), *mMaterial);
+		PxMat44 mat44(	PxVec4(matrix[0][0], matrix[0][1], matrix[0][2], matrix[0][3]),
+						PxVec4(matrix[1][0], matrix[1][1], matrix[1][2], matrix[1][3]),
+						PxVec4(matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3]),
+						PxVec4(matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]));
+		PxRigidDynamic* pConvexActor = pPhysics->createRigidDynamic(PxTransform(mat44));
+		PxShape* pConvexShape = PxRigidActorExt::createExclusiveShape(*pConvexActor, PxConvexMeshGeometry(convexMesh), *pMaterial);
 
+		// TODO проверки
+		if (!pConvexShape) {
+			pConvexActor->release();
+		}
 
-		mScene->addActor(*aConvexActor);
-		return aConvexActor;
+		pScene->addActor(*pConvexActor);
+		return pConvexActor;
 	}
 
-	ActorPhyscs* createActorTriangle(Mesh* mesh, const float pos[3]) {
-		if (!mesh) {
-			help::log("Physic: Triangle actor: mesh == nullptr");
+	physics::ActorPhyscs* physics::createActorTriangle(Mesh& mesh, const glm::mat4x4& matrix) {
+		if (!pPhysics || !pScene || !pCooking) {
 			return nullptr;
 		}
 
-		if (!mPhysics || !mScene) {
-			help::log("Physic: Triangle actor: FAIL: mPhysics == nullptr || mScene == nullptr");
+		if (!pMaterial) {
+			pMaterial = pPhysics->createMaterial(0.5f, 0.5f, 0.1f); // Трение
 		}
-
-		if (!mMaterial) {
-			mMaterial = mPhysics->createMaterial(0.5f, 0.5f, 0.1f); // Трение
-		}
-		if (!mMaterial) {
-			help::log("Physic: Triangle actor: createMaterial failed!");
+		if (!pMaterial) {
 			return nullptr;
 		}
-
-		PxRigidStatic* aTriangleActor = mPhysics->createRigidStatic(PxTransform(pos[0], pos[1], pos[2]));
 
 		PxTriangleMeshDesc meshDesc;
-
-		unsigned int count = mesh->countVertex();
-
-		meshDesc.points.count = count;
+		meshDesc.points.count = mesh.countVertex();
 		meshDesc.points.stride = sizeof(PxVec3); // float * 3
-		meshDesc.points.data = mesh->vertexes();
-
-		unsigned int countIndex = mesh->countIndex();
-
-		meshDesc.triangles.count = countIndex;
+		meshDesc.points.data = mesh.vertexes();
+		meshDesc.triangles.count = mesh.countIndex();
 		meshDesc.triangles.stride = 3 * sizeof(PxU32); // unsigned int
-		meshDesc.triangles.data = mesh->indexes();
+		meshDesc.triangles.data = mesh.indexes();
 
 		PxDefaultMemoryOutputStream writeBuffer;
-		bool status = mCooking->cookTriangleMesh(meshDesc, writeBuffer);
+		bool status = pCooking->cookTriangleMesh(meshDesc, writeBuffer);
 		if (!status) {
-			help::log("Physic: Triangle actor: cookTriangleMesh FAIL");
 			return nullptr;
 		}
 
 		PxDefaultMemoryInputData readBuffer(writeBuffer.getData(), writeBuffer.getSize());
-		PxTriangleMesh* triangleMesh = mPhysics->createTriangleMesh(readBuffer);
+		PxTriangleMesh* triangleMesh = pPhysics->createTriangleMesh(readBuffer);
 
 		if (!triangleMesh) {
-			help::log("Physic: Triangle actor: triangleMesh == nullptr");
 			return nullptr;
 		}
 
-		PxShape* aTriangleShape = PxRigidActorExt::createExclusiveShape(*aTriangleActor, PxTriangleMeshGeometry(triangleMesh), *mMaterial);
+		PxMat44 mat44(	PxVec4(matrix[0][0], matrix[0][1], matrix[0][2], matrix[0][3]),
+						PxVec4(matrix[1][0], matrix[1][1], matrix[1][2], matrix[1][3]),
+						PxVec4(matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3]),
+						PxVec4(matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]));
+		PxRigidStatic* pTriangleActor = pPhysics->createRigidStatic(PxTransform(mat44));
+		PxShape* pTriangleShape = PxRigidActorExt::createExclusiveShape(*pTriangleActor, PxTriangleMeshGeometry(triangleMesh), *pMaterial);
 
-		if (!aTriangleShape) {
-			help::log("Physic: Triangle actor: aTriangleShape == nullptr");
+		// TODO проверки
+		if (!pTriangleShape) {
+			pTriangleActor->release();
 			return nullptr;
 		}
 
-		mScene->addActor(*aTriangleActor);
-		return aTriangleActor;
-	}
-
-	ActorPhyscs* createActorBox(const float rect[3], const float pos[3]) {
-		if (!mPhysics || !mScene) {
-			help::log("Physic: Box actor: FAIL: mPhysics == nullptr || mScene == nullptr");
-		}
-
-		if (!mMaterial) {
-			mMaterial = mPhysics->createMaterial(0.5f, 0.5f, 0.1f); // Трение
-		}
-		if (!mMaterial) {
-			help::log("Physic: Box actor: createMaterial failed!");
-			return nullptr;
-		}
-
-		PxRigidDynamic* aBoxActor = mPhysics->createRigidDynamic(PxTransform(pos[0], pos[1], pos[2]));
-		PxShape* aBoxShape = PxRigidActorExt::createExclusiveShape(*aBoxActor, PxBoxGeometry(rect[0]/2.0f, rect[1]/2.0f, rect[2]/2.0f), *mMaterial);
-
-		mScene->addActor(*aBoxActor);
-
-		aLastActor = aBoxActor;
-		return aBoxActor;
-	}
-
-	Position getActorPos() {
-		if (!aLastActor) {
-			return Position();
-		}
-
-		PxTransform transform = aLastActor->getGlobalPose();
-		PxMat44 mat44(transform);
-
-		float mat[16];
-
-		mat[0] = mat44.column0[0];
-		mat[1] = mat44.column0[1];
-		mat[2] = mat44.column0[2];
-		mat[3] = 0;
-
-		mat[4] = mat44.column1[0];
-		mat[5] = mat44.column1[1];
-		mat[6] = mat44.column1[2];
-		mat[7] = 0;
-
-		mat[8] = mat44.column2[0];
-		mat[9] = mat44.column2[1];
-		mat[10] = mat44.column2[2];
-		mat[11] = 0;
-
-		mat[12] = mat44.column3[0];
-		mat[13] = mat44.column3[1];
-		mat[14] = mat44.column3[2];
-		mat[15] = 1;
-
-		return mat;
-	}
-
-	Position getActorPos(ActorPhyscs* actorPhyscs) {
-		if (!actorPhyscs) {
-			return Position();
-		}
-
-		PxTransform transform = static_cast<PxRigidDynamic*>(actorPhyscs)->getGlobalPose();
-		PxMat44 mat44(transform);
-
-		float mat[16];
-
-		mat[0] = mat44.column0[0];
-		mat[1] = mat44.column0[1];
-		mat[2] = mat44.column0[2];
-		mat[3] = 0;
-
-		mat[4] = mat44.column1[0];
-		mat[5] = mat44.column1[1];
-		mat[6] = mat44.column1[2];
-		mat[7] = 0;
-
-		mat[8] = mat44.column2[0];
-		mat[9] = mat44.column2[1];
-		mat[10] = mat44.column2[2];
-		mat[11] = 0;
-
-		mat[12] = mat44.column3[0];
-		mat[13] = mat44.column3[1];
-		mat[14] = mat44.column3[2];
-		mat[15] = 1;
-
-		return mat;
+		pScene->addActor(*pTriangleActor);
+		return pTriangleActor;
 	}
 };

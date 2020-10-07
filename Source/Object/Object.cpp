@@ -2,23 +2,28 @@
 #include "Object.h"
 #include "Model.h"
 #include "Shape.h"
+#include "Physics/Physics.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace glm;
 
 Object::Object()
+	: _typePhysics(Engine::Physics::Type::NONE)
+	, _actorPhyscs(nullptr)
 {
 
 }
 
 Object::Object(const string &name, const string &modelName, const vec3 &pos, const Json::Value &data)
+	: _typePhysics(Engine::Physics::Type::NONE)
+	, _actorPhyscs(nullptr)
 {
 	set(name, modelName, pos, data);
 }
 
-Object::~Object()
-{
+Object::~Object() {
+	releaseActorPhysics();
 }
 
 void Object::getDataJson(Json::Value& dataJson)
@@ -31,14 +36,12 @@ void Object::getDataJson(Json::Value& dataJson)
 	dataJson["pos"][2] = _matrix[3][2];
 }
 
-Model& Object::getModel()
-{
+Model& Object::getModel() {
 	if (!_model) _model = Model::getByName("default");
 	return *_model;
 };
 
-const float& Object::getHeight()
-{
+const float& Object::getHeight() {
 	return _matrix[3][2];
 }
 
@@ -47,13 +50,25 @@ void Object::set(const string &name, const string &modelName, const vec3 &pos, c
 	setName(name);
 	_model = Model::getByName(modelName);
 
-	if (length(pos) > 0.0f) _matrix = translate(_matrix, pos);
+	_matrix = translate(_matrix, pos);
 	if (!data.empty()) setData(data);
 }
 
 void Object::setHeight(const float &height)
 {
 	_matrix[3][2] = height;
+}
+
+void Object::updateMatrixPhysics() {
+	Engine::Physics::updateMatrixActor(*this);
+}
+
+bool Object::createActorPhysics() {
+	return Engine::Physics::createActor(*this);
+}
+
+void Object::releaseActorPhysics() {
+	Engine::Physics::releaseActor(*this);
 }
 
 // Virtual
