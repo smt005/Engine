@@ -3,10 +3,11 @@
 #include "Game.h"
 #include "Screen.h"
 #include "Callback/Callback.h"
+#include "FileManager.h"
 #include "Common/Help.h"
 
 #include "json/json.h"
-#include "GLFW/glfw3.h"
+#include "GLFW/glfw3.h" // https://www.glfw.org/docs/3.3/window_guide.html
 
 #include <chrono>
 #include <iostream>
@@ -17,27 +18,40 @@ GamePtr _game = nullptr;
 Json::Value _settingJson;
 float _deltaTime = 0.0f;
 double _lastTime = Core::currentTime();
+const std::string fileNameSetting = "Setting.json";
 
 void cursorPositionCallback(GLFWwindow* Window, double x, double y);
 void mouseButtonCallback(GLFWwindow* Window, int Button, int Action, int mods);
 void keyCallback(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods);
 void windowSizeCallback(GLFWwindow* window, int width, int height);
+void windowPosCallback(GLFWwindow* window, int left, int top);
+void windowCloseCallback(GLFWwindow* window);
 
 int Core::execution(const GamePtr& game)
 {
-	if (!game) return -1;
+	if (!game) {
+		return -1;
+	}
 
-	if (!help::loadJson("Setting.json", _settingJson))
+	_game = game;
+
+	const std::filesystem::path sourcesDir = _game->getreSourcesDir();
+	Engine::FileManager::setResourcesDir(sourcesDir);
+
+	//Engine::FileManager::setResourcesDir(_game->getreSourcesDir());
+
+	if (!help::loadJson(fileNameSetting, _settingJson))
 	{
 		_settingJson.clear();
 		_settingJson["window"]["width"] = 960;
 		_settingJson["window"]["height"] = 540;
+		_settingJson["window"]["left"] = 200;
+		_settingJson["window"]["top"] = 100;
 		_settingJson["window"]["title"] = "Window_default";
 		_settingJson["window"]["fullscreen"] = false;
-		help::saveJson("Setting.json", _settingJson);
+		help::saveJson(fileNameSetting, _settingJson);
 	}
 
-	_game = game;
 	main();
 
 	return 0;
@@ -58,14 +72,19 @@ bool Core::main() {
 		return false;
 	}
 
+	glfwSetWindowPos(window, Screen::left(), Screen::top());
+
 	glfwSetCursorPosCallback(window, cursorPositionCallback);
 	glfwSetMouseButtonCallback(window, mouseButtonCallback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetWindowSizeCallback(window, windowSizeCallback);
+	glfwSetWindowPosCallback(window, windowPosCallback);
+	glfwSetWindowCloseCallback(window, windowCloseCallback);
 
 	glfwMakeContextCurrent(window);
 
 	Core::init();
+	Core::resize();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -195,4 +214,24 @@ void windowSizeCallback(GLFWwindow* window, int width, int height)
 	Screen::setHeight(height);
 
 	Core::resize();
+}
+
+void windowPosCallback(GLFWwindow* window, int left, int top)
+{
+	Screen::setLeft(left);
+	Screen::setTop(top);
+
+	Core::resize();
+}
+
+void windowCloseCallback(GLFWwindow* window)
+{
+	// Сохранение настроек окна
+
+	_settingJson["window"]["width"] = Screen::width();
+	_settingJson["window"]["height"] = Screen::height();
+	_settingJson["window"]["left"] = Screen::left();
+	_settingJson["window"]["top"] = Screen::top();
+
+	help::saveJson(fileNameSetting, _settingJson);
 }
