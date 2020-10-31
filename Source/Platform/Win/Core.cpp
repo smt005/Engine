@@ -103,6 +103,9 @@ bool Core::main() {
 
 void Core::close()
 {
+	if (!_game) return;
+	_game->close();
+
 	exit(1);
 }
 

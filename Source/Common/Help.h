@@ -24,14 +24,19 @@ namespace help
 	v3 = rand() % 30 + 1985;   // v3 in the range 1985-2014
 	*/
 
-	inline float random_f(const float& min = 0.0f, const float& max = 1.0f, const int& accuracy = 1000) {
-		int var = rand() % accuracy;
-		float k = static_cast<float>(var) / static_cast<float>(accuracy);
-		float range = max - min;
-		return min + range * k;
+	template <class T>
+	inline T random(const T& min = 0.0f, const T& max = 1.0f, const int accuracy = 32000) {
+		int randVar = rand();
+		int var = randVar % accuracy;
+		T k = static_cast<T>(var) / static_cast<T>(accuracy);
+		T range = max - min;
+		T value = range * k;
+		T res = min + value;
+		return res;
+		//return min + range * k;
 	}
 
-	inline int random_i(const int& min = 0, const int& max = 1) {
+	inline int random_i(const int min = 0, const int max = 1) {
 		const int range = max - min;
 		int var = rand() % range;
 		float k = static_cast<float>(var) / static_cast<float>(range);

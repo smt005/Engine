@@ -17,6 +17,7 @@ public:
 	virtual void update() {};
 	virtual void draw() {};
 	virtual void resize() {};
+	virtual void close() {};
 };
 
 typedef std::shared_ptr<Game> GamePtr;
