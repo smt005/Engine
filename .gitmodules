@@ -19,3 +19,6 @@
 [submodule "ThirdParty/glfw"]
 	path = ThirdParty/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "ThirdParty/FreeType2"]
+	path = ThirdParty/FreeType2
+	url = https://gitlab.freedesktop.org/freetype/freetype.git
