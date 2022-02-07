@@ -1,15 +1,9 @@
 [submodule "ThirdParty/PhysX"]
 	path = ThirdParty/PhysX
 	url = https://github.com/smt005/PhysX.git
-[submodule "ThirdParty/Новая папка"]
-	path = ThirdParty/Новая папка
-	url = https://github.com/smt005/FreeImage.git
 [submodule "ThirdParty/jsoncpp"]
 	path = ThirdParty/jsoncpp
 	url = https://github.com/open-source-parsers/jsoncpp.git
-[submodule "ThirdParty/freetype2"]
-	path = ThirdParty/freetype2
-	url = git://git.sv.nongnu.org/freetype/freetype2.git
 [submodule "ThirdParty/glm"]
 	path = ThirdParty/glm
 	url = https://github.com/g-truc/glm.git
@@ -22,3 +16,6 @@
 [submodule "ThirdParty/glew"]
 	path = ThirdParty/glew
 	url = https://github.com/smt005/GLEW.git
+[submodule "ThirdParty/FreeImage"]
+	path = ThirdParty/FreeImage
+	url = https://github.com/smt005/FreeImage.git
