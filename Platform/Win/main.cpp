@@ -6,7 +6,6 @@
 #endif
 
 #include "Core.h"
-#include "GamesManager.h"
 
 int main(int argc, char** argv)
 {
@@ -14,7 +13,6 @@ int main(int argc, char** argv)
 	FreeConsole();
 #endif
 
-	Engine::GamePtr gamePtr;
-	gamePtr = game::getGame(argc > 1 ? argv[1] : std::string());
+	Engine::Game::Ptr gamePtr = Engine::Game::GetGame();
 	return Engine::Core::execution(gamePtr);
 }

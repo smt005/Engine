@@ -14,7 +14,7 @@
 
 using namespace Engine;
 
-GamePtr _game = nullptr;
+Game::Ptr _game = nullptr;
 Json::Value _settingJson;
 float _deltaTime = 0.0f;
 double _lastTime = Core::currentTime();
@@ -27,7 +27,7 @@ void windowSizeCallback(GLFWwindow* window, int width, int height);
 void windowPosCallback(GLFWwindow* window, int left, int top);
 void windowCloseCallback(GLFWwindow* window);
 
-int Core::execution(const GamePtr& game)
+int Core::execution(const Game::Ptr& game)
 {
 	if (!game) {
 		return -1;
@@ -35,10 +35,10 @@ int Core::execution(const GamePtr& game)
 
 	_game = game;
 
-	const std::filesystem::path sourcesDir = _game->getreSourcesDir();
+	const std::filesystem::path sourcesDir = _game->getSourcesDir();
 	Engine::FileManager::setResourcesDir(sourcesDir);
 
-	//Engine::FileManager::setResourcesDir(_game->getreSourcesDir());
+	//Engine::FileManager::setResourcesDir(_game->getSourcesDir());
 
 	if (!help::loadJson(fileNameSetting, _settingJson))
 	{

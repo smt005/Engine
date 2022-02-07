@@ -6,28 +6,37 @@
 
 namespace Engine
 {
-	
+
 class Game
 {
 public:
-	virtual ~Game() {};
-	virtual std::string getName() = 0;
-	virtual std::filesystem::path getreSourcesDir() = 0;
+	typedef std::shared_ptr<Game> Ptr;
+
+public:
+	virtual ~Game() = default;
+	virtual std::string getName() { return typeid(*this).name(); }
+	virtual std::filesystem::path getSourcesDir() = 0;
 	virtual void init() {};
 	virtual void update() {};
 	virtual void draw() {};
 	virtual void resize() {};
 	virtual void close() {};
-};
 
-typedef std::shared_ptr<Game> GamePtr;
-
-
-class DefaultGame final : public Game
-{
-public:
-	std::string getName() override { return "DefaultGame"; }
-	std::filesystem::path getreSourcesDir() override { return ""; }
+	static Game::Ptr GetGame(const std::string& params = std::string());
 };
 
 };	// Engine
+
+/* Для подключения игры к движку, нужно в подмодуле сделать реалезацию метода GetGame.
+Пример:
+*/
+
+/* Game.cpp
+#include "Game.h"
+#include "PhysX/MapPhysX.h"
+
+Engine::Game::Ptr Engine::Game::GetGame(const std::string& params) {
+	Engine::Game::Ptr gamePtr(new MapPhysX());
+	return gamePtr;
+}
+*/

@@ -15,7 +15,7 @@ class Window;
 class Core
 {
 public:
-	static int execution(const GamePtr& game);
+	static int execution(const Game::Ptr& game);
 	static bool main();
 	static void close();
 

@@ -132,6 +132,8 @@ namespace Engine {
 		if (debugVisualizing) {
 			pScene->getScenePvdClient()->setScenePvdFlags(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS | PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES | PxPvdSceneFlag::eTRANSMIT_CONTACTS);
 		}
+
+		return true;
 	}
 
 	void Physics::releaseScene() {
