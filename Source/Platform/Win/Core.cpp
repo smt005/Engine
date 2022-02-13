@@ -37,9 +37,6 @@ int Core::execution(const Game::Ptr& game)
 
 	const std::filesystem::path sourcesDir = _game->getSourcesDir();
 	Engine::FileManager::setResourcesDir(sourcesDir);
-
-	//Engine::FileManager::setResourcesDir(_game->getSourcesDir());
-
 	if (!help::loadJson(fileNameSetting, _settingJson))
 	{
 		_settingJson.clear();

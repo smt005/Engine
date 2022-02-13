@@ -1,5 +1,5 @@
 
-#define WINDOWS_HIDE_CONSOLE 0
+#define WINDOWS_HIDE_CONSOLE 1
 
 #if WINDOWS_HIDE_CONSOLE
 	#include <Windows.h>

@@ -21,9 +21,11 @@ class Object : public Position, public Name
 public:
 	int tag = 0;
 
+
 protected:
 	ModelPtr _model;
 	bool _visible = true;
+	double _createTime;
 
 private:
 	// Physics
@@ -32,7 +34,7 @@ private:
 
 public:
 	Object();
-	Object(const string &name, const string &modelName, const vec3 &pos = vec3(0.0f), const Json::Value& data = Json::Value());
+	Object(const string& name, const string& modelName, const vec3& pos = vec3(0.0f), const Json::Value& data = Json::Value());
 	virtual ~Object();
 
 	void getDataJson(Json::Value& dataJson);
@@ -40,17 +42,21 @@ public:
 	Model& getModel();
 	const float& getHeight();
 
-	void set(const string &name, const string &modelName, const vec3 &pos = vec3(0.0f), const Json::Value& data = Json::Value());
-	void setHeight(const float &height);
-	
+	void set(const string& name, const string& modelName, const vec3& pos = vec3(0.0f), const Json::Value& data = Json::Value());
+	void setHeight(const float& height);
+
 	// Physics
-	void setTypeActorPhysics(const Engine::Physics::Type typePhysics) {_typePhysics = typePhysics; }
+	void setTypeActorPhysics(const Engine::Physics::Type typePhysics) { _typePhysics = typePhysics; }
 	void updateMatrixPhysics();
 	bool createActorPhysics();
 	void releaseActorPhysics();
 
+	void addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);
+
 	inline bool visible() { return _visible; }
 	inline void setVisible(const bool visible) { _visible = visible; }
+
+	inline double getCreateTime() { return _createTime; }
 
 public:
 	virtual void setData(const Json::Value &data);

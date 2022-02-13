@@ -1,3 +1,4 @@
+
 #include "Physics/Physics.h"
 #include "Common/Help.h"
 #include "Object/Object.h"
@@ -113,20 +114,20 @@ namespace Engine {
 
 		if (!sceneDesc.cpuDispatcher) {
 			PxDefaultCpuDispatcher* mCpuDispatcher = PxDefaultCpuDispatcherCreate(1); // Что за параметро
-			if (!mCpuDispatcher) {
-				return false;
-			}
+if (!mCpuDispatcher) {
+	return false;
+}
 
-			sceneDesc.cpuDispatcher = mCpuDispatcher; // Узнать...
+sceneDesc.cpuDispatcher = mCpuDispatcher; // Узнать...
 
-			if (!sceneDesc.filterShader) {
-				sceneDesc.filterShader = &PxDefaultSimulationFilterShader;
-			}
+if (!sceneDesc.filterShader) {
+	sceneDesc.filterShader = &PxDefaultSimulationFilterShader;
+}
 
-			pScene = pPhysics->createScene(sceneDesc);
-			if (!pScene) {
-				return false;
-			}
+pScene = pPhysics->createScene(sceneDesc);
+if (!pScene) {
+	return false;
+}
 		}
 
 		if (debugVisualizing) {
@@ -165,7 +166,8 @@ namespace Engine {
 
 		if (object._typePhysics == Physics::Type::CONVEX) {
 			actorPhyscs = physics::createActorConvex(object.getModel().getMesh(), object.getMatrix());
-		} else if (object._typePhysics == Physics::Type::TRIANGLE) {
+		}
+		else if (object._typePhysics == Physics::Type::TRIANGLE) {
 			actorPhyscs = physics::createActorTriangle(object.getModel().getMesh(), object.getMatrix());
 		}
 
@@ -213,9 +215,28 @@ namespace Engine {
 	}
 
 	void Physics::releaseActor(Object& object) {
-		if (object._typePhysics == Physics::Type::CONVEX) {
+		if (object._typePhysics != Physics::Type::NONE && pScene) {
+			if (PxActor* actor = (PxActor*)object._actorPhyscs) {
+				actor->release();
+			}
 		}
-		else if (object._typePhysics == Physics::Type::TRIANGLE) {
+
+		object._actorPhyscs = nullptr;
+	}
+	
+	void Physics::addForceToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType) {
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			if (PxRigidDynamic* pConvexActor = (PxRigidDynamic*)object._actorPhyscs) {
+				PxVec3 force = PxVec3(vector.x, vector.y, vector.z);
+
+				switch (forceType) {
+					case Engine::Physics::Force::ACCELERATION: pConvexActor->addForce(force, PxForceMode::Enum::eACCELERATION, true); break;
+					case Engine::Physics::Force::FORCE: pConvexActor->addForce(force, PxForceMode::Enum::eFORCE, true); break;
+					case Engine::Physics::Force::IMPULSE: pConvexActor->addForce(force, PxForceMode::Enum::eIMPULSE, true); break;
+					case Engine::Physics::Force::VELOCITY_CHANGE: pConvexActor->addForce(force, PxForceMode::Enum::eVELOCITY_CHANGE, true); break;
+					default: pConvexActor->addForce(force, PxForceMode::Enum::eIMPULSE, true);
+				}
+			}
 		}
 	}
 

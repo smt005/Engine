@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "glm/vec3.hpp"
+
 class Position;
 class Object;
 
@@ -20,6 +22,14 @@ namespace Engine {
 			TRIANGLE
 		};
 
+		enum class Force
+		{
+			ACCELERATION,
+			FORCE,
+			IMPULSE,
+			VELOCITY_CHANGE
+		};
+
 	public:
 		static bool init();
 		static void release();
@@ -32,6 +42,8 @@ namespace Engine {
 		static bool createActor(Object& object);
 		static void updateMatrixActor(Object& object);
 		static void releaseActor(Object& object);
+
+		static void addForceToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType);
 	};
 	
 };	// Engine

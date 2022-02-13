@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "Model.h"
 #include "Shape.h"
+#include "Core.h"
 #include "Physics/Physics.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -9,7 +10,8 @@
 using namespace glm;
 
 Object::Object()
-	: _typePhysics(Engine::Physics::Type::NONE)
+	: _createTime(Engine::Core::currentTime())
+	,_typePhysics(Engine::Physics::Type::NONE)
 	, _actorPhyscs(nullptr)
 {
 
@@ -23,7 +25,7 @@ Object::Object(const string &name, const string &modelName, const vec3 &pos, con
 }
 
 Object::~Object() {
-	releaseActorPhysics();
+	// Удалять актёров PhysX в деструкторе нельзя.
 }
 
 void Object::getDataJson(Json::Value& dataJson)
@@ -69,6 +71,10 @@ bool Object::createActorPhysics() {
 
 void Object::releaseActorPhysics() {
 	Engine::Physics::releaseActor(*this);
+}
+
+void Object::addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType) {
+	Engine::Physics::addForceToActor(*this, vector, forceType);
 }
 
 // Virtual

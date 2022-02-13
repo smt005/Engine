@@ -15,7 +15,7 @@ public:
 public:
 	virtual ~Game() = default;
 	virtual std::string getName() { return typeid(*this).name(); }
-	virtual std::filesystem::path getSourcesDir() = 0;
+	virtual std::filesystem::path getSourcesDir() { return std::string(); };
 	virtual void init() {};
 	virtual void update() {};
 	virtual void draw() {};

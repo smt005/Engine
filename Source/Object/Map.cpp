@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "Physics/Physics.h"
 #include "FileManager.h"
+#include "Core.h"
 #include "Common/Help.h"
 
 #include <algorithm>
@@ -126,7 +127,10 @@ void Map::initPhysixs() {
 }
 
 void Map::releasePhysixs() {
+	for (Object* obgectPtr : objects) { obgectPtr->releaseActorPhysics(); }
+	for (Glider* gliderPtr : gliders) { gliderPtr->releaseActorPhysics(); }
 
+	_physicsState = false;
 }
 
 void Map::updatePhysixs() {
