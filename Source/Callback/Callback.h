@@ -11,7 +11,6 @@
 
 namespace Engine
 {
-
 constexpr int CALLBACK_COUNT_KEY = 1024;
 constexpr int CALLBACK_COUNT_TAP = 10;
 
@@ -32,6 +31,9 @@ enum class CallbackType
 
 class Callback
 {
+public:
+	typedef std::shared_ptr<Callback> Ptr;
+
 public:
 	static void addObject(Callback& object);
 	static void removeObject(Callback& object);

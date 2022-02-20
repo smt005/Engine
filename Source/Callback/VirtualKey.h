@@ -5,6 +5,16 @@ namespace Engine
 
 enum class VirtualKey
 {
+	VK_0 = 48,
+	VK_1 = 49,
+	VK_2 = 50,
+	VK_3 = 51,
+	VK_4 = 52,
+	VK_5 = 53,
+	VK_6 = 54,
+	VK_7 = 55,
+	VK_8 = 56,
+	VK_9 = 57,
 	A = 65,
 	B =	66,
 	C = 67,

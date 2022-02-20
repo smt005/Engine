@@ -17,14 +17,19 @@ typedef std::shared_ptr<Map> MapPtr;
 class Map : public DataClass <Map>, public Color
 {
 public:
+	typedef std::shared_ptr<Map> Ptr;
+
+public:
 	std::vector<Object*> objects;
 	std::vector<Glider*> gliders;
 
-	Map() {};
+	Map() : _physicsState(false) {};
 	Map(const string &name);
 	virtual ~Map();
 
 	bool create(const string &name);
+	void clear();
+	bool load();
 
 	void getDataJson(Json::Value& dataJson);
 	void action();

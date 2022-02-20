@@ -87,9 +87,11 @@ void DataClass<ObjectT>::erase(const string& name)
 template <class ObjectT>
 void DataClass<ObjectT>::clear(bool onlyUnused)
 {
-	if (onlyUnused = false)	{
+	_map.clear();
+
+	/*if (onlyUnused = false) {
 		_map.clear();
 	} else {
-		remove(_map.begin(), _map.end(), [](ObjectPtrT& itemPtr) { return itemPtr.use_count <= 0 ? true : false; });
-	}
+		//...
+	}*/
 }

@@ -10,7 +10,7 @@
 
 #include <algorithm>
 
-Map::Map(const string &name)
+Map::Map(const string& name)
 	: _physicsState(false)
 {
 	create(name);
@@ -21,11 +21,22 @@ Map::~Map() {
 	help::clear(gliders);
 }
 
-bool Map::create(const string &name)
+bool Map::create(const string& name)
 {
 	setName(name);
+	clear();
+	return load();
+}
 
-	string fileName = "Maps/" + name + ".json";
+void Map::clear() {
+	help::clear(objects);
+	help::clear(gliders);
+}
+
+bool Map::load() {
+	clear();
+
+	string fileName = "Maps/" + getName() + ".json";
 	Json::Value data;
 	help::loadJson(fileName, data);
 
