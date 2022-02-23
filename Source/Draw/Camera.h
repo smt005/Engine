@@ -21,6 +21,9 @@ using namespace glm;
 
 class Camera
 {
+public:
+	typedef std::shared_ptr<Camera> Ptr;
+
 private:
 	mat4x4 _matProject;
 	mat4x4 _matView;

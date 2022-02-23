@@ -11,6 +11,7 @@
 
 class Object;
 class Glider;
+class Camera;
 class Map;
 typedef std::shared_ptr<Map> MapPtr;
 
@@ -47,4 +48,5 @@ public:
 
 private:
 	bool _physicsState;
+	std::shared_ptr<Camera> _cameraPtr;
 };

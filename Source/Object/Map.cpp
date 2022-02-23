@@ -4,6 +4,7 @@
 #include "Glider.h"
 #include "Model.h"
 #include "Physics/Physics.h"
+#include "Draw/Camera.h"
 #include "FileManager.h"
 #include "Core.h"
 #include "Common/Help.h"
@@ -42,6 +43,7 @@ bool Map::load() {
 
 	// Параметры
 	{
+		// Фон
 		int index = 0;
 		float color[4];
 		auto elementColor = data["backColor"];
@@ -53,6 +55,14 @@ bool Map::load() {
 			}
 		}
 		setColor(color);
+
+		// Камера
+		auto cameraData = data["camera"];
+		if (cameraData) {
+			_cameraPtr = std::make_shared<Camera>();
+			_cameraPtr->setJsonData(cameraData);
+			Camera::setCurrent(*_cameraPtr);
+		}
 	}
 
 	// Объекты
