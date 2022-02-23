@@ -204,3 +204,10 @@ Object*	Map::getObjectByName(const std::string& name) {
 
 	return *it;
 }
+
+const Camera& Map::getCamera() {
+	if (!_cameraPtr) {
+		_cameraPtr = std::make_shared<Camera>();
+	}
+	return *_cameraPtr;
+}

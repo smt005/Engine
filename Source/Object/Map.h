@@ -45,6 +45,7 @@ public:
 	Object& addObject(Object* object);
 
 	Object*	getObjectByName(const std::string& name);
+	const Camera& getCamera();
 
 private:
 	bool _physicsState;

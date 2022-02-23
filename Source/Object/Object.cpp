@@ -47,6 +47,10 @@ const float& Object::getHeight() {
 	return _matrix[3][2];
 }
 
+float Object::hit() {
+	return 0;
+}
+
 void Object::set(const string &name, const string &modelName, const vec3 &pos, const Json::Value &data)
 {
 	setName(name);

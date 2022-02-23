@@ -406,7 +406,7 @@ glm::vec3 Camera::corsorCoord()
 mat4x4 Camera::_matPVM;
 Camera Camera::current;
 
-Camera& Camera::setCurrent(Camera& camera)
+Camera& Camera::setCurrent(const Camera& camera)
 {
 	current = camera;
 	return current;

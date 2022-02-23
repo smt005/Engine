@@ -42,6 +42,8 @@ public:
 	Model& getModel();
 	const float& getHeight();
 
+	float hit();
+
 	void set(const string& name, const string& modelName, const vec3& pos = vec3(0.0f), const Json::Value& data = Json::Value());
 	void setHeight(const float& height);
 
