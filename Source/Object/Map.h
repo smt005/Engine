@@ -5,6 +5,7 @@
 #include "glm/mat4x4.hpp"
 #include "Common/DataClass.h"
 #include "Object/Color.h"
+#include  "Object/Object.h"
 
 #include <memory>
 #include <vector>
@@ -44,10 +45,12 @@ public:
 	Object& addObject(const string& nameModel, const glm::mat4x4& mat = glm::mat4x4(1.0));
 	Object& addObject(Object* object);
 
-	Object*	getObjectByName(const std::string& name);
+	Object* getObjectPtrByName(const std::string& name);
+	Object&	getObjectByName(const std::string& name);
 	const Camera& getCamera();
 
 private:
 	bool _physicsState;
 	std::shared_ptr<Camera> _cameraPtr;
+	Object _defaultObject;
 };

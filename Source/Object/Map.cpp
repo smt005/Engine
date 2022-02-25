@@ -196,13 +196,23 @@ Object& Map::addObject(Object* object)
 	return help::add(objects, object);
 }
 
-Object*	Map::getObjectByName(const std::string& name) {
+Object*	Map::getObjectPtrByName(const std::string& name) {
 	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object* object) { return object->getName() == name ? true : false; });
 	if (it == objects.end()) {
-		help::log("Map::getObjectByName(" + name  + ") not found.");
+		return nullptr;
+		//help::log("Map::getObjectByName(" + name  + ") not found.");
 	}
 
 	return *it;
+}
+
+Object& Map::getObjectByName(const std::string& name) {
+	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object* object) { return object->getName() == name ? true : false; });
+	if (it == objects.end()) {
+		return _defaultObject;
+	}
+
+	return *(*it);
 }
 
 const Camera& Map::getCamera() {
