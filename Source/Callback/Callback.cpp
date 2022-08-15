@@ -97,6 +97,13 @@ void Callback::onMove(float x, float y)
 	}
 }
 
+void Callback::onScroll(double yOffset)
+{
+	TapCallbackEvent* callbackEvent = new TapCallbackEvent(yOffset > 0 ? VirtualTap::SCROLL_UP : VirtualTap::SCROLL_BOTTOM);
+	CallbackEventPtr callbackEventPtr(callbackEvent);
+	iteration(CallbackType::SCROLL, callbackEventPtr);
+}
+
 void Callback::update()
 {
 	if (keyPinch) {

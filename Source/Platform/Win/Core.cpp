@@ -26,6 +26,11 @@ void keyCallback(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods
 void windowSizeCallback(GLFWwindow* window, int width, int height);
 void windowPosCallback(GLFWwindow* window, int left, int top);
 void windowCloseCallback(GLFWwindow* window);
+void windowCloseCallback(GLFWwindow* window);
+void windowScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+
+typedef std::function<void(GLFWwindow* window)> WhileFunction;
+std::vector<WhileFunction> whileFunctions;
 
 int Core::execution(const Game::Ptr& game)
 {
@@ -77,6 +82,7 @@ bool Core::main() {
 	glfwSetWindowSizeCallback(window, windowSizeCallback);
 	glfwSetWindowPosCallback(window, windowPosCallback);
 	glfwSetWindowCloseCallback(window, windowCloseCallback);
+	glfwSetScrollCallback(window, windowScrollCallback);
 
 	glfwMakeContextCurrent(window);
 
@@ -88,6 +94,11 @@ bool Core::main() {
 		Callback::update();
 		Core::update();
 		Core::draw();
+
+		for (WhileFunction function : whileFunctions) {
+			function(window);
+		}
+		whileFunctions.clear();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -169,6 +180,14 @@ float Core::deltaTime() {
 	return _deltaTime;
 }
 
+void Core::SetCursorPos(const double x, const double y) {
+
+	whileFunctions.emplace_back([x, y](GLFWwindow* window) {
+		Engine::Callback::setMousePos(x, y);
+		glfwSetCursorPos(window, x, y);
+	});
+}
+
 //...
 
 void cursorPositionCallback(GLFWwindow* Window, double x, double y)
@@ -234,4 +253,9 @@ void windowCloseCallback(GLFWwindow* window)
 	_settingJson["window"]["top"] = Screen::top();
 
 	help::saveJson(fileNameSetting, _settingJson);
+}
+
+void windowScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	Callback::onScroll(yoffset);
 }

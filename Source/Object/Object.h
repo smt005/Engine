@@ -34,7 +34,7 @@ private:
 
 public:
 	Object();
-	Object(const string& name, const string& modelName, const vec3& pos = vec3(0.0f), const Json::Value& data = Json::Value());
+	Object(const string& name, const string& modelName, const vec3& pos = vec3(0.0f));
 	virtual ~Object();
 
 	void getDataJson(Json::Value& dataJson);
@@ -44,7 +44,7 @@ public:
 
 	float hit(const int x, const int y);
 
-	void set(const string& name, const string& modelName, const vec3& pos = vec3(0.0f), const Json::Value& data = Json::Value());
+	void set(const string& name, const string& modelName, const vec3& pos = vec3(0.0f));
 	void setHeight(const float& height);
 
 	// Physics
@@ -61,7 +61,6 @@ public:
 	inline double getCreateTime() { return _createTime; }
 
 public:
-	virtual void setData(const Json::Value &data);
 	virtual void action();
 
 public:

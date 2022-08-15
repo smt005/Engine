@@ -22,8 +22,10 @@ public:
 	inline const unsigned int countVertex()	{ return _countVertex; }
 	inline const unsigned int countIndex() const { return _countIndex; }
 
-	inline const float* const vertexes()       const { return _aVertex; }
-	inline const float* const normals()        const { return _aNormal; }
+	//inline const float* const vertexes()       const { return _aVertex; }
+	//inline const float* const normals()        const { return _aNormal; }
+	inline float* vertexes()       const { return _aVertex; }
+	inline float* normals()        const { return _aNormal; }
 	inline const float* const texCoords()      const { return _aTexCoord; }
 	inline const unsigned int* const indexes() const { return _aIndex; }
 

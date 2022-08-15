@@ -19,11 +19,11 @@ Object::Object()
 
 }
 
-Object::Object(const string &name, const string &modelName, const vec3 &pos, const Json::Value &data)
+Object::Object(const string &name, const string &modelName, const vec3 &pos)
 	: _typePhysics(Engine::Physics::Type::NONE)
 	, _actorPhyscs(nullptr)
 {
-	set(name, modelName, pos, data);
+	set(name, modelName, pos);
 }
 
 Object::~Object() {
@@ -125,13 +125,12 @@ float Object::hit(const int xTap, const int yTap) {
 	return false;
 }
 
-void Object::set(const string &name, const string &modelName, const vec3 &pos, const Json::Value &data)
+void Object::set(const string &name, const string &modelName, const vec3 &pos)
 {
 	setName(name);
 	_model = Model::getByName(modelName);
 
 	_matrix = translate(_matrix, pos);
-	if (!data.empty()) setData(data);
 }
 
 void Object::setHeight(const float &height)
@@ -156,10 +155,6 @@ void Object::addForce(const glm::vec3& vector, const Engine::Physics::Force& for
 }
 
 // Virtual
-
-void Object::setData(const Json::Value &data)
-{
-}
 
 void Object::action()
 {

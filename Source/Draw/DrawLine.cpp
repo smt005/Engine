@@ -8,8 +8,6 @@
 #include "DrawLine.h"
 #include "Object/Line.h"
 
-using namespace draw;
-
 struct {
 	unsigned int program = 0;
 	GLuint u_matProjectionView = 0;
@@ -73,10 +71,10 @@ void DrawLine::draw(const Greed& greed)
 {
 	glUniformMatrix4fv(lineShader.u_matViewModel, 1, GL_FALSE, greed.getMatrixFloat());
 
-	draw::DrawLine::draw(greed.lineX);
-	draw::DrawLine::draw(greed.lineY);
-	draw::DrawLine::draw(greed.lineZ);
-	draw::DrawLine::draw(greed.heavyLineX);
-	draw::DrawLine::draw(greed.heavyLineY);
-	draw::DrawLine::draw(greed.heavyLineZ);
+	DrawLine::draw(greed.lineX);
+	DrawLine::draw(greed.lineY);
+	DrawLine::draw(greed.lineZ);
+	DrawLine::draw(greed.heavyLineX);
+	DrawLine::draw(greed.heavyLineY);
+	DrawLine::draw(greed.heavyLineZ);
 }

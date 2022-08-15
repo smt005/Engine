@@ -60,7 +60,9 @@ enum class VirtualTap
 {
 	LEFT = 0,
 	RIGHT = 1,
-	MIDDLE = 2
+	MIDDLE = 2,
+	SCROLL_UP = 3,
+	SCROLL_BOTTOM = 4
 };
 
 };	// Engine

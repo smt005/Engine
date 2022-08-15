@@ -6,9 +6,6 @@
 class Line;
 class Greed;
 
-namespace draw
-{
-
 class DrawLine
 {
 public:
@@ -17,5 +14,3 @@ public:
 	static void draw(const Line& line);
 	static void draw(const Greed& greed);
 };
-
-}

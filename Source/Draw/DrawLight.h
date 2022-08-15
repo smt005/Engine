@@ -10,15 +10,17 @@ class Object;
 class Map;
 class Triangle;
 
-class Draw
+class DrawLight
 {
 public:
 	static void setClearColor(const float r, const float g, const float b, const float a);
 	static const float * const getClearColor();
+	static void setLightPos(const float x, const float y, const float z);
 
 	static void clearColor();
 	static void viewport();
 	static void prepare();
+	static void resetShader();
 
 	static void draw(Mesh& mesh);
 	static void draw(Model& model);
@@ -28,6 +30,7 @@ public:
 
 private:
 	static float _clearColor[4];
+	static float _lightPos[4];
 	static unsigned int curentBufer;
 	static unsigned int currentTexture;
 };

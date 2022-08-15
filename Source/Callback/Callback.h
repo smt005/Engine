@@ -26,7 +26,8 @@ enum class CallbackType
 	PRESS_KEY,
 	PINCH_KEY,
 	RELEASE_KEY,
-	MOVE
+	MOVE,
+	SCROLL
 };
 
 class Callback
@@ -45,10 +46,12 @@ public:
 	static void onReleaseTap(const int id);
 
 	static void onMove(float x, float y);
+	static void onScroll(double yOffset);
 
 	static void update();
 
 	inline static const glm::vec2& mousePos() { return _mousePos; }
+	inline static void setMousePos(const double x, const double y) { _mousePos.x = x; _mousePos.y = y; }
 	inline static const glm::vec2& deltaMousePos() { return _deltaMousePos; }
 
 	inline static bool pressKey(const VirtualKey id) { return _key[static_cast<int>(id)]; }

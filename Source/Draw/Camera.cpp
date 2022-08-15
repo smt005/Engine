@@ -76,7 +76,7 @@ void Camera::makeFrustum()
 
 void Camera::setDefault()
 {
-	_matProject = perspective(45.0f, Engine::Screen::aspect(), 0.1f, 1000.0f);
+	_matProject = perspective(_fov, Engine::Screen::aspect(), 0.1f, 1000.0f);
 	setLookAt(vec3(25.0f, 25.0f, 25.0f), vec3(0.0f, 0.0f, 0.0f));
 }
 
@@ -99,13 +99,13 @@ float Camera::frustum(const mat4x4 &mat, const float &radius)
 	return dist + radius;
 }
 
-void Camera::setOrtho(const float &left, const float &right, const float &bottom, const float &top)
+void Camera::setOrtho(const float left, const float right, const float bottom, const float top)
 {
 	_matProject = ortho(left, right, bottom, top);
 	makeMatProjectView();
 }
 
-void Camera::setPerspective(const float &fov, const float &aspect, const float &zNear, const float &zFar)
+void Camera::setPerspective(const float fov, const float aspect, const float zNear, const float zFar)
 {
 	_matProject = perspective(fov, aspect, zNear, zFar);
 	makeMatProjectView();
@@ -164,6 +164,12 @@ void Camera::setLookAt(const vec3 &pos, const vec3 &vector, const float &dist)
 		_matView = translate(_matView, _pos);
 		makeMatProjectView();
 	}
+}
+
+void Camera::setFov(float fov) {
+	_fov = fov;
+	_matProject = perspective(_fov, Engine::Screen::aspect(), 0.1f, 1000.0f);
+	makeMatProjectView();
 }
 
 void Camera::setCalcFrustum(const bool &calcFrustum)
@@ -239,10 +245,9 @@ void Camera::setPos(const vec3 &pos)
 	makeMatProjectView();
 }
 
-void Camera::move(const int &direct, const float speed)
+void Camera::move(const int &direct, const float kForce)
 {
-	if (speed > 0.0f) _speed = speed;
-	_speed = _fromEye ? -_speed : _speed;
+	float speed = _fromEye ? -_speed * kForce : _speed * kForce;
 	vec3 pos = _pos;
 
 	switch (direct)
