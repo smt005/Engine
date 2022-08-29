@@ -5,7 +5,7 @@
 #include "Callback/Callback.h"
 #include "FileManager.h"
 #include "Common/Help.h"
-
+#include "ImGuiManager/UI.h"
 #include "json/json.h"
 #include "GLFW/glfw3.h" // https://www.glfw.org/docs/3.3/window_guide.html
 
@@ -88,6 +88,7 @@ bool Core::main() {
 
 	Core::init();
 	Core::resize();
+	UI::Init(window);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -100,10 +101,13 @@ bool Core::main() {
 		}
 		whileFunctions.clear();
 
+		UI::Render();
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
+	UI::Cleanup();
 	glfwTerminate();
 
 	return true;
@@ -217,13 +221,11 @@ void keyCallback(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods
 	{
 	case GLFW_PRESS: {
 		Callback::onPressKey(Key);
-	}
-					 break;
+	} break;
 
 	case GLFW_RELEASE: {
 		Callback::onReleaseKey(Key);
-	}
-					   break;
+	} break;
 	}
 }
 

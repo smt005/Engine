@@ -19,3 +19,6 @@
 [submodule "ThirdParty/FreeImage"]
 	path = ThirdParty/FreeImage
 	url = https://github.com/smt005/FreeImage.git
+[submodule "ThirdParty/ImGui"]
+	path = ThirdParty/ImGui
+	url = https://github.com/smt005/ImGui.git
