@@ -6,11 +6,12 @@
 #include "backends/imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+#include <set>
 
-namespace UI {
-	Windows windows;
-};
+UI::Windows UI::windows;
+std::vector<const UI::Window*> UI::closedWindows;
 
+// UI
 void UI::Init(void* window) {
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
@@ -36,15 +37,30 @@ void UI::Render() {
 	if (windows.empty()) {
 		return;
 	}
+	
+	if (!closedWindows.empty()) {
+		for (const Window* windowPtr : closedWindows) {
+			auto itErase = std::find_if(windows.begin(), windows.end(), [windowPtr](const auto& pair) { return pair.second.get() == windowPtr; });
+			if (itErase != windows.end()) {
+				windows.erase(itErase);
+			}
+		}
+
+		closedWindows.clear();
+	}
 
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	for (Window::Ptr& windowPtr : windows) {
-		auto content = windowPtr->Content();
-		ImGui::Begin(windowPtr->Id().c_str());
-			content();
+	for (auto& pair : windows) {
+		if (!pair.second) {
+			continue;
+		}
+
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse;
+		ImGui::Begin(pair.second->_title.c_str(), &pair.second->_open, window_flags);
+		pair.second->Draw();
 		ImGui::End();
 	}
 
@@ -53,6 +69,9 @@ void UI::Render() {
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void UI::AddWindow(Window::Ptr& window) {
-	windows.emplace_back(window);
+void UI::CloseWindow(const std::string& id) {
+	auto itErase = windows.find(id);
+	if (itErase != windows.end()) {
+		closedWindows.emplace_back(itErase->second.get());
+	}
 }
