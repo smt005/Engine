@@ -54,13 +54,13 @@ void UI::Render() {
 	ImGui::NewFrame();
 
 	for (auto& pair : windows) {
-		if (!pair.second) {
+		Window* window = pair.second.get();
+		if (!window) {
 			continue;
 		}
 
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse;
-		ImGui::Begin(pair.second->_title.c_str(), &pair.second->_open, window_flags);
-		pair.second->Draw();
+		ImGui::Begin(window->_title.c_str(), window->_closeBtn ? &window->_closeBtn : nullptr, window->_window_flags);
+		window->Draw();
 		ImGui::End();
 	}
 

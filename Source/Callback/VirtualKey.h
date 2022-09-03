@@ -42,6 +42,8 @@ enum class VirtualKey
 	Y =	89,
 	Z =	90,
 
+	TILDE =	96,
+
 	SPACE	= 32,
 	ESCAPE	= 256,
 	RETURN	= 259,

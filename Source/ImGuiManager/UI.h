@@ -20,7 +20,7 @@ public:
 		typedef std::shared_ptr<Window> Ptr;
 
 	public:
-		Window() : _open(true) {}
+		Window() : _closeBtn(true), _window_flags(NULL) {}
 		virtual ~Window() = default;
 
 		virtual void Draw() {}
@@ -29,11 +29,14 @@ public:
 
 		inline void SetId(const std::string& id) { _id = id; }
 		inline void SetTitle(const std::string& title) { _title = title; }
-
+		inline void SetFlag(int window_flags) { _window_flags = window_flags; }
+		inline std::string& Id() { return _id; }
+		inline void VisibleCloseBtn(const bool value) { _closeBtn = value; }
 		void Close() { UI::closedWindows.emplace_back(this); }
 
 	private:
-		bool _open;
+		bool _closeBtn;
+		int _window_flags;
 		std::string _id;
 		std::string _title;
 	};
@@ -59,6 +62,7 @@ public:
 		window->OnOpen();
 		return id;
 	}
+	static bool ShowingWindow(const std::string& id) { return windows.find(id) != windows.end(); }
 	static void CloseWindow(const std::string& id);
 	static void CloseWindow(const Window* windowPtr) { closedWindows.emplace_back(windowPtr); }
 	static void CloseWindow(const Window::Ptr windowPtr) { closedWindows.emplace_back(windowPtr.get()); }
