@@ -32,3 +32,5 @@ public:
 };
 
 };	// Engine
+
+#define LOG Engine::Core::log

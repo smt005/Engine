@@ -16,7 +16,6 @@ void UI::Init(void* window) {
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	// Setup Dear ImGui style
 	//ImGui::StyleColorsDark();
@@ -42,6 +41,7 @@ void UI::Render() {
 		for (const Window* windowPtr : closedWindows) {
 			auto itErase = std::find_if(windows.begin(), windows.end(), [windowPtr](const auto& pair) { return pair.second.get() == windowPtr; });
 			if (itErase != windows.end()) {
+				itErase->second->OnClose();
 				windows.erase(itErase);
 			}
 		}
@@ -59,8 +59,15 @@ void UI::Render() {
 			continue;
 		}
 
-		ImGui::Begin(window->_title.c_str(), window->_closeBtn ? &window->_closeBtn : nullptr, window->_window_flags);
-		window->Draw();
+		ImGui::Begin(window->_id.c_str(), window->_closeBtn ? &window->_closeBtn : nullptr, window->_window_flags);
+			if (!window->_visible) {
+				window->OnOpen();
+				window->_visible = true;
+			}
+			if (!window->_closeBtn) {
+				CloseWindow(window);
+			}
+			window->Draw();
 		ImGui::End();
 	}
 
