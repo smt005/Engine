@@ -60,7 +60,7 @@ bool Model::load() {
 	string suffixScale;
 	float scale[3];
 
-	if (!dataModel["scale"].empty())
+	/*if (!dataModel["scale"].empty())
 	{
 		if (dataModel["scale"].isArray())
 		{
@@ -78,7 +78,7 @@ bool Model::load() {
 
 			hasScalling = true;
 		}
-		else
+		else if (dataModel["scale"].isDouble())
 		{
 			float value = dataModel["scale"].asFloat();
 
@@ -92,13 +92,13 @@ bool Model::load() {
 
 			hasScalling = true;
 		}
-	}
+	}*/
 
-	if (!hasScalling)
+	//if (!hasScalling)
 	{
 		_shape = Shape::getByName(nameShape);
 	}
-	else
+	/*else
 	{
 		string nameWithSuffixScale = nameShape + "_[" + std::to_string(scale[0]) + '_' + std::to_string(scale[1]) + '_' + std::to_string(scale[2]) + '_' + "]";
 
@@ -112,7 +112,7 @@ bool Model::load() {
 			_shape->copy(*shape);
 			_shape->setScale(scale);
 		}
-	}
+	}*/
 	
 	_texture = Texture::getByName(nameTexture);
 

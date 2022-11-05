@@ -187,7 +187,7 @@ namespace Editor {
         data[newName]["shape"] = "";
         data[newName]["texture"] = "";
 
-        _name[0] = '\0';
+        help::CopyToArrayChar(_name, newName);
         _shape[0] = '\0';
         _texture[0] = '\0';
         //_scale[0] = '\0';
@@ -245,6 +245,10 @@ namespace Editor {
         Json::Value& data = Model::_data;
 
         for (auto it = data.begin(); it != data.end(); ++it) {
+            if (!it->isObject() ) {
+                continue;
+            }
+
             const string& nameModel = it.name();
             if (nameModel == "default") {
                 continue;
