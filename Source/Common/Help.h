@@ -12,6 +12,7 @@
 
 namespace help
 {
+	//...
 	bool loadJson(const std::string& fileName, Json::Value& value);
 	bool saveJson(const std::string& fileName, const Json::Value& value, const std::string& indentation = "\t");
 	std::string stringFroJson(const Json::Value& value, const std::string& indentation = "\t");
@@ -148,4 +149,10 @@ namespace help
 	void log(const TextT& text) {
 		std::cout << "LOG: " << text << std::endl;
 	}
+
+	template <typename Tchar, typename Tstring>
+	void CopyToArrayChar(Tchar& arrayChar, const Tstring& text) { // Пример, std::array<char, 128>* arrayChar
+		strncpy(arrayChar.data(), text.data(), arrayChar.size());
+	};
+
 }; // help

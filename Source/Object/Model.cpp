@@ -6,6 +6,8 @@
 #define FILE_NAME_SHAPE_FILE	"Models/Box1.obj"
 #define FILE_NAME_TEXTURE_FILE	"Textures/BlackWhite.png"
 
+std::string Model::modelPath = FILE_NAME_MODEL_DATA;
+
 Model::Model()
 	: Color(Color::WHITE)
 {
@@ -43,8 +45,11 @@ const unsigned int& Model::textureId()
 bool Model::create(const string &newName)
 {
 	setName(newName);
+	return load();
+}
 
-	Json::Value dataModel = data(newName);
+bool Model::load() {
+	Json::Value& dataModel = data(getName());
 	if (dataModel.empty())
 		return false;
 

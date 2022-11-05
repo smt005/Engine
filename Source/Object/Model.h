@@ -25,10 +25,13 @@ public:
 	Texture& texture();
 	const unsigned int& textureId();
 
-	bool create(const std::string &name);
+	bool create(const std::string& name);
+	bool load();
 
 private:
+public:
 	static Json::Value _data;
+	static std::string modelPath;
 
 public:
 	static Json::Value& data(const std::string &name);
