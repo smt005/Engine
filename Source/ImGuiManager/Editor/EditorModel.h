@@ -20,6 +20,7 @@ namespace Editor {
 		void ButtonDisplay();
 
 		void Select(std::string& name);
+		void OpenExplorer(const std::string& name);
 		void Remove(const std::string& name);
 		void Add(const std::string& newName);
 		void Copy(std::string& newName, const std::string copyName);

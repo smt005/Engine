@@ -8,11 +8,13 @@
 #include <Windows.h>
 #include <string>
 #include <shobjidl.h> 
+#include <algorithm>
 
 namespace Engine {
 	void OpenFolderAndSelectItems(const std::string& filenameStr, const std::string& pathStr) {
-		//LPCTSTR filename = "C:\\Work\\My\\CommonProject\\Source\\Resources\\Files\\TouchGame\\Textures\\Common\\Finishes.jpg";
-		LPCTSTR filename = "C:\\Work\\My\\CommonProject\\Source\\Resources\\Files\\TouchGame\\Textures\\Common\\Finishes.jpg";
+        std::string fullFilename = pathStr + '\\' + filenameStr;
+        std::replace(fullFilename.begin(), fullFilename.end(), '/', '\\');
+        LPCTSTR filename = fullFilename.c_str();
 
 		ITEMIDLIST* pidl = ILCreateFromPath(filename);
 		if (pidl) {

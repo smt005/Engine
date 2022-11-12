@@ -31,7 +31,7 @@ namespace Editor {
         if (posWindow.y < 0.f) posWindow.y = 0.f;
         ImGui::SetWindowPos(Id().c_str(), posWindow);
 
-        ImGui::SetWindowSize(Id().c_str(), { 750.f, 330.f });
+        ImGui::SetWindowSize(Id().c_str(), { 750.f, 333.f });
 
         Load();
     }
@@ -78,10 +78,10 @@ namespace Editor {
     }
 
     void ModelEditor::EditDisplay() {
-        ImGui::BeginChild("edit", { 550.f, 260.f }, true);
+        ImGui::BeginChild("edit", { 518.f, 260.f }, true);
 
         if (_selectNamePtr && !_selectNamePtr->empty()) {
-            ImGui::PushItemWidth(400.f);
+            ImGui::PushItemWidth(390.f);
 
             ImGui::SameLine(30.f);
             ImGui::Text("Name");
@@ -98,6 +98,10 @@ namespace Editor {
             if (ImGui::Button("?##choose_shape_btn", {20.f, 20.f})) {
                 ChooseFile(_shape);
             }
+            ImGui::SameLine();
+            if (ImGui::Button(">##exp_shape_btn", { 20.f, 20.f })) {
+                OpenExplorer(_shape.data());
+            }
             ImGui::Dummy(ImVec2(0.f, 0.f));
 
             //...
@@ -109,6 +113,10 @@ namespace Editor {
             if (ImGui::Button("?##choose_texture_btn", { 20.f, 20.f })) {
                 ChooseFile(_texture);
             }
+            ImGui::SameLine();
+            if (ImGui::Button(">##exp_texture_btn", { 20.f, 20.f })) {
+                OpenExplorer(_texture.data());
+            }
             ImGui::Dummy(ImVec2(0.f, 0.f));
 
             //...
@@ -119,6 +127,10 @@ namespace Editor {
             ImGui::SameLine();
             if (ImGui::Button("?##choose_physic_btn", { 20.f, 20.f })) {
                 ChooseFile(_physicShape);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button(">##exp_physic_btn", { 20.f, 20.f })) {
+                OpenExplorer(_physicShape.data());
             }
             ImGui::Dummy(ImVec2(0.f, 0.f));
 
@@ -374,6 +386,12 @@ namespace Editor {
         std::string nameFile = fiilNameFile.substr(pos, size);
 
         help::CopyToArrayChar(textChar, nameFile);
+    }
+
+    void ModelEditor::OpenExplorer(const std::string& name) {
+        if (!name.empty()) {
+            Engine::OpenFolderAndSelectItems(name, Engine::FileManager::getResourcesDir().u8string());
+        }
     }
 
     //...
