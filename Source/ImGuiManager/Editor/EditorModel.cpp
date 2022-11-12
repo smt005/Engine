@@ -6,11 +6,20 @@
 #include "Object/Model.h"
 #include "FileManager.h"
 #include "Common/Help.h"
+#include "Common/WindowsWin32.h"
 
 namespace Editor {
 
-    ModelEditor::ModelEditor() {
+    ModelEditor::ModelEditor()
+    : _selectNamePtr(nullptr)
+    {
         SetId("Edit model");
+
+        _name[0] = '\0';
+        _shape[0] = '\0';
+        _texture[0] = '\0';
+        _physicShape[0] = '\0';
+        _scale[0] = '\0';
     }
 
     void ModelEditor::OnOpen() {
@@ -72,11 +81,58 @@ namespace Editor {
         ImGui::BeginChild("edit", { 550.f, 260.f }, true);
 
         if (_selectNamePtr && !_selectNamePtr->empty()) {
-            ImGui::PushItemWidth(430.f);
-            ImGui::InputText("Name##name_input", _name.data(), _name.size());
-            ImGui::InputText("Shape##shape_input", _shape.data(), _shape.size());
-            ImGui::InputText("Texure##texture_input", _texture.data(), _texture.size());
-            //ImGui::InputText("Scale##scale_input", _scale.data(), _scale.size());
+            ImGui::PushItemWidth(400.f);
+
+            ImGui::SameLine(30.f);
+            ImGui::Text("Name");
+            ImGui::SameLine(65.f);
+            ImGui::InputText("##name_input", _name.data(), _name.size());
+            ImGui::Dummy(ImVec2(0.f, 0.f));
+
+            //...
+            ImGui::SameLine(24.f);
+            ImGui::Text("Shape");
+            ImGui::SameLine(65.f);
+            ImGui::InputText("##shape_input", _shape.data(), _shape.size());
+            ImGui::SameLine();
+            if (ImGui::Button("?##choose_shape_btn", {20.f, 20.f})) {
+                ChooseFile(_shape);
+            }
+            ImGui::Dummy(ImVec2(0.f, 0.f));
+
+            //...
+            ImGui::SameLine(10.f);
+            ImGui::Text("Texture");
+            ImGui::SameLine(65.f);
+            ImGui::InputText("##texture_input", _texture.data(), _texture.size());
+            ImGui::SameLine();
+            if (ImGui::Button("?##choose_texture_btn", { 20.f, 20.f })) {
+                ChooseFile(_texture);
+            }
+            ImGui::Dummy(ImVec2(0.f, 0.f));
+
+            //...
+            ImGui::SameLine(14.f);
+            ImGui::Text("Physic");
+            ImGui::SameLine(65.f);
+            ImGui::InputText("##physic_input", _physicShape.data(), _physicShape.size());
+            ImGui::SameLine();
+            if (ImGui::Button("?##choose_physic_btn", { 20.f, 20.f })) {
+                ChooseFile(_physicShape);
+            }
+            ImGui::Dummy(ImVec2(0.f, 0.f));
+
+            //...
+            ImGui::SameLine(24.f);
+            ImGui::Text("Scale");
+            ImGui::SameLine(65.f);
+            ImGui::InputText("##scale_input", _scale.data(), _scale.size());
+            ImGui::Dummy(ImVec2(0.f, 0.f));
+
+            //...
+            if (ModelPtr model = Model::getByName(_name.data())) {                
+                ImGui::Image(reinterpret_cast<ImTextureID>(model->textureId()), { 100.f, 100.f }, {0, 1}, {1, 0}, { 1.f, 1.f, 1.f, 1.f }, { 1.f, 1.f, 1.f, 1.f });
+            }
         }
 
         ImGui::EndChild();
@@ -86,7 +142,7 @@ namespace Editor {
         ImGui::BeginChild("button", { 750.f, 30.f }, false);
 
         //...
-        if (ImGui::Button("Add", { 100.f, 24.f })) {
+        if (ImGui::Button("Add", { 62.f, 24.f })) {
             Editor::TextCharPtr newNamePtr(new Editor::TextChar());
             (*newNamePtr)[0] = '\0';
 
@@ -108,7 +164,32 @@ namespace Editor {
         }
 
         ImGui::SameLine();
-        if (ImGui::Button("Remove", { 100.f, 24.f })) {
+        if (ImGui::Button("Copy", { 62.f, 24.f }) && _selectNamePtr) {
+            Editor::TextCharPtr newNamePtr(new Editor::TextChar());
+            (*newNamePtr)[0] = '\0';
+
+            CommonPopupModal::Show(GetPtr(), [this, newNamePtr]() {
+                ImGui::Text("Copy %s", _selectNamePtr->c_str());
+
+                ImGui::Dummy(ImVec2(0.f, 0.f));
+                ImGui::InputText("##new_name_input", newNamePtr->data(), newNamePtr->size());
+
+                ImGui::Dummy(ImVec2(0.f, 0.f));
+                if (ImGui::Button("Add", { 100.f, 24.f }) && (*newNamePtr)[0] != '\0') {
+                    Copy(std::string(newNamePtr->data()), *_selectNamePtr);
+                    CommonPopupModal::Hide();
+                }
+
+                ImGui::SameLine();
+                ImGui::SameLine();
+                if (ImGui::Button("Close", { 100.f, 24.f })) {
+                    CommonPopupModal::Hide();
+                }
+                }, "Add");
+        }
+
+        ImGui::SameLine();
+        if (ImGui::Button("Remove", { 62.f, 24.f })) {
             CommonPopupModal::Show(GetPtr(), [this]() {
                 ImGui::TextColored({ 0.9f, 0.0f, 0.0f, 1.0f }, "Remove %s?", _selectNamePtr ? _selectNamePtr->c_str() : "ERROR");
 
@@ -127,13 +208,13 @@ namespace Editor {
         }
 
         //...
-        ImGui::SameLine();
-        if (ImGui::Button("Apply", { 100.f, 24.f})) {
+        ImGui::SameLine(220.f);
+        if (ImGui::Button("Apply", { 62.f, 24.f})) {
             Apply();
         }
 
         ImGui::SameLine();
-        if (ImGui::Button("Reset", { 100.f, 24.f })) {
+        if (ImGui::Button("Reset", { 62.f, 24.f })) {
             CommonPopupModal::Show(GetPtr(), [this]() {
                 ImGui::TextColored({ 0.9f, 0.0f, 0.0f, 1.0f }, "Reset %s?", _selectNamePtr ? _selectNamePtr->c_str() : "ERROR");
 
@@ -153,13 +234,13 @@ namespace Editor {
         }
 
         //...
-        ImGui::SameLine();
-        if (ImGui::Button("Save", { 100.f, 24.f })) {
+        ImGui::SameLine(600.f);
+        if (ImGui::Button("Save", { 62.f, 24.f })) {
             Save();
         }
 
         ImGui::SameLine();
-        if (ImGui::Button("Close", { 100.f, 24.f })) {
+        if (ImGui::Button("Close", { 62.f, 24.f })) {
             Close();
         }
 
@@ -167,7 +248,7 @@ namespace Editor {
     }
 
     //...
-    void ModelEditor::Remove(std::string& name) {
+    void ModelEditor::Remove(const std::string& name) {
         if (_selectNamePtr && !_selectNamePtr->empty()) {
             std::string newName = _name.data();
             Json::Value& data = Model::_data;
@@ -180,7 +261,11 @@ namespace Editor {
         }
     }
 
-    void ModelEditor::Add(std::string& newName) {
+    void ModelEditor::Add(const std::string& newName) {
+        if (std::find_if(_modelNames.begin(), _modelNames.end(), [&newName](const std::string& name) { return name == newName; }) != _modelNames.end()) {
+            return;
+        }
+
         _selectNamePtr = &_modelNames.emplace_back(newName);
 
         Json::Value& data = Model::_data;
@@ -190,6 +275,31 @@ namespace Editor {
         help::CopyToArrayChar(_name, newName);
         _shape[0] = '\0';
         _texture[0] = '\0';
+        //_scale[0] = '\0';
+    }
+
+    void ModelEditor::Copy(std::string& newName, const std::string copyName) {
+        if (std::find_if(_modelNames.begin(), _modelNames.end(), [&newName](const std::string& name) { return name == newName; }) != _modelNames.end()) {
+            return;
+        }
+
+        _selectNamePtr = &_modelNames.emplace_back(newName);
+
+        Json::Value& data = Model::_data;
+
+        const std::string shape = data[copyName]["shape"].asString();
+        if (!shape.empty()) {
+            data[newName]["shape"] = shape;
+        }
+
+        const std::string texture = data[copyName]["texture"].asString();
+        if (!texture.empty()) {
+            data[newName]["texture"] = texture;
+        }
+
+        help::CopyToArrayChar(_name, newName);
+        help::CopyToArrayChar(_shape, shape);
+        help::CopyToArrayChar(_texture, texture);
         //_scale[0] = '\0';
     }
 
@@ -208,6 +318,8 @@ namespace Editor {
         help::CopyToArrayChar(_name, name);
         help::CopyToArrayChar(_shape, shape);
         help::CopyToArrayChar(_texture, texture);
+        help::CopyToArrayChar(_physicShape, ""s);
+        help::CopyToArrayChar(_scale, ""s);
 
         /*if (scale.empty()) {
             _scale[0] = '1';
@@ -241,6 +353,30 @@ namespace Editor {
         }
     }
 
+    void ModelEditor::ChooseFile(Editor::TextChar& textChar) {
+        std::string fiilNameFile = Engine::SelectFile();
+        std::replace(fiilNameFile.begin(), fiilNameFile.end(), '\\', '/');
+
+        std::string resourcesDir = Engine::FileManager::getResourcesDir().u8string();
+        std::replace(resourcesDir.begin(), resourcesDir.end(), '\\', '/');
+
+        size_t pos = fiilNameFile.find(resourcesDir);
+        if (pos == resourcesDir.npos) {
+            return;
+        }
+
+        pos += resourcesDir.size() + 1;
+        if (pos >= fiilNameFile.size()) {
+            return;
+        }
+
+        size_t size = fiilNameFile.size() - pos;
+        std::string nameFile = fiilNameFile.substr(pos, size);
+
+        help::CopyToArrayChar(textChar, nameFile);
+    }
+
+    //...
     void ModelEditor::Load() {
         Json::Value& data = Model::_data;
 

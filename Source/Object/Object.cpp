@@ -138,6 +138,10 @@ void Object::setHeight(const float &height)
 	_matrix[3][2] = height;
 }
 
+void Object::setActorPos(const glm::vec3& pos) {
+	Engine::Physics::setPositionToActor(*this, pos);
+}
+
 void Object::updateMatrixPhysics() {
 	Engine::Physics::updateMatrixActor(*this);
 }

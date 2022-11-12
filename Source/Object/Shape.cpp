@@ -230,11 +230,11 @@ bool Shape::load(const string& name)
 	// -
 	while (iChar < len)
 	{
-		if (data[iChar] == 'v' && data[iChar + 1] == ' ' && data[iChar + 2] == ' ')
+		if (data[iChar] == 'v' && data[iChar + 1] == ' ')
 		{
-			vertexTemporary._charLine[vertexTemporary._countLine] = &data[iChar + 3];
+			vertexTemporary._charLine[vertexTemporary._countLine] = &data[iChar + 2];
 			++vertexTemporary._countLine;
-			iChar += 3;
+			iChar += 2;
 		}
 
 		if (data[iChar] == 'v' && data[iChar + 1] == 'n' && data[iChar + 2] == ' ')

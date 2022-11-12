@@ -47,17 +47,20 @@ public:
 	void set(const string& name, const string& modelName, const vec3& pos = vec3(0.0f));
 	void setHeight(const float& height);
 
+	void setActorPos(const glm::vec3& pos);
+	
 	// Physics
 	void setTypeActorPhysics(const Engine::Physics::Type typePhysics) { _typePhysics = typePhysics; }
 	void updateMatrixPhysics();
 	bool createActorPhysics();
 	void releaseActorPhysics();
 
+
 	void addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);
 
 	inline bool visible() { return _visible; }
 	inline void setVisible(const bool visible) { _visible = visible; }
-
+	inline bool hasPhysics() { return _actorPhyscs; }
 	inline double getCreateTime() { return _createTime; }
 
 public:

@@ -43,6 +43,8 @@ namespace Engine {
 		static void updateMatrixActor(Object& object);
 		static void releaseActor(Object& object);
 
+		static void setPositionToActor(Object& object, const glm::vec3& pos);
+
 		static void addForceToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType);
 	};
 	

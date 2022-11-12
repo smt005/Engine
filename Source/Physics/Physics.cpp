@@ -113,21 +113,21 @@ namespace Engine {
 		sceneDesc.gravity = gravity;
 
 		if (!sceneDesc.cpuDispatcher) {
-			PxDefaultCpuDispatcher* mCpuDispatcher = PxDefaultCpuDispatcherCreate(1); // Что за параметро
-if (!mCpuDispatcher) {
-	return false;
-}
+			PxDefaultCpuDispatcher* mCpuDispatcher = PxDefaultCpuDispatcherCreate(1); // Что за параметр
+			if (!mCpuDispatcher) {
+				return false;
+			}
 
-sceneDesc.cpuDispatcher = mCpuDispatcher; // Узнать...
+			sceneDesc.cpuDispatcher = mCpuDispatcher; // Узнать...
 
-if (!sceneDesc.filterShader) {
-	sceneDesc.filterShader = &PxDefaultSimulationFilterShader;
-}
+			if (!sceneDesc.filterShader) {
+				sceneDesc.filterShader = &PxDefaultSimulationFilterShader;
+			}
 
-pScene = pPhysics->createScene(sceneDesc);
-if (!pScene) {
-	return false;
-}
+			pScene = pPhysics->createScene(sceneDesc);
+			if (!pScene) {
+				return false;
+			}
 		}
 
 		if (debugVisualizing) {
@@ -240,8 +240,33 @@ if (!pScene) {
 		}
 	}
 
+
+	void Physics::setPositionToActor(Object& object, const glm::vec3& pos) {
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			if (!object._actorPhyscs) {
+				return;
+			}
+
+			PxRigidDynamic* pConvexActor = (PxRigidDynamic*)object._actorPhyscs;
+			if (!pConvexActor) {
+				return;
+			}
+
+			PxTransform transform = static_cast<PxRigidDynamic*>(object._actorPhyscs)->getGlobalPose();
+			transform.p[0] = pos[0];
+			transform.p[1] = pos[1];
+			transform.p[2] = pos[2];
+
+			pConvexActor->setGlobalPose(transform);
+		}
+	}
+
 	//...
 	physics::ActorPhyscs* physics::createActorConvex(Mesh& mesh, const glm::mat4x4& matrix) {
+		if (mesh.countVertex() == 0) {
+			return nullptr;
+		}
+
 		if (!pPhysics || !pScene || !pCooking) {
 			return nullptr;
 		}

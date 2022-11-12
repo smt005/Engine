@@ -20,9 +20,12 @@ namespace Editor {
 		void ButtonDisplay();
 
 		void Select(std::string& name);
-		void Remove(std::string& name);
-		void Add(std::string& name);
+		void Remove(const std::string& name);
+		void Add(const std::string& newName);
+		void Copy(std::string& newName, const std::string copyName);
 		void Apply();
+		void ChooseFile(Editor::TextChar& textChar);
+
 		void Load();
 		void Save();
 
@@ -34,6 +37,7 @@ namespace Editor {
 		Editor::TextChar _name;
 		Editor::TextChar _shape;
 		Editor::TextChar _texture;
-		//Editor::TextChar _scale;
+		Editor::TextChar _physicShape;
+		Editor::TextChar _scale;
 	};
 }
