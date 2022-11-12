@@ -11,6 +11,22 @@
 
 #include <algorithm>
 
+std::vector<Map::Ptr> Map::currentMaps;
+Map Map::defaultMap;
+
+void Map::SetCurrentMap(Map::Ptr& map) {
+	currentMaps.clear();
+	currentMaps.emplace_back(map);
+}
+
+void Map::AddCurrentMap(Map::Ptr& map) {
+	currentMaps.emplace_back(map);
+}
+
+void Map::ClearCurrentMap(Map::Ptr& map) {
+	currentMaps.clear();
+}
+
 Map::Map(const string& name)
 	: _physicsState(false)
 {

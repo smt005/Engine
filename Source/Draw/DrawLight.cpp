@@ -129,13 +129,13 @@ void DrawLight::draw(Object& object)
 
 void DrawLight::draw(Map& map)
 {
-	for (auto& object : map.objects) {
+	for (auto& object : map.GetObjects()) {
 		if (object->visible()) {
 			draw(*object);
 		}
 	}
 
-	for (auto& glider : map.gliders) {
+	for (auto& glider : map.GetGliders()) {
 		if (glider->visible()) {
 			draw(*glider);
 		}

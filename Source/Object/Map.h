@@ -22,9 +22,13 @@ public:
 	typedef std::shared_ptr<Map> Ptr;
 
 public:
-	std::vector<Object*> objects;
-	std::vector<Glider*> gliders;
+	static void SetCurrentMap(Map::Ptr& map);
+	static void AddCurrentMap(Map::Ptr& map);
+	static void ClearCurrentMap(Map::Ptr& map);
+	static Map& GetFirstCurrentMap() { return currentMaps.empty() ? defaultMap : *currentMaps[0]; }
+	static std::vector<Map::Ptr>& GetCurrentMaps() { return currentMaps; }
 
+public:
 	Map() : _physicsState(false) {};
 	Map(const string &name);
 	virtual ~Map();
@@ -48,6 +52,17 @@ public:
 	Object* getObjectPtrByName(const std::string& name);
 	Object&	getObjectByName(const std::string& name);
 	const Camera& getCamera();
+
+	std::vector<Object*>& GetObjects() { return objects; }
+	std::vector<Glider*>& GetGliders() { return gliders; }
+	
+private:
+	std::vector<Object*> objects;
+	std::vector<Glider*> gliders;
+
+private:
+	static std::vector<Map::Ptr> currentMaps;
+	static Map defaultMap;
 
 private:
 	bool _physicsState;

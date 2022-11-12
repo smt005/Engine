@@ -15,6 +15,7 @@ namespace Editor {
 		void OnOpen() override;
 		void OnClose() override;
 
+	private:
 		void ListDisplay();
 		void EditDisplay();
 		void ButtonDisplay();

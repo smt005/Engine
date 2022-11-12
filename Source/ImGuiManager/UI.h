@@ -60,6 +60,8 @@ public:
 		windows.emplace(window->_id, T::Ptr(window));
 		return id;
 	}
+
+	static bool WindowDisplayed() { return !windows.empty(); }
 	static bool ShowingWindow(const std::string& id) { return windows.find(id) != windows.end(); }
 	static void CloseWindow(const std::string& id);
 	static void CloseWindow(const Window* windowPtr) { closedWindows.emplace_back(windowPtr); }
