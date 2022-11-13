@@ -168,7 +168,6 @@ namespace Editor {
                 }
 
                 ImGui::SameLine();
-                ImGui::SameLine();
                 if (ImGui::Button("Close", { 100.f, 24.f })) {
                     CommonPopupModal::Hide();
                 }

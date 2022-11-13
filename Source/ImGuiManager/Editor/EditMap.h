@@ -7,11 +7,19 @@
 
 namespace Editor {
 	class MapEditor final : public UI::Window, public CommonPopupModal::Wptr {
+		friend UI;
+
+	public:
+		static const std::string windowName;
+		static Object* NewObject();
+		static void AddObjectToMap();
+
 	public:
 		MapEditor();
 		void Draw() override;
 		void OnOpen() override;
 		void OnClose() override;
+		void Update() override;
 
 	private:
 		void ListDisplay();
@@ -24,6 +32,7 @@ namespace Editor {
 	private:
 		int _guiId;
 		Object* _selectObjectPtr = nullptr;
+		Object* _tempObjectPtr = nullptr;
 
 		Editor::TextChar _name;
 		Editor::TextChar _model;

@@ -8,6 +8,7 @@
 
 namespace Editor {
 	class ModelEditor final : public UI::Window, public CommonPopupModal::Wptr {
+		friend UI;
 
 	public:
 		ModelEditor();

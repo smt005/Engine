@@ -101,6 +101,7 @@ bool Core::main() {
 		}
 		whileFunctions.clear();
 
+		UI::Update();
 		UI::Render();
 
 		glfwSwapBuffers(window);

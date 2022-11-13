@@ -17,5 +17,6 @@ namespace Editor {
 
 	typedef std::array<char, 128> TextChar;
 	typedef std::shared_ptr<TextChar> TextCharPtr;
+	typedef std::shared_ptr<std::string> stringPtr;
 
 }

@@ -82,3 +82,12 @@ void UI::CloseWindow(const std::string& id) {
 		closedWindows.emplace_back(itErase->second.get());
 	}
 }
+
+UI::Window::Ptr UI::GetWindow(const std::string& id) {
+	auto it = windows.find(id);
+	if (it != windows.end()) {
+		return it->second;
+	}
+	return nullptr;
+}
+

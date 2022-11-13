@@ -26,10 +26,11 @@ public:
 		virtual void Draw() {}
 		virtual void OnOpen() {}
 		virtual void OnClose() {}
+		virtual void Update() {}
 
 		inline void SetId(const std::string& id) { _id = id; }
 		inline void SetFlag(int window_flags) { _window_flags = window_flags; }
-		inline std::string& Id() { return _id; }
+		inline const std::string& Id() { return _id; }
 		inline void VisibleCloseBtn(const bool value) { _closeBtn = value; }
 		void Close() { UI::closedWindows.emplace_back(this); }
 
@@ -66,6 +67,10 @@ public:
 	static void CloseWindow(const std::string& id);
 	static void CloseWindow(const Window* windowPtr) { closedWindows.emplace_back(windowPtr); }
 	static void CloseWindow(const Window::Ptr windowPtr) { closedWindows.emplace_back(windowPtr.get()); }
+	static Window::Ptr GetWindow(const std::string& id);
+
+private:
+	static void Update() { for (const std::pair<std::string, UI::Window::Ptr>& windowPair : windows) { windowPair.second->Update(); }; }
 
 private:
 	static Windows windows;

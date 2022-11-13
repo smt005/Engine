@@ -20,6 +20,8 @@ public:
 	virtual bool create(const string &name);
 	virtual void setDefault(const string &name);
 
+	static const map<string, ObjectPtrT>& GetMap() { return _map; }
+
 private:
 	static map<string, ObjectPtrT> _map;
 	static ObjectT _default;

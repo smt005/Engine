@@ -5,11 +5,28 @@
 #include "Common/Help.h"
 #include "Object/Map.h"
 #include "Object/Model.h"
+#include "Draw\Camera.h"
 
 namespace Editor {
+    const std::string MapEditor::windowName = "Edit map";
 
+    Object* MapEditor::NewObject() {
+        if (MapEditor* windowPtr = dynamic_cast<MapEditor*>(UI::GetWindow(windowName).get())) {
+            return windowPtr->_tempObjectPtr;
+        }
+        return nullptr;
+    }
+
+    void MapEditor::AddObjectToMap() {
+        if (MapEditor* windowPtr = dynamic_cast<MapEditor*>(UI::GetWindow(windowName).get())) {
+            Map::GetFirstCurrentMap().GetObjects().emplace_back(windowPtr->_tempObjectPtr);
+            windowPtr->_tempObjectPtr = nullptr;
+        }
+    }
+
+    //...
     MapEditor::MapEditor() {
-        SetId("Edit map");
+        SetId(windowName);
 
         _name[0] = '\0';
         _model[0] = '\0';
@@ -30,7 +47,17 @@ namespace Editor {
     }
 
     void MapEditor::OnClose() {
+        delete _tempObjectPtr;
+        _tempObjectPtr = nullptr;
+
         Save();
+    }
+
+    void MapEditor::Update() {
+        if (_tempObjectPtr) {
+            glm::vec3 cursorPos3 = Camera::current.corsorCoord();
+            _tempObjectPtr->setPos(cursorPos3);
+        }
     }
 
     //...
@@ -59,6 +86,7 @@ namespace Editor {
         for (Object* object : Map::GetFirstCurrentMap().GetObjects()) {
             bool select = _selectObjectPtr == object;
             ImGui::TextColored(select ? ImVec4(0.3f, 0.6f, 0.9f, 1.0f) : ImVec4(0.1f, 0.1f, 0.1f, 1.0f), "%s", object->getName().c_str());
+
             if (ImGui::IsItemHovered()) {
                 if (ImGui::IsItemClicked()) {
                     _selectObjectPtr = object;
@@ -105,7 +133,31 @@ namespace Editor {
 
         //...
         if (ImGui::Button("Add", { 62.f, 24.f })) {
-            //...
+            Editor::stringPtr nameModelPtr(new std::string());
+
+            CommonPopupModal::Show(GetPtr(), [this, nameModelPtr]() {
+                for (const auto& modelPair : Model::GetMap()) {
+                    bool select = modelPair.first == *nameModelPtr;
+                    ImGui::TextColored(select ? ImVec4(0.3f, 0.6f, 0.9f, 1.0f) : ImVec4(0.1f, 0.1f, 0.1f, 1.0f), "%s", modelPair.first.c_str());
+
+                    if (ImGui::IsItemHovered()) {
+                        if (ImGui::IsItemClicked()) {
+                            *nameModelPtr = modelPair.first;
+
+                            delete _tempObjectPtr;
+                            glm::vec3 cursorPos3 = Camera::current.corsorCoord();
+                            _tempObjectPtr = new Object(("##NEW:"+ modelPair.first), modelPair.first, cursorPos3);
+                        }
+                    }
+                }
+
+                ImGui::Dummy(ImVec2(0.f, 0.f));
+                if (ImGui::Button("Close", { 100.f, 24.f })) {
+                    delete _tempObjectPtr;
+                    _tempObjectPtr = nullptr;
+                    CommonPopupModal::Hide();
+                }
+                }, "Add");
         }
 
         ImGui::SameLine();

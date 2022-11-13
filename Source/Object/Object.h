@@ -19,8 +19,10 @@ class Object : public Position, public Name
 	friend Engine::Physics;
 
 public:
-	int tag = 0;
+	typedef std::shared_ptr<Object> Ptr;
 
+public:
+	int tag = 0;
 
 protected:
 	ModelPtr _model;
