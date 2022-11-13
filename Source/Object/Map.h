@@ -22,8 +22,8 @@ public:
 	typedef std::shared_ptr<Map> Ptr;
 
 public:
-	static void SetCurrentMap(Map::Ptr& map);
-	static void AddCurrentMap(Map::Ptr& map);
+	static Map::Ptr& SetCurrentMap(Map::Ptr& map);
+	static Map::Ptr& AddCurrentMap(Map::Ptr& map);
 	static void ClearCurrentMap(Map::Ptr& map);
 	static Map& GetFirstCurrentMap() { return currentMaps.empty() ? defaultMap : *currentMaps[0]; }
 	static std::vector<Map::Ptr>& GetCurrentMaps() { return currentMaps; }
