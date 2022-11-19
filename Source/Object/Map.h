@@ -10,8 +10,6 @@
 #include <memory>
 #include <vector>
 
-class Object;
-class Glider;
 class Camera;
 class Map;
 typedef std::shared_ptr<Map> MapPtr;
@@ -33,12 +31,12 @@ public:
 	Map(const string &name);
 	virtual ~Map();
 
-	bool create(const string &name);
-	void clear();
-	bool load();
+	virtual bool create(const string &name);
+	virtual void clear();
+	virtual bool load();
+	virtual void action();
 
 	void getDataJson(Json::Value& dataJson);
-	void action();
 
 	// Physics
 	void initPhysixs();
@@ -49,16 +47,14 @@ public:
 	Object& addObject(const string& nameModel, const glm::mat4x4& mat = glm::mat4x4(1.0));
 	Object& addObject(Object* object);
 
-	Object* getObjectPtrByName(const std::string& name);
+	Object::Ptr getObjectPtrByName(const std::string& name);
 	Object&	getObjectByName(const std::string& name);
-	const Camera& getCamera();
+	Camera& getCamera();
 
-	std::vector<Object*>& GetObjects() { return objects; }
-	std::vector<Glider*>& GetGliders() { return gliders; }
-	
-private:
-	std::vector<Object*> objects;
-	std::vector<Glider*> gliders;
+	std::vector<Object::Ptr>& GetObjects() { return objects; }
+
+protected:
+	std::vector<Object::Ptr> objects;
 
 private:
 	static std::vector<Map::Ptr> currentMaps;

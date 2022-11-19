@@ -20,8 +20,6 @@ public:
 	virtual bool create(const string &name);
 	virtual void setDefault(const string &name);
 
-	static const map<string, ObjectPtrT>& GetMap() { return _map; }
-
 private:
 	static map<string, ObjectPtrT> _map;
 	static ObjectT _default;
@@ -29,9 +27,12 @@ private:
 public:
 	static ObjectPtrT& getByName(const string& name);
 	static bool hasByName(const string& name);
+	static ObjectPtrT& add(ObjectPtrT& object);
 
 	static void erase(const string& name);
 	static void clear(bool onlyUnused = true);
+
+	static const map<string, ObjectPtrT>& GetMap() { return _map; }
 };
 
 template <class ObjectT>
@@ -68,6 +69,17 @@ ObjectPtrT& DataClass<ObjectT>::getByName(const string& name)
 	
 	ObjectPtrT newItemPtr(newItem);
 	return _map[name] = newItemPtr;
+}
+
+template <class ObjectT>
+ObjectPtrT& DataClass<ObjectT>::add(ObjectPtrT& object) {
+	const std::string& name = object->getName();
+	auto it = _map.find(name);
+	if (it != _map.end()) {
+		return object;
+	}
+
+	return _map[name] = object;
 }
 
 template <class ObjectT>

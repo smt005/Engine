@@ -11,7 +11,7 @@ namespace Editor {
 
 	public:
 		static const std::string windowName;
-		static Object* NewObject();
+		static Object::Ptr NewObject();
 		static void AddObjectToMap();
 
 	public:
@@ -31,8 +31,8 @@ namespace Editor {
 
 	private:
 		int _guiId;
-		Object* _selectObjectPtr = nullptr;
-		Object* _tempObjectPtr = nullptr;
+		Object::Ptr _selectObjectPtr;
+		Object::Ptr _tempObjectPtr;
 
 		Editor::TextChar _name;
 		Editor::TextChar _model;

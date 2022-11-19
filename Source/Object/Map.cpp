@@ -1,7 +1,7 @@
 
 #include "Map.h"
 #include "Object.h"
-#include "Glider.h"
+
 #include "Model.h"
 #include "Physics/Physics.h"
 #include "Draw/Camera.h"
@@ -34,8 +34,7 @@ Map::Map(const string& name)
 }
 
 Map::~Map() {
-	help::clear(objects);
-	help::clear(gliders);
+
 }
 
 bool Map::create(const string& name)
@@ -46,8 +45,7 @@ bool Map::create(const string& name)
 }
 
 void Map::clear() {
-	help::clear(objects);
-	help::clear(gliders);
+	objects.clear();
 }
 
 bool Map::load() {
@@ -105,31 +103,11 @@ bool Map::load() {
 			typeActorPhysics = Engine::Physics::Type::TRIANGLE;
 		}
 
-		Object& object = help::add(objects);
-		object.set(name, modelName, pos);
+		//Object& object = help::add(objects);
+		//object.set(name, modelName, pos);
+		Object& object = *objects.emplace_back(std::make_shared<Object>(name, modelName, pos));
 		object.setVisible(visible);
 		object.setTypeActorPhysics(typeActorPhysics);
-	}
-
-	// Глайдеры
-	for (auto element : data["gliders"])
-	{
-		const string &name = element["name"].asString();
-		const string &modelName = element["model"].empty() ? "default" : element["model"].asString();
-		const bool& visible = element["visible"].empty() ? true : element["visible"].asBool();
-
-		vec3 pos(0.0f);
-		int index = 0;
-		auto elementPos = element["pos"];
-		for (auto it = elementPos.begin(); it != elementPos.end(); ++it)
-		{
-			pos[index] = it->asFloat();
-			++index;
-		}
-
-		Glider &object = help::add(gliders);
-		object.set(name, modelName, pos);
-		object.setVisible(visible);
 	}
 
 	return true;
@@ -145,13 +123,6 @@ void Map::getDataJson(Json::Value& dataJson)
 		object->getDataJson(dataObject);
 		dataJson["objects"].append(dataObject);
 	}
-
-	for (auto glider : gliders)
-	{
-		Json::Value dataObject;
-		glider->getDataJson(dataObject);
-		dataJson["gliders"].append(dataObject);
-	}
 }
 
 void Map::initPhysixs() {
@@ -164,9 +135,7 @@ void Map::initPhysixs() {
 }
 
 void Map::releasePhysixs() {
-	for (Object* obgectPtr : objects) { obgectPtr->releaseActorPhysics(); }
-	for (Glider* gliderPtr : gliders) { gliderPtr->releaseActorPhysics(); }
-
+	for (Object::Ptr obgectPtr : objects) { obgectPtr->releaseActorPhysics(); }
 	_physicsState = false;
 }
 
@@ -184,36 +153,34 @@ void Map::updatePhysixs() {
 void Map::action()
 {
 	for (auto object : objects) object->action();
-	for (auto glider : gliders) glider->action();
 }
 
 Object& Map::addObjectToPos(const string& nameModel, const glm::vec3& pos)
 {
-	Object &object = help::add(objects);
-
-	object.set("", nameModel, pos);
-
+	Object& object = *objects.emplace_back(std::make_shared<Object>("", nameModel, pos));
 	return object;
 }
 
 Object& Map::addObject(const string& nameModel, const glm::mat4x4& mat)
 {
-	Object& object = help::add(objects);
+	//Object& object = help::add(objects);
 
 	// TODO: Временно
 	glm::vec3 pos = glm::vec3(mat[3][0], mat[3][1], mat[3][2]);
-	object.set("", nameModel, pos);
+	//object.set("", nameModel, pos);
 
+	Object& object = *objects.emplace_back(std::make_shared<Object>("", nameModel, pos));
 	return object;
 }
 
 Object& Map::addObject(Object* object)
 {
-	return help::add(objects, object);
+	//return help::add(objects, object);
+	return *objects.emplace_back(object);
 }
 
-Object*	Map::getObjectPtrByName(const std::string& name) {
-	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object* object) { return object->getName() == name ? true : false; });
+Object::Ptr	Map::getObjectPtrByName(const std::string& name) {
+	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object::Ptr& object) { return object->getName() == name ? true : false; });
 	if (it == objects.end()) {
 		return nullptr;
 		//help::log("Map::getObjectByName(" + name  + ") not found.");
@@ -223,7 +190,7 @@ Object*	Map::getObjectPtrByName(const std::string& name) {
 }
 
 Object& Map::getObjectByName(const std::string& name) {
-	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object* object) { return object->getName() == name ? true : false; });
+	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object::Ptr& object) { return object->getName() == name ? true : false; });
 	if (it == objects.end()) {
 		return _defaultObject;
 	}
@@ -231,7 +198,7 @@ Object& Map::getObjectByName(const std::string& name) {
 	return *(*it);
 }
 
-const Camera& Map::getCamera() {
+Camera& Map::getCamera() {
 	if (!_cameraPtr) {
 		_cameraPtr = std::make_shared<Camera>();
 	}

@@ -10,7 +10,6 @@
 #include "Object/Shape.h"
 #include "Object/Model.h"
 #include "Object/Object.h"
-#include "Object/Glider.h"
 #include "Object/Triangle.h"
 #include "Object/Map.h"
 #include "Object/Texture.h"
@@ -132,12 +131,6 @@ void DrawLight::draw(Map& map)
 	for (auto& object : map.GetObjects()) {
 		if (object->visible()) {
 			draw(*object);
-		}
-	}
-
-	for (auto& glider : map.GetGliders()) {
-		if (glider->visible()) {
-			draw(*glider);
 		}
 	}
 }

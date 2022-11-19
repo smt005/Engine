@@ -10,7 +10,7 @@
 namespace Editor {
     const std::string MapEditor::windowName = "Edit map";
 
-    Object* MapEditor::NewObject() {
+    Object::Ptr MapEditor::NewObject() {
         if (MapEditor* windowPtr = dynamic_cast<MapEditor*>(UI::GetWindow(windowName).get())) {
             return windowPtr->_tempObjectPtr;
         }
@@ -47,8 +47,7 @@ namespace Editor {
     }
 
     void MapEditor::OnClose() {
-        delete _tempObjectPtr;
-        _tempObjectPtr = nullptr;
+        _tempObjectPtr.reset();
 
         Save();
     }
@@ -83,7 +82,7 @@ namespace Editor {
         ImGui::SetColumnWidth(0, 200.f);
         ImGui::SetColumnWidth(1, 1.f);
 
-        for (Object* object : Map::GetFirstCurrentMap().GetObjects()) {
+        for (Object::Ptr object : Map::GetFirstCurrentMap().GetObjects()) {
             bool select = _selectObjectPtr == object;
             ImGui::TextColored(select ? ImVec4(0.3f, 0.6f, 0.9f, 1.0f) : ImVec4(0.1f, 0.1f, 0.1f, 1.0f), "%s", object->getName().c_str());
 
@@ -144,17 +143,16 @@ namespace Editor {
                         if (ImGui::IsItemClicked()) {
                             *nameModelPtr = modelPair.first;
 
-                            delete _tempObjectPtr;
+                            _tempObjectPtr.reset();
                             glm::vec3 cursorPos3 = Camera::current.corsorCoord();
-                            _tempObjectPtr = new Object(("##NEW:"+ modelPair.first), modelPair.first, cursorPos3);
+                            _tempObjectPtr = std::make_shared<Object>(("##NEW:"+ modelPair.first), modelPair.first, cursorPos3);
                         }
                     }
                 }
 
                 ImGui::Dummy(ImVec2(0.f, 0.f));
                 if (ImGui::Button("Close", { 100.f, 24.f })) {
-                    delete _tempObjectPtr;
-                    _tempObjectPtr = nullptr;
+                    _tempObjectPtr.reset();
                     CommonPopupModal::Hide();
                 }
                 }, "Add");
