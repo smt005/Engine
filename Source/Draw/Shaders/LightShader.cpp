@@ -4,7 +4,6 @@
 #include "LightShader.h"
 #include "GL/glew.h"
 #include "../Shader.h"
-#include "../Camera.h"
 #include "../Camera/CameraTemp.h"
 
 void LightShader::prepare()
@@ -30,12 +29,7 @@ void LightShader::prepare()
 	}
 
 	glUseProgram(program);
-
-	if (CameraTemp::CurrentPtr()) {
-		glUniformMatrix4fv(u_matProjectionView, 1, GL_FALSE, CameraTemp::CurrentPtr()->ProjectViewFloat());
-	} else {
-		glUniformMatrix4fv(u_matProjectionView, 1, GL_FALSE, Camera::current.matPV());
-	}
+	glUniformMatrix4fv(u_matProjectionView, 1, GL_FALSE, CameraTemp::GetLink().ProjectViewFloat());
 
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);

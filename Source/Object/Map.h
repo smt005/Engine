@@ -11,6 +11,7 @@
 #include <vector>
 
 class Camera;
+class CameraPerspective;
 class Map;
 typedef std::shared_ptr<Map> MapPtr;
 
@@ -63,5 +64,6 @@ private:
 private:
 	bool _physicsState;
 	std::shared_ptr<Camera> _cameraPtr;
+	std::shared_ptr<CameraPerspective> _cameraTempPtr;
 	Object _defaultObject;
 };

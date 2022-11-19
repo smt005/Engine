@@ -72,26 +72,41 @@ public:
 	}*/
 
 public:
-	static CameraTemp::Ptr CurrentPtr();
-	static void SetCurrent(CameraTemp::Ptr camera);
+	template<typename T>
+	static std::shared_ptr<T> Set(std::shared_ptr<T> camera) {
+		_currentCameraPtr = currentCameraPtr;
+	}
+
+	static CameraTemp::Ptr Get();
+	static CameraTemp& GetLink();
+
+	template<typename T>
+	static T* GetPtr() {
+		if (!_currentCameraPtr) {
+			_currentCameraPtr = std::make_shared<T>();
+			return static_cast<T*>(_currentCameraPtr.get());
+		}
+		CameraTemp* ptr = _currentCameraPtr.get();
+		T* tPtr = dynamic_cast<T*>(ptr);
+		return tPtr;
+	}
+
+	template<typename T>
+	static std::shared_ptr<T> Make() {
+		return std::make_shared<T>();
+	}
+
+	template<typename T>
+	static std::shared_ptr<T> MakeAndSet() {
+		std::shared_ptr<T> tempPtr(new T());
+		_currentCameraPtr = tempPtr;
+		return tempPtr;
+	}
 
 protected:
 	glm::mat4x4 _matProject;
 	glm::mat4x4 _matView;
 	glm::mat4x4 _matProjectView;
-
-	glm::vec3 _eye{ 0.f, 0.f, 0.f };
-	glm::vec3 _direct{ 1.f, 0.f, 0.f };
-	glm::vec3 _up{ 0.f, 0.f, 1.f };
-
-	/*float _zFar;
-	float _zNear;
-	float _fov;
-
-	float _left;
-	float _right;
-	float _bottom;
-	float _top;*/
 
 protected:
 	static CameraTemp::Ptr _currentCameraPtr;

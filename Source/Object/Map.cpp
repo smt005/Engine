@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "Physics/Physics.h"
 #include "Draw/Camera.h"
+#include "Draw/Camera/CameraPerspective.h"
 #include "FileManager.h"
 #include "Core.h"
 #include "Common/Help.h"
@@ -76,6 +77,10 @@ bool Map::load() {
 			_cameraPtr = std::make_shared<Camera>();
 			_cameraPtr->setJsonData(cameraData);
 			Camera::setCurrent(*_cameraPtr);
+
+			//...
+			_cameraTempPtr = CameraTemp::MakeAndSet<CameraPerspective>();
+			_cameraTempPtr->Load(cameraData);
 		}
 	}
 

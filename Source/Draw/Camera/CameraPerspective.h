@@ -51,9 +51,14 @@ public:
 		CameraTemp::MakeProjectView();
 	}
 
+	void Load(const Json::Value& data);
+
 private:
 	float _zFar;
 	float _zNear;
 	float _fov;
 
+	glm::vec3 _eye    { 0.f, 0.f, 0.f };
+	glm::vec3 _direct { 1.f, 0.f, 0.f };
+	glm::vec3 _up     { 0.f, 0.f, 1.f };
 };
