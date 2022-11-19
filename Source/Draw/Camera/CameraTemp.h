@@ -28,10 +28,32 @@ public:
 		_matProjectView = _matProject * _matView;
 	}
 
+	void LookAt(const glm::vec3& eye, const glm::vec3& direct) {
+		_eye = eye;
+		_direct = direct;
+
+		_matView = glm::lookAt(_eye, _eye + _direct, _up);
+		CameraTemp::MakeProjectView();
+	}
+
+	void SetPos(const glm::vec3& eye) {
+		_eye = eye;
+
+		_matView = glm::lookAt(_eye, _eye + _direct, _up);
+		CameraTemp::MakeProjectView();
+	}
+
+	void SetDirect(const glm::vec3& direct) {
+		_direct = direct;
+
+		_matView = glm::lookAt(_eye, _eye + _direct, _up);
+		CameraTemp::MakeProjectView();
+	}
+
 public:
 	virtual void Resize() {}
-	virtual void Load(const Json::Value& data) {}
-	virtual void Save(Json::Value& data) {}
+	virtual void Load(const Json::Value& data);
+	virtual void Save(Json::Value& data);
 
 public:
 	template<typename T>
@@ -69,6 +91,10 @@ protected:
 	glm::mat4x4 _matProject;
 	glm::mat4x4 _matView;
 	glm::mat4x4 _matProjectView;
+
+	glm::vec3 _eye{ 0.f, 0.f, 0.f };
+	glm::vec3 _direct{ 1.f, 0.f, 0.f };
+	glm::vec3 _up{ 0.f, 0.f, 1.f };
 
 protected:
 	static CameraTemp::Ptr _currentCameraPtr;
