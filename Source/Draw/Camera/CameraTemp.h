@@ -28,48 +28,10 @@ public:
 		_matProjectView = _matProject * _matView;
 	}
 
+public:
 	virtual void Resize() {}
-
-	/*void SetPerspective(float zFar = 1000.f, float zNear = 0.1f, float fov = 45.f) {
-		_zFar = zFar;
-		_zNear = zNear;
-		_fov = fov;
-
-		_matProject = glm::perspective(_fov, Engine::Screen::aspect(), _zNear, _zFar);
-		MakeProjectView();
-	}
-
-	void SetOrtho(const float left = -1.f, const float right = 1.f, const float bottom = -1.f, const float top = 1.f) {
-		_left = left;
-		_right = right;
-		_bottom = bottom;
-		_top = top;
-
-		_matProject = glm::ortho(_left, _right, _bottom, _top);
-		MakeProjectView();
-	}
-
-	void LookAt(const glm::vec3& eye, const glm::vec3& direct) {
-		_eye = eye;
-		_direct = direct;
-
-		_matView = glm::lookAt(_eye, _eye + _direct, _up);
-		MakeProjectView();
-	}
-
-	void SetPos(const glm::vec3& eye) {
-		_eye = eye;
-
-		_matView = glm::lookAt(_eye, _eye + _direct, _up);
-		MakeProjectView();
-	}
-
-	void SetDirect(const glm::vec3& direct) {
-		_direct = direct;
-
-		_matView = glm::lookAt(_eye, _eye + _direct, _up);
-		MakeProjectView();
-	}*/
+	virtual void Load(const Json::Value& data) {}
+	virtual void Save(Json::Value& data) {}
 
 public:
 	template<typename T>

@@ -8,7 +8,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <json/json.h>
 
-#include "Screen.h"
 #include "Draw/Camera/CameraTemp.h"
 
 class CameraPerspective : public CameraTemp {
@@ -20,14 +19,7 @@ public:
 		SetPerspective();
 	}
 
-	void SetPerspective(float zFar = 1000.f, float zNear = 0.1f, float fov = 45.f) {
-		_zFar = zFar;
-		_zNear = zNear;
-		_fov = fov;
-
-		_matProject = glm::perspective(_fov, Engine::Screen::aspect(), _zNear, _zFar);
-		CameraTemp::MakeProjectView();
-	}
+	void SetPerspective(float zFar = 1000.f, float zNear = 0.1f, float fov = 45.f);
 
 	void LookAt(const glm::vec3& eye, const glm::vec3& direct) {
 		_eye = eye;
@@ -51,7 +43,8 @@ public:
 		CameraTemp::MakeProjectView();
 	}
 
-	void Load(const Json::Value& data);
+	void Load(const Json::Value& data) override;
+	void Save(Json::Value& data) override;
 
 private:
 	float _zFar;
