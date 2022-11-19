@@ -74,4 +74,6 @@ public:
 public:
 	static Object& defaultItem();
 	static void removeDefault();
+	static Object::Ptr hitObjects(int x, int y, const std::vector<Object::Ptr>& objects);
+	static bool hitObjects(int x, int y, const std::vector<Object::Ptr>& objects, std::map<std::string, Object::Ptr>& objectsUnderMouse);
 };

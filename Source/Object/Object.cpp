@@ -183,3 +183,28 @@ void Object::removeDefault()
 	delete _default;
 	_default = nullptr;
 }
+
+Object::Ptr Object::hitObjects(const int x, const int y, const std::vector<Object::Ptr>& objects) {
+	std::map<std::string, Object::Ptr> objectsUnderMouse;
+
+	for (Object::Ptr object : objects) {
+		if (object->visible() && object->hit(x, y)) {
+			objectsUnderMouse.emplace(object->getName(), object);
+		}
+	}
+
+	if (hitObjects(x, y, objects, objectsUnderMouse)) {
+		return objectsUnderMouse.begin()->second;
+	}
+
+	return Object::Ptr(new Object());
+}
+
+bool Object::hitObjects(int x, int y, const std::vector<Object::Ptr>& objects, std::map<std::string, Object::Ptr>& objectsUnderMouse) {
+	for (Object::Ptr object : objects) {
+		if (object->visible() && object->hit(x, y)) {
+			objectsUnderMouse.emplace(object->getName(), object);
+		}
+	}
+	return !objectsUnderMouse.empty();
+}
