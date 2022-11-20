@@ -5,7 +5,7 @@
 #include "Model.h"
 #include "Physics/Physics.h"
 #include "Draw/Camera.h"
-#include "Draw/Camera/CameraPerspective.h"
+#include "Draw/Camera_Prototype_0/CameraPerspective.h"
 #include "FileManager.h"
 #include "Core.h"
 #include "Common/Help.h"

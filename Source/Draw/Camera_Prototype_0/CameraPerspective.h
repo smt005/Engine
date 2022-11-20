@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Draw/Camera/CameraTemp.h"
+#include "CameraTemp.h"
 
 class CameraPerspective : public CameraTemp {
 public:

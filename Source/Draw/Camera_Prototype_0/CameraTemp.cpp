@@ -1,5 +1,6 @@
 
-#include "../Camera/CameraTemp.h"
+//#include "../Camera/CameraTemp.h"
+#include "CameraTemp.h"
 
 CameraTemp::Ptr CameraTemp::_currentCameraPtr;
 

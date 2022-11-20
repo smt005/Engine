@@ -4,7 +4,7 @@
 #include "LightShader.h"
 #include "GL/glew.h"
 #include "../Shader.h"
-#include "../Camera/CameraTemp.h"
+#include "../Camera_Prototype_0/CameraTemp.h"
 
 void LightShader::prepare()
 {
