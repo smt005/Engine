@@ -25,9 +25,9 @@ void CameraProt2::Load(const Json::Value& data) {
 
 	const Json::Value& posData = data["pos"];
 	if (posData.isArray()) {
-		_eye.x = posData[0].asFloat();
-		_eye.y = posData[1].asFloat();
-		_eye.z = posData[2].asFloat();
+		_pos.x = posData[0].asFloat();
+		_pos.y = posData[1].asFloat();
+		_pos.z = posData[2].asFloat();
 	}
 
 	const Json::Value& directData = data["direct"];
@@ -45,21 +45,21 @@ void CameraProt2::Load(const Json::Value& data) {
 	}
 
 	//...
-	_matView = glm::lookAt(_eye, _eye + _direct, _up);
+	_matView = glm::lookAt(_pos, _pos + _direct, _up);
 	Resize();
 }
 
 void CameraProt2::Save(Json::Value& data) {
 	data["type"] = _type == Type::PERSPECTIVE ? "perspective" : "ortho";
 
-	if (_eye.x == 0.f && _eye.y == 0.f && _eye.z == 0.f) {
+	if (_pos.x == 0.f && _pos.y == 0.f && _pos.z == 0.f) {
 		data.removeMember("pos");
 	}
 	else {
 		Json::Value& posData = data["pos"];
-		posData.append(_eye.x);
-		posData.append(_eye.y);
-		posData.append(_eye.z);
+		posData.append(_pos.x);
+		posData.append(_pos.y);
+		posData.append(_pos.z);
 	}
 
 	if (_direct.x == 1.f && _direct.y == 0.f && _direct.z == 0.f) {

@@ -5,7 +5,8 @@
 #include "Model.h"
 #include "Physics/Physics.h"
 #include "Draw/Camera.h"
-#include "Draw/Camera_Prototype_0/CameraPerspective.h"
+//#include "Draw/Camera_Prototype_0/CameraPerspective.h"
+#include "Draw/Camera_Prototype_1/CameraControl.h"
 #include "FileManager.h"
 #include "Core.h"
 #include "Common/Help.h"
@@ -79,8 +80,13 @@ bool Map::load() {
 			Camera::setCurrent(*_cameraPtr);
 
 			//...
-			_cameraTempPtr = CameraTemp::MakeAndSet<CameraPerspective>();
-			_cameraTempPtr->Load(cameraData);
+			//_cameraTempPtr = CameraTemp::MakeAndSet<CameraPerspective>();
+			//_cameraTempPtr->Load(cameraData);
+
+			if (CameraControl* cameraPtr = CameraProt2::GetPtr<CameraControl>()) {
+				cameraPtr->Load(cameraData);
+				//cameraPtr->Enable(true);
+			}
 		}
 	}
 
