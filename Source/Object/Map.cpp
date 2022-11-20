@@ -75,17 +75,8 @@ bool Map::load() {
 		// Камера
 		auto cameraData = data["camera"];
 		if (cameraData) {
-			_cameraPtr = std::make_shared<Camera>();
-			_cameraPtr->setJsonData(cameraData);
-			Camera::setCurrent(*_cameraPtr);
-
-			//...
-			//_cameraTempPtr = CameraTemp::MakeAndSet<CameraPerspective>();
-			//_cameraTempPtr->Load(cameraData);
-
 			if (CameraControl* cameraPtr = CameraProt2::GetPtr<CameraControl>()) {
 				cameraPtr->Load(cameraData);
-				//cameraPtr->Enable(true);
 			}
 		}
 	}
@@ -114,8 +105,6 @@ bool Map::load() {
 			typeActorPhysics = Engine::Physics::Type::TRIANGLE;
 		}
 
-		//Object& object = help::add(objects);
-		//object.set(name, modelName, pos);
 		Object& object = *objects.emplace_back(std::make_shared<Object>(name, modelName, pos));
 		object.setVisible(visible);
 		object.setTypeActorPhysics(typeActorPhysics);
@@ -174,19 +163,14 @@ Object& Map::addObjectToPos(const string& nameModel, const glm::vec3& pos)
 
 Object& Map::addObject(const string& nameModel, const glm::mat4x4& mat)
 {
-	//Object& object = help::add(objects);
-
 	// TODO: Временно
 	glm::vec3 pos = glm::vec3(mat[3][0], mat[3][1], mat[3][2]);
-	//object.set("", nameModel, pos);
-
 	Object& object = *objects.emplace_back(std::make_shared<Object>("", nameModel, pos));
 	return object;
 }
 
 Object& Map::addObject(Object* object)
 {
-	//return help::add(objects, object);
 	return *objects.emplace_back(object);
 }
 

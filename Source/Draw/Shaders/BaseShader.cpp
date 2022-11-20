@@ -4,7 +4,7 @@
 #include "BaseShader.h"
 #include "GL/glew.h"
 #include "../Shader.h"
-#include "../Camera.h"
+#include "../Camera_Prototype_1/CameraProt2.h"
 
 void BaseShader::prepare()
 {
@@ -26,7 +26,7 @@ void BaseShader::prepare()
 	}
 
 	glUseProgram(program);
-	glUniformMatrix4fv(u_matProjectionView, 1, GL_FALSE, Camera::current.matPV());
+	glUniformMatrix4fv(u_matProjectionView, 1, GL_FALSE, CameraProt2::GetLink().ProjectViewFloat());
 
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);

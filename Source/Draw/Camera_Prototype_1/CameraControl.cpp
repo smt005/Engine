@@ -65,6 +65,7 @@ void CameraControl::MakeCallback() {
 			}
 		}
 	);
+
 }
 
 void CameraControl::Move(const MoveDirect direct, const float kForce) {

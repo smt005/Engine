@@ -3,7 +3,6 @@
 #include "Shaders/BaseShader.h"
 
 #include "Draw.h"
-#include "Camera.h"
 #include "Screen.h"
 #include "Shader.h"
 #include "Object/Mesh.h"
