@@ -4,8 +4,6 @@
 
 #include "Model.h"
 #include "Physics/Physics.h"
-#include "Draw/Camera.h"
-//#include "Draw/Camera_Prototype_0/CameraPerspective.h"
 #include "Draw/Camera_Prototype_1/CameraControl.h"
 #include "FileManager.h"
 #include "Core.h"
@@ -75,9 +73,9 @@ bool Map::load() {
 		// Камера
 		auto cameraData = data["camera"];
 		if (cameraData) {
-			if (CameraControl* cameraPtr = CameraProt2::GetPtr<CameraControl>()) {
-				cameraPtr->Load(cameraData);
-			}
+			CameraControl* cameraTempPtr = new CameraControl();
+			cameraTempPtr->Load(cameraData);
+			_cameraPtr = std::shared_ptr<CameraProt2>(cameraTempPtr);
 		}
 	}
 
@@ -191,11 +189,4 @@ Object& Map::getObjectByName(const std::string& name) {
 	}
 
 	return *(*it);
-}
-
-Camera& Map::getCamera() {
-	if (!_cameraPtr) {
-		_cameraPtr = std::make_shared<Camera>();
-	}
-	return *_cameraPtr;
 }

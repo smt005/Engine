@@ -91,8 +91,9 @@ public:
 
 public:
 	template<typename T>
-	static std::shared_ptr<T> Set(std::shared_ptr<T> camera) {
-		_currentCameraPtr = currentCameraPtr;
+	static std::shared_ptr<T> Set(std::shared_ptr<T>& cameraPtr) {
+		_currentCameraPtr = cameraPtr;
+		return cameraPtr;
 	}
 
 	static CameraProt2::Ptr Get() {
@@ -136,5 +137,6 @@ private:
 	Type _type = Type::PERSPECTIVE;
 
 private:
+	public:
 	static CameraProt2::Ptr _currentCameraPtr;
 };

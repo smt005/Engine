@@ -5,7 +5,7 @@
 #include "Common/Help.h"
 #include "Object/Map.h"
 #include "Object/Model.h"
-#include "Draw\Camera.h"
+#include "Draw/Camera_Prototype_1/CameraProt2.h"
 
 namespace Editor {
     const std::string MapEditor::windowName = "Edit map";
@@ -54,7 +54,7 @@ namespace Editor {
 
     void MapEditor::Update() {
         if (_tempObjectPtr) {
-            glm::vec3 cursorPos3 = Camera::current.corsorCoord();
+            glm::vec3 cursorPos3;// NEW_CAMERA = Camera::current.corsorCoord();
             _tempObjectPtr->setPos(cursorPos3);
         }
     }
@@ -144,7 +144,7 @@ namespace Editor {
                             *nameModelPtr = modelPair.first;
 
                             _tempObjectPtr.reset();
-                            glm::vec3 cursorPos3 = Camera::current.corsorCoord();
+                            glm::vec3 cursorPos3; // NEW_CAMERA = Camera::current.corsorCoord();
                             _tempObjectPtr = std::make_shared<Object>(("##NEW:"+ modelPair.first), modelPair.first, cursorPos3);
                         }
                     }

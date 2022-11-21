@@ -10,8 +10,7 @@
 #include <memory>
 #include <vector>
 
-class Camera;
-class CameraPerspective;
+class CameraProt2;
 class Map;
 typedef std::shared_ptr<Map> MapPtr;
 
@@ -50,8 +49,8 @@ public:
 
 	Object::Ptr getObjectPtrByName(const std::string& name);
 	Object&	getObjectByName(const std::string& name);
-	Camera& getCamera();
 
+	std::shared_ptr<CameraProt2>& getCamera() { return _cameraPtr; }
 	std::vector<Object::Ptr>& GetObjects() { return objects; }
 
 protected:
@@ -63,7 +62,6 @@ private:
 
 private:
 	bool _physicsState;
-	std::shared_ptr<Camera> _cameraPtr;
-	std::shared_ptr<CameraPerspective> _cameraTempPtr;
+	std::shared_ptr<CameraProt2> _cameraPtr;
 	Object _defaultObject;
 };

@@ -4,7 +4,7 @@
 #include "Shape.h"
 #include "Core.h"
 #include "Screen.h"
-#include "Draw/Camera.h"
+#include "Draw/Camera_Prototype_1/CameraProt2.h"
 #include "Physics/Physics.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -94,7 +94,7 @@ float Object::hit(const int xTap, const int yTap) {
 		return 0;
 	}
 
-	glm::mat4x4 matCamera = Camera::getCurrent().matProjectView();
+	glm::mat4x4 matCamera = CameraProt2::GetLink().ProjectView();
 	const Mesh& mesh = _model->getMesh();
 
 	for (int index = 0; index < mesh.countIndex(); index += 3)
