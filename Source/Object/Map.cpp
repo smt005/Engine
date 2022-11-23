@@ -73,9 +73,28 @@ bool Map::load() {
 		// Камера
 		auto cameraData = data["camera"];
 		if (cameraData) {
-			CameraControl* cameraTempPtr = new CameraControl();
-			cameraTempPtr->Load(cameraData);
-			_cameraPtr = std::shared_ptr<CameraProt2>(cameraTempPtr);
+			const Json::Value& classData = cameraData["class"];
+			const std::string classCamera = classData.isString() ? classData.asString() : std::string();
+
+			const Json::Value& currentData = cameraData["current"];
+			bool setCurrent = currentData.isBool() ? currentData.asBool() : false;
+
+			if (classCamera == "CameraControl") {
+				CameraControl* cameraTempPtr = new CameraControl();
+				cameraTempPtr->Load(cameraData);
+				cameraTempPtr->Enable(setCurrent);
+				_cameraPtr = std::shared_ptr<CameraProt2>(cameraTempPtr);
+			} else {
+				CameraProt2* cameraTempPtr = new CameraProt2();
+				cameraTempPtr->Load(cameraData);
+				_cameraPtr = std::shared_ptr<CameraProt2>(cameraTempPtr);
+			}
+
+			_cameraPtr->Init();
+
+			if (setCurrent) {
+				CameraProt2::Set<CameraProt2>(_cameraPtr);
+			}
 		}
 	}
 

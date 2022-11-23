@@ -11,6 +11,30 @@ CameraControl::~CameraControl() {
 	}
 }
 
+// VIRTUAL
+void CameraControl::Load(const Json::Value& data) {
+	CameraProt2::Load(data);
+
+	const Json::Value& speedData = data["speed"];
+	if (speedData.isNumeric()) {
+		_speed = speedData.asFloat();
+	}
+
+	const Json::Value& angleSpeedData = data["angleSpeed"];
+	if (angleSpeedData.isNumeric()) {
+		_angleSpeed = angleSpeedData.asFloat();
+	}
+}
+
+void CameraControl::Save(Json::Value& data) {
+	CameraProt2::Save(data);
+
+	data["class"] = "CameraControl";
+	data["speed"] = _speed;
+	data["angleSpeed"] = _angleSpeed;
+}
+
+//...
 void CameraControl::Enable(const bool state) {
 	if (state) {
 		if (!_callbackPtr) {
@@ -126,7 +150,12 @@ void CameraControl::Rotate(const glm::vec2& angles) {
 	glm::vec3 directVector = Direct();
 
 	float angleY = asinf(directVector.z);
-	float angleX = acosf(directVector.y / static_cast<float>(cos(angleY)));
+	float valueForAcos = directVector.y / cos(angleY);
+	if (-1.f > valueForAcos > 1.f) {
+		return;
+	}
+
+	float angleX = valueForAcos <= 1.f ? acosf(valueForAcos) : 0.f;
 
 	if (directVector.x < 0.f)
 		angleX = glm::pi<float>() + (glm::pi<float>() - angleX);

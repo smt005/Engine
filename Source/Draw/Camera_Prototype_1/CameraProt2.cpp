@@ -1,13 +1,26 @@
 
 #include "CameraProt2.h"
 
-void CameraProt2::SetPerspective(float zFar, float zNear, float fov) {
+void CameraProt2::Init() {
+	_matView = glm::lookAt(_pos, _pos + _direct, _up);
+	Resize();
+}
+
+void CameraProt2::SetPerspective(const float zFar, const float zNear, const float fov) {
 	_matProject = glm::perspective(fov, Engine::Screen::aspect(), zNear, zFar);
 	MakeProjectView();
 }
 
-void CameraProt2::SetOrtho(const float left, const float right, const float bottom, const float top) {
-	_matProject = glm::ortho(left, right, bottom, top);
+void CameraProt2::SetOrtho(const float size, float zNear, float zFar) {
+	float aspect = Engine::Screen::aspect();
+
+	if (aspect > 1.f) {
+		_matProject = glm::ortho(-size * aspect, size * aspect, -size, size, zNear, zFar);
+	}
+	else {
+		_matProject = glm::ortho(-size, size, -size / aspect, size / aspect, zNear, zFar);
+	}
+
 	MakeProjectView();
 }
 
