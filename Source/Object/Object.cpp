@@ -49,8 +49,8 @@ const float& Object::getHeight() {
 	return _matrix[3][2];
 }
 
-float Object::hit(const int xTap, const int yTap) {
-	auto transformToScreen = [](glm::vec3& point, glm::mat4x4& mat) {
+float Object::hit(const int xTap, const int yTap, const glm::mat4x4& matCamera) {
+	auto transformToScreen = [](glm::vec3& point, const glm::mat4x4& mat) {
 		glm::vec4 p(point.x, point.y, point.z, 1.0f);
 		p = mat * p;
 
@@ -94,7 +94,6 @@ float Object::hit(const int xTap, const int yTap) {
 		return 0;
 	}
 
-	glm::mat4x4 matCamera = CameraProt2::GetLink().ProjectView();
 	const Mesh& mesh = _model->getMesh();
 
 	for (int index = 0; index < mesh.countIndex(); index += 3)
@@ -184,25 +183,25 @@ void Object::removeDefault()
 	_default = nullptr;
 }
 
-Object::Ptr Object::hitObjects(const int x, const int y, const std::vector<Object::Ptr>& objects) {
+Object::Ptr Object::hitObjects(const int x, const int y, const std::vector<Object::Ptr>& objects, const glm::mat4x4& matCamera) {
 	std::map<std::string, Object::Ptr> objectsUnderMouse;
 
-	for (Object::Ptr object : objects) {
-		if (object->visible() && object->hit(x, y)) {
+	/*for (Object::Ptr object : objects) {
+		if (object->visible() && object->hit(x, y, matCamera)) {
 			objectsUnderMouse.emplace(object->getName(), object);
 		}
-	}
+	}*/
 
-	if (hitObjects(x, y, objects, objectsUnderMouse)) {
+	if (hitObjects(x, y, objects, objectsUnderMouse, matCamera)) {
 		return objectsUnderMouse.begin()->second;
 	}
 
 	return Object::Ptr(new Object());
 }
 
-bool Object::hitObjects(int x, int y, const std::vector<Object::Ptr>& objects, std::map<std::string, Object::Ptr>& objectsUnderMouse) {
+bool Object::hitObjects(int x, int y, const std::vector<Object::Ptr>& objects, std::map<std::string, Object::Ptr>& objectsUnderMouse, const glm::mat4x4& matCamera) {
 	for (Object::Ptr object : objects) {
-		if (object->visible() && object->hit(x, y)) {
+		if (object->visible() && object->hit(x, y, matCamera)) {
 			objectsUnderMouse.emplace(object->getName(), object);
 		}
 	}

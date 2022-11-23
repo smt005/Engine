@@ -44,7 +44,7 @@ public:
 	Model& getModel();
 	const float& getHeight();
 
-	float hit(const int x, const int y);
+	float hit(const int x, const int y, const glm::mat4x4& matCamera);
 
 	void set(const string& name, const string& modelName, const vec3& pos = vec3(0.0f));
 	void setHeight(const float& height);
@@ -74,6 +74,6 @@ public:
 public:
 	static Object& defaultItem();
 	static void removeDefault();
-	static Object::Ptr hitObjects(int x, int y, const std::vector<Object::Ptr>& objects);
-	static bool hitObjects(int x, int y, const std::vector<Object::Ptr>& objects, std::map<std::string, Object::Ptr>& objectsUnderMouse);
+	static Object::Ptr hitObjects(int x, int y, const std::vector<Object::Ptr>& objects, const glm::mat4x4& matCamera);
+	static bool hitObjects(int x, int y, const std::vector<Object::Ptr>& objects, std::map<std::string, Object::Ptr>& objectsUnderMouse, const glm::mat4x4& matCamera);
 };
