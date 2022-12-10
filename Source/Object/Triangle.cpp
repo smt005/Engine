@@ -7,7 +7,7 @@
 
 #include "Triangle.h"
 
-TexturePtr Triangle::textureStatic;
+Texture::Ptr Triangle::textureStatic;
 
 Triangle::~Triangle() {
 	if (_points) {
@@ -53,7 +53,7 @@ bool Triangle::initVBO() const
 
 // static
 
-TexturePtr& Triangle::getTextureStatic() {
+Texture::Ptr& Triangle::getTextureStatic() {
 	if (!textureStatic) {
 		textureStatic = Texture::getByName("Textures/Box.jpg");
 	}

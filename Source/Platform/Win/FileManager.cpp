@@ -27,17 +27,16 @@ bool FileManager::readTextFile(const std::filesystem::path& fileName, char*& dat
 	FILE* file;
 	std::filesystem::path fullFilePath = _resourcesDir / fileName;
 
-	if (fopen_s(&file, fullFilePath.string().c_str(), "r") == NULL)
-	{
+	if (fopen_s(&file, fullFilePath.string().c_str(), "r") == NULL) {
 		fseek(file, 0, SEEK_END);
 		lenght = ftell(file);
-		rewind(file);
 
 		if (lenght == 0) {
 			fclose(file);
 			return false;
 		}
 
+		rewind(file);
 		data = (char *)malloc(sizeof(char)* (lenght + 1));
 		lenght = fread(data, sizeof(char), lenght, file);
 		data[lenght] = '\0';

@@ -15,7 +15,7 @@ class Model : public DataClass <Model>, public Color
 {
 private:
 	ShapePtr _shape;
-	TexturePtr _texture;
+	Texture::Ptr _texture;
 
 public:
 	Model();

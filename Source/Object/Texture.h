@@ -3,25 +3,25 @@
 #include <string>
 #include "Common/DataClass.h"
 
-using namespace std;
-
-class Texture;
-typedef std::shared_ptr<Texture> TexturePtr;
-
 class Texture: public DataClass <Texture>
 {
+public:
+	typedef std::shared_ptr<Texture> Ptr;
+
 private:
-	string _fileName;
+	std::string _fileName;
 	unsigned int _id = 0;
 
 public:
 	Texture() {}
-	Texture(const string &name, bool needLoad = true);
+	Texture(const std::string &name, bool needLoad = true);
 	~Texture();
 
-	const unsigned int& id();
+	unsigned int id();
 	unsigned int load();
-	unsigned int load(const string &newName);
+	unsigned int load(const std::string &newName);
+
+	void SetId(const unsigned int id);
 
 public:
 	static unsigned int loadTexture(const char* fileName);

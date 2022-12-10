@@ -35,15 +35,15 @@ public:
 	{}
 	~Triangle();
 
-	inline void set(const TexturePtr& texture)				{ _texture = texture; }
-	inline Triangle& operator=(const TexturePtr& texture)	{ _texture = texture; }
+	inline void set(const Texture::Ptr& texture)				{ _texture = texture; }
+	inline Triangle& operator=(const Texture::Ptr& texture)	{ _texture = texture; }
 	inline void setTexture(const std::string& name)			{ _texture = Texture::getByName(name); }
 
 	void setData(unsigned short int type, unsigned int count, Point* points, TexCoord* texCoord);
 
 	unsigned int textureId() const {
 		if (_texture) return _texture->id();
-		TexturePtr& texture = getTextureStatic();
+		Texture::Ptr& texture = getTextureStatic();
 		return texture->id();
 	}
 
@@ -64,14 +64,14 @@ protected:
 	unsigned int _count;
 	Point* _points;
 	TexCoord* _texCoord;
-	TexturePtr _texture;
+	Texture::Ptr _texture;
 
 	bool _hasVBO = false;
 	unsigned int _buffer[2];
 
 private:
-	static TexturePtr textureStatic;
+	static Texture::Ptr textureStatic;
 
 public:
-	static TexturePtr& getTextureStatic();
+	static Texture::Ptr& getTextureStatic();
 };

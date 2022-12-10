@@ -18,7 +18,7 @@ Texture::Texture(const string &name, bool needLoad)
 	if (needLoad) load();
 }
 
-const unsigned int& Texture::id()
+unsigned int Texture::id()
 {
 	if (_id != 0) return _id;
 	_id = load();
@@ -40,6 +40,11 @@ unsigned int Texture::load(const string &newName)
 
 	setName(newName);
 	return load();
+}
+
+void Texture::SetId(const unsigned int id) {
+	_id = id;
+	_fileName.clear();
 }
 
 unsigned int Texture::loadTexture(const char* fileName)
