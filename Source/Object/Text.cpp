@@ -1,5 +1,6 @@
 #include "Object/Text.h"
 #include "FileManager.h"
+#include "Draw/DrawText.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -31,12 +32,12 @@ FT_Glyph getGlyph(FT_Face face, uint32_t charcode);
 FT_Pos getKerning(FT_Face face, uint32_t leftCharcode, uint32_t rightCharcode);
 
 //...
-TextNew::TextNew(const std::string& text, const std::string& fontName) : _text(text) {
+Text::Text(const std::string& text, const std::string& fontName) : _text(text) {
     MakeImageData();
     MakeTexture();
 }
 
-void TextNew::MakeImageData() {
+void Text::MakeImageData() {
     // Инициализация библиотеки
     if (ftLibrary == 0) {
         FT_Init_FreeType(&ftLibrary);
@@ -183,7 +184,7 @@ void TextNew::MakeImageData() {
     _height = imageH;
 }
 
-void TextNew::MakeTexture() {
+void Text::MakeTexture() {
     _idTexture = 0;
 
     if (_image.empty() || _height <= 0 || _width <= 0) {
@@ -223,8 +224,11 @@ void TextNew::MakeTexture() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
+void Text::Draw() {
+    DrawText::draw(*this);
+}
 
-void TextNew::SavePNG() {
+void Text::SavePNG() {
     // Файл для сохранения картинки
     //FILE* f = fopen("output.png", "wb");
     std::string fileName = Engine::FileManager::getResourcesDir().u8string();
@@ -286,7 +290,7 @@ void TextNew::SavePNG() {
 /*void TextNew::InitLib() {
 }/*/
 
-void TextNew::RemoveLib() {
+void Text::RemoveLib() {
     // Освобождаем памяти для глифов
     /*for (std::size_t i = 0; i < symbols.size(); ++i)
     {

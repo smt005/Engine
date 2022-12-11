@@ -13,7 +13,7 @@ CameraControl::~CameraControl() {
 
 // VIRTUAL
 void CameraControl::Load(const Json::Value& data) {
-	CameraProt2::Load(data);
+	Camera::Load(data);
 
 	const Json::Value& speedData = data["speed"];
 	if (speedData.isNumeric()) {
@@ -27,7 +27,7 @@ void CameraControl::Load(const Json::Value& data) {
 }
 
 void CameraControl::Save(Json::Value& data) {
-	CameraProt2::Save(data);
+	Camera::Save(data);
 
 	data["class"] = "CameraControl";
 	data["speed"] = _speed;

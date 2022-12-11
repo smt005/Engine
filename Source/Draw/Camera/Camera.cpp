@@ -1,17 +1,17 @@
 
-#include "CameraProt2.h"
+#include "Camera.h"
 
-void CameraProt2::Init() {
+void Camera::Init() {
 	_matView = glm::lookAt(_pos, _pos + _direct, _up);
 	Resize();
 }
 
-void CameraProt2::SetPerspective(const float zFar, const float zNear, const float fov) {
+void Camera::SetPerspective(const float zFar, const float zNear, const float fov) {
 	_matProject = glm::perspective(fov, Engine::Screen::aspect(), zNear, zFar);
 	MakeProjectView();
 }
 
-void CameraProt2::SetOrtho(const float size, float zNear, float zFar) {
+void Camera::SetOrtho(const float size, float zNear, float zFar) {
 	float aspect = Engine::Screen::aspect();
 
 	if (aspect > 1.f) {
@@ -24,7 +24,7 @@ void CameraProt2::SetOrtho(const float size, float zNear, float zFar) {
 	MakeProjectView();
 }
 
-void CameraProt2::Load(const Json::Value& data) {
+void Camera::Load(const Json::Value& data) {
 	const Json::Value& typeData = data["type"];
 	if (typeData.isString()) {
 		const std::string typeStr = typeData.asString();
@@ -62,7 +62,7 @@ void CameraProt2::Load(const Json::Value& data) {
 	Resize();
 }
 
-void CameraProt2::Save(Json::Value& data) {
+void Camera::Save(Json::Value& data) {
 	data["type"] = _type == Type::PERSPECTIVE ? "perspective" : "ortho";
 
 	if (_pos.x == 0.f && _pos.y == 0.f && _pos.z == 0.f) {
@@ -97,11 +97,11 @@ void CameraProt2::Save(Json::Value& data) {
 }
 
 // STATIC
-CameraProt2::Ptr CameraProt2::_currentCameraPtr;
+Camera::Ptr Camera::_currentCameraPtr;
 
-CameraProt2& CameraProt2::GetLink() {
+Camera& Camera::GetLink() {
 	if (!_currentCameraPtr) {
-		_currentCameraPtr = std::make_shared<CameraProt2>();
+		_currentCameraPtr = std::make_shared<Camera>();
 	}
 	return *_currentCameraPtr;
 }

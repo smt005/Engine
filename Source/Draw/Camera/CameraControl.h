@@ -1,10 +1,10 @@
 #pragma once
 
-#include "CameraProt2.h"
+#include "Camera.h"
 
 namespace Engine { class Callback; }
 
-class CameraControl final : public CameraProt2 {
+class CameraControl final : public Camera {
 public:
 	typedef std::shared_ptr<CameraControl> Ptr;
 
@@ -16,7 +16,7 @@ public:
 
 public:
 	CameraControl() {}
-	CameraControl(const Type type) { CameraProt2::_type = type; }
+	CameraControl(const Type type) { Camera::_type = type; }
 	~CameraControl();
 
 	void Load(const Json::Value& data) override;

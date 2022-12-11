@@ -10,10 +10,10 @@
 
 #include "Screen.h"
 
-class CameraProt2
+class Camera
 {
 public:
-	typedef std::shared_ptr<CameraProt2> Ptr;
+	typedef std::shared_ptr<Camera> Ptr;
 
 	enum class Type {
 		PERSPECTIVE,
@@ -21,7 +21,7 @@ public:
 	};
 
 public:
-	CameraProt2()
+	Camera()
 		: _matProject(glm::mat4x4(1.f))
 		, _matView(glm::mat4x4(1.f))
 		, _matProjectView(glm::mat4x4(1.f))
@@ -31,7 +31,7 @@ public:
 		, _type(Type::PERSPECTIVE)
 	{}
 
-	CameraProt2(const Type type)
+	Camera(const Type type)
 		: _matProject(glm::mat4x4(1.f))
 		, _matView(glm::mat4x4(1.f))
 		, _matProjectView(glm::mat4x4(1.f))
@@ -118,7 +118,7 @@ public:
 		return cameraPtr;
 	}
 
-	static CameraProt2::Ptr Get() {
+	static Camera::Ptr Get() {
 		return _currentCameraPtr;
 	}
 
@@ -128,7 +128,7 @@ public:
 			_currentCameraPtr = std::make_shared<T>();
 			return static_cast<T*>(_currentCameraPtr.get());
 		}
-		CameraProt2* ptr = _currentCameraPtr.get();
+		Camera* ptr = _currentCameraPtr.get();
 		T* tPtr = dynamic_cast<T*>(ptr);
 		return tPtr;
 	}
@@ -145,7 +145,7 @@ public:
 		return tempPtr;
 	}
 
-	static CameraProt2& GetLink();
+	static Camera& GetLink();
 
 protected:
 	glm::mat4x4 _matProject;
@@ -160,5 +160,5 @@ protected:
 
 private:
 	public:
-	static CameraProt2::Ptr _currentCameraPtr;
+	static Camera::Ptr _currentCameraPtr;
 };

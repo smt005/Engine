@@ -3,7 +3,7 @@
 
 #include "Draw.h"
 #include "Shader.h"
-#include "Camera_Prototype_1/CameraProt2.h"
+#include "Camera/Camera.h"
 
 #include "DrawLine.h"
 #include "Object/Line.h"
@@ -34,7 +34,7 @@ void DrawLine::prepare()
 	}
 
 	glUseProgram(lineShader.program);
-	glUniformMatrix4fv(lineShader.u_matProjectionView, 1, GL_FALSE, CameraProt2::GetLink().ProjectViewFloat());
+	glUniformMatrix4fv(lineShader.u_matProjectionView, 1, GL_FALSE, Camera::GetLink().ProjectViewFloat());
 
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_DEPTH_TEST);

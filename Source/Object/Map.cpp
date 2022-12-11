@@ -4,7 +4,7 @@
 
 #include "Model.h"
 #include "Physics/Physics.h"
-#include "Draw/Camera_Prototype_1/CameraControl.h"
+#include "Draw/Camera/CameraControl.h"
 #include "FileManager.h"
 #include "Core.h"
 #include "Common/Help.h"
@@ -83,17 +83,17 @@ bool Map::load() {
 				CameraControl* cameraTempPtr = new CameraControl();
 				cameraTempPtr->Load(cameraData);
 				cameraTempPtr->Enable(setCurrent);
-				_cameraPtr = std::shared_ptr<CameraProt2>(cameraTempPtr);
+				_cameraPtr = std::shared_ptr<Camera>(cameraTempPtr);
 			} else {
-				CameraProt2* cameraTempPtr = new CameraProt2();
+				Camera* cameraTempPtr = new Camera();
 				cameraTempPtr->Load(cameraData);
-				_cameraPtr = std::shared_ptr<CameraProt2>(cameraTempPtr);
+				_cameraPtr = std::shared_ptr<Camera>(cameraTempPtr);
 			}
 
 			_cameraPtr->Init();
 
 			if (setCurrent) {
-				CameraProt2::Set<CameraProt2>(_cameraPtr);
+				Camera::Set<Camera>(_cameraPtr);
 			}
 		}
 	}

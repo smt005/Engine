@@ -38,6 +38,7 @@ public:
 	inline void set(const Texture::Ptr& texture)				{ _texture = texture; }
 	inline Triangle& operator=(const Texture::Ptr& texture)	{ _texture = texture; }
 	inline void setTexture(const std::string& name)			{ _texture = Texture::getByName(name); }
+	inline void SetTexture(const Texture::Ptr& texture) { _texture = texture; }
 
 	void setData(unsigned short int type, unsigned int count, Point* points, TexCoord* texCoord);
 

@@ -4,7 +4,7 @@
 #include "Shape.h"
 #include "Core.h"
 #include "Screen.h"
-#include "Draw/Camera_Prototype_1/CameraProt2.h"
+#include "Draw/Camera/Camera.h"
 #include "Physics/Physics.h"
 
 #include <glm/gtc/matrix_transform.hpp>

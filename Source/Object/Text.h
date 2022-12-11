@@ -6,13 +6,14 @@
 
 namespace Engine {
 
-class TextNew final {
+class Text final {
 public:
-	TextNew() : _idTexture(0) {}
-	TextNew(const std::string& text, const std::string& fontName = "Fonts/tahoma.ttf");
+	Text() : _idTexture(0) {}
+	Text(const std::string& text, const std::string& fontName = "Fonts/tahoma.ttf");
 
 	inline const unsigned int IdTexture() { return _idTexture; }
 
+	void Draw();
 	void SavePNG();
 
 private:

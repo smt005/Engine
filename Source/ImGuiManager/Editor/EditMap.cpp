@@ -5,7 +5,7 @@
 #include "Common/Help.h"
 #include "Object/Map.h"
 #include "Object/Model.h"
-#include "Draw/Camera_Prototype_1/CameraProt2.h"
+#include "Draw/Camera/Camera.h"
 
 namespace Editor {
     const std::string MapEditor::windowName = "Edit map";
