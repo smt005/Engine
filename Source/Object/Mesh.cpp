@@ -124,3 +124,71 @@ void Mesh::setData(	float* const aVertex,
 	_aIndex = aIndex;
 	_countIndex = countIndex;
 }
+
+void Mesh::MakeRectangle(Mesh& mesh) {
+	mesh._countVertex = 4;
+
+	//...
+	mesh._aVertex = new float[mesh._countVertex * 3];
+
+	mesh._aVertex[0] = 1;
+	mesh._aVertex[1] = 0;
+	mesh._aVertex[2] = -1;
+
+	mesh._aVertex[3] = -1;
+	mesh._aVertex[4] = 0;
+	mesh._aVertex[5] = -1;
+
+	mesh._aVertex[6] = 1;
+	mesh._aVertex[7] = 0;
+	mesh._aVertex[8] = 1;
+
+	mesh._aVertex[9] = -1;
+	mesh._aVertex[10] = 0;
+	mesh._aVertex[11] = 1;
+
+	//...
+	mesh._aNormal = new float[mesh._countVertex * 3];
+
+	mesh._aNormal[0] = 0;
+	mesh._aNormal[1] = 1;
+	mesh._aNormal[2] = 0;
+
+	mesh._aNormal[3] = 0;
+	mesh._aNormal[4] = 1;
+	mesh._aNormal[5] = 0;
+
+	mesh._aNormal[6] = 0;
+	mesh._aNormal[7] = 1;
+	mesh._aNormal[8] = 0;
+
+	mesh._aNormal[9] = 0;
+	mesh._aNormal[10] = 1;
+	mesh._aNormal[11] = 0;
+
+	//...
+	mesh._aTexCoord = new float[mesh._countVertex * 2];
+
+	mesh._aTexCoord[0] = 0;
+	mesh._aTexCoord[1] = 1;
+
+	mesh._aTexCoord[2] = 1;
+	mesh._aTexCoord[3] = 1;
+
+	mesh._aTexCoord[4] = 0;
+	mesh._aTexCoord[5] = 0;
+
+	mesh._aTexCoord[6] = 1;
+	mesh._aTexCoord[7] = 0;
+
+	//...
+	mesh._countIndex = 6;
+	mesh._aIndex = new unsigned int[mesh._countIndex];
+
+	mesh._aIndex[0] = 1;
+	mesh._aIndex[1] = 2;
+	mesh._aIndex[2] = 0;
+	mesh._aIndex[3] = 1;
+	mesh._aIndex[4] = 3;
+	mesh._aIndex[5] = 2;
+}

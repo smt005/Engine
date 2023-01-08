@@ -4,9 +4,11 @@
 #include <vector>
 #include <stdint.h> // Поддержка uint8_t, int32_t и т.д.
 
+#include "Object/Color.h"
+
 namespace Engine {
 
-class Text final {
+class Text final : public Color {
 public:
 	Text() : _idTexture(0) {}
 	Text(const std::string& text, const std::string& fontName = "Fonts/tahoma.ttf");

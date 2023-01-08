@@ -49,4 +49,6 @@ public:
 public:
 	virtual ~Mesh();
 	bool initVBO();
+
+	static void MakeRectangle(Mesh& mesh);
 };

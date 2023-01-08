@@ -205,11 +205,10 @@ void Text::MakeTexture() {
 
             indexNew = index * 4;
             unsigned char value = (unsigned char)_image[index];
-            imageFontRGB[indexNew] = 1;
-            imageFontRGB[++indexNew] = 1;
+            imageFontRGB[  indexNew] = value;
             imageFontRGB[++indexNew] = value;
             imageFontRGB[++indexNew] = value;
-            // imageFontRGB[indexNew] = 1;// (unsigned char)image[index];
+            imageFontRGB[++indexNew] = value;
         }
     }
 
@@ -225,7 +224,8 @@ void Text::MakeTexture() {
 }
 
 void Text::Draw() {
-    DrawText::draw(*this);
+    Text& thisText = *this;
+    DrawText::Draw(thisText);
 }
 
 void Text::SavePNG() {
