@@ -7,6 +7,8 @@
 
 #include "Game.h"
 
+struct GLFWwindow;
+
 namespace Engine
 {
 
@@ -18,6 +20,7 @@ public:
 	static int execution(const Game::Ptr& game);
 	static bool main();
 	static void close();
+	static void mainLoop(GLFWwindow* window);
 
 	static void init();
 	static void update();

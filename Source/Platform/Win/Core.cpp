@@ -12,6 +12,12 @@
 #include <chrono>
 #include <iostream>
 
+#define THREAD_EXPAMPLE 1
+#if THREAD_EXPAMPLE
+#include <thread>
+#include <atomic>
+#endif
+
 using namespace Engine;
 
 Game::Ptr _game = nullptr;
@@ -19,6 +25,7 @@ Json::Value _settingJson;
 float _deltaTime = 0.0f;
 double _lastTime = Core::currentTime();
 const std::string fileNameSetting = "Setting.json";
+
 
 void cursorPositionCallback(GLFWwindow* Window, double x, double y);
 void mouseButtonCallback(GLFWwindow* Window, int Button, int Action, int mods);
@@ -88,27 +95,17 @@ bool Core::main() {
 
 	Core::init();
 	Core::resize();
+
+#if THREAD_EXPAMPLE
 	UI::Init(window);
+#endif
 
-	while (!glfwWindowShouldClose(window))
-	{
-		Callback::update();
-		Core::update();
-		Core::draw();
+	mainLoop(window);
 
-		for (WhileFunction function : whileFunctions) {
-			function(window);
-		}
-		whileFunctions.clear();
-
-		UI::Update();
-		UI::Render();
-
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-	}
-
+#if THREAD_EXPAMPLE
 	UI::Cleanup();
+#endif
+
 	glfwTerminate();
 
 	return true;
@@ -262,3 +259,55 @@ void windowScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	Callback::onScroll(yoffset);
 }
+
+#if THREAD_EXPAMPLE
+void Core::mainLoop(GLFWwindow* window) {
+	std::atomic_bool alive = true;
+
+	/*std::thread tUpdate([&alive]() {
+	while (alive.load(std::memory_order_relaxed)) {
+		Callback::update();
+	}});*/
+
+	std::thread tDraw([&alive]() {
+	while (alive.load(std::memory_order_relaxed)) {
+		Core::update();
+	}});
+
+	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(window))) {
+		Callback::update();
+		Core::draw();
+
+		for (WhileFunction function : whileFunctions) {
+			function(window);
+		}
+		whileFunctions.clear();
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+	alive.store(false, std::memory_order_relaxed);
+	//tUpdate.join();
+	tDraw.join();
+}
+#else
+void Core::mainLoop(GLFWwindow* window) {
+	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(window))) {
+		Callback::update();
+		Core::update();
+		Core::draw();
+
+		for (WhileFunction function : whileFunctions) {
+			function(window);
+		}
+		whileFunctions.clear();
+
+		UI::Update();
+		UI::Render();
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+}
+#endif
