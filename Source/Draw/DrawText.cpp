@@ -43,6 +43,14 @@ void DrawText::Draw(Engine::Text& text) {
 	DrawText::Prepare();
 
 	glm::mat4x4 matrix(1.f);
+	float fText = (float)text.Width() / (float)text.Height();
+
+	matrix = glm::translate(matrix, glm::vec3(text._offsetX * fText, text._offsetY, text._offsetZ));
+
+	float scale = (float)text.Height() / (float)Engine::Screen::width();
+
+	matrix = glm::scale(matrix, glm::vec3(scale * fText, 1.f, scale));
+
 	glUniformMatrix4fv(textShader.u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
 
 	unsigned int textureId = text.IdTexture();

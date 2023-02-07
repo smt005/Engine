@@ -32,12 +32,12 @@ FT_Glyph getGlyph(FT_Face face, uint32_t charcode);
 FT_Pos getKerning(FT_Face face, uint32_t leftCharcode, uint32_t rightCharcode);
 
 //...
-Text::Text(const std::string& text, const std::string& fontName) : _text(text) {
-    MakeImageData();
+Text::Text(const std::string& text, const unsigned int size, const std::string& fontName) : _text(text), _size(size) {
+    MakeImageData(fontName);
     MakeTexture();
 }
 
-void Text::MakeImageData() {
+void Text::MakeImageData(const std::string& fontName) {
     // Инициализация библиотеки
     if (ftLibrary == 0) {
         FT_Init_FreeType(&ftLibrary);
@@ -47,14 +47,14 @@ void Text::MakeImageData() {
     FT_Face ftFace = 0;
 
     std::string fontFilaName = Engine::FileManager::getResourcesDir().u8string();
-    fontFilaName += "/Fonts/Futured.ttf";
+    fontFilaName += "/Fonts/";
+    fontFilaName += fontName;
     FT_New_Face(ftLibrary, fontFilaName.c_str(), 0, &ftFace);
 
     // Установим размер символа для рендеринга
-    FT_Set_Pixel_Sizes(ftFace, 100, 0);
+    FT_Set_Pixel_Sizes(ftFace, 0, _size);
 
     // Выводимая строка
-    //const std::string exampleString("FreeType it's amazing!");
     const std::string exampleString(_text);
 
     // Набор готовых символов
@@ -67,8 +67,7 @@ void Text::MakeImageData() {
     // Позиция текущего символа в формате 26.6
     int32_t posX = 0;
 
-    for (std::size_t i = 0; i < exampleString.size(); ++i)
-    {
+    for (std::size_t i = 0; i < exampleString.size(); ++i) {
         // Получаем код символа
         const uint32_t charcode = exampleString[i];
 
@@ -123,9 +122,8 @@ void Text::MakeImageData() {
         bottom = std::max(bottom, symb.posY + symb.height);
     }
 
-    for (std::size_t i = 0; i < symbols.size(); ++i)
-    {
-        // Смещаем все символы влево, чтобы строка примыкала к левой части
+    // Смещаем все символы влево, чтобы строка примыкала к левой части
+    for (std::size_t i = 0; i < symbols.size(); ++i) {
         symbols[i].posX -= left;
     }
 
@@ -141,27 +139,23 @@ void Text::MakeImageData() {
     // Выделяем память для картинки
     _image = std::vector<uint8_t>(imageW* imageH);
 
-    for (std::size_t i = 0; i < symbols.size(); ++i)
-    {
+    for (std::size_t i = 0; i < symbols.size(); ++i) {
         const Symbol& symb = symbols[i];
 
         FT_BitmapGlyph bitmapGlyph = (FT_BitmapGlyph)symb.glyph;
         FT_Bitmap bitmap = bitmapGlyph->bitmap;
 
-        for (int32_t srcY = 0; srcY < symb.height; ++srcY)
-        {
+        for (int32_t srcY = 0; srcY < symb.height; ++srcY) {
             // Координата Y в итоговой картинке
             const int32_t dstY = symb.posY + srcY - top;
 
-            for (int32_t srcX = 0; srcX < symb.width; ++srcX)
-            {
+            for (int32_t srcX = 0; srcX < symb.width; ++srcX) {
                 // Получаем пиксель из изображения символа,
                 // (обязательно используйте pitch вместо width)
                 const uint8_t c = bitmap.buffer[srcX + srcY * bitmap.pitch];
 
                 // Если пиксель полностью прозрачный, то пропускаем его
-                if (0 == c)
-                {
+                if (0 == c) {
                     continue;
                 }
 

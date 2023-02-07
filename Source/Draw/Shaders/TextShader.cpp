@@ -33,10 +33,10 @@ void TextShader::prepare()
 	glm::mat4x4 matProject;
 
 	if (aspect > 1.f) {
-		matProject = glm::ortho(-size * aspect, size * aspect, -size, size, zNear, zFar);
+		matProject = glm::ortho(size * aspect, -size * aspect, -size, size, zNear, zFar);
 	}
 	else {
-		matProject = glm::ortho(-size, size, -size / aspect, size / aspect, zNear, zFar);
+		matProject = glm::ortho(size, -size, -size / aspect, size / aspect, zNear, zFar);
 	}
 
 	glm::vec3 pos(0.f, 0.f, 0.f);

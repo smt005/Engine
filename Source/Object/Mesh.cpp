@@ -169,16 +169,16 @@ void Mesh::MakeRectangle(Mesh& mesh) {
 	//...
 	mesh._aTexCoord = new float[mesh._countVertex * 2];
 
-	mesh._aTexCoord[0] = 0;
+	mesh._aTexCoord[0] = 1;
 	mesh._aTexCoord[1] = 1;
 
-	mesh._aTexCoord[2] = 1;
+	mesh._aTexCoord[2] = 0;
 	mesh._aTexCoord[3] = 1;
 
-	mesh._aTexCoord[4] = 0;
+	mesh._aTexCoord[4] = 1;
 	mesh._aTexCoord[5] = 0;
 
-	mesh._aTexCoord[6] = 1;
+	mesh._aTexCoord[6] = 0;
 	mesh._aTexCoord[7] = 0;
 
 	//...
