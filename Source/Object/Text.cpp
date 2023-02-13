@@ -225,7 +225,7 @@ void Text::Draw() {
 void Text::SavePNG() {
     // Файл для сохранения картинки
     //FILE* f = fopen("output.png", "wb");
-    std::string fileName = Engine::FileManager::getResourcesDir().u8string();
+    /*std::string fileName = Engine::FileManager::getResourcesDir().u8string();
     fileName += "/../../../../TestText.png";
     FILE* f = fopen(fileName.c_str(), "wb");
 
@@ -277,7 +277,7 @@ void Text::SavePNG() {
     // Закончили работу, освобождаем ресурсы
     fclose(f);
     png_free_data(png_ptr, info_ptr, PNG_FREE_ALL, -1);
-    png_destroy_write_struct(&png_ptr, 0);
+    png_destroy_write_struct(&png_ptr, 0);*/
 }
 
 // STATIC
