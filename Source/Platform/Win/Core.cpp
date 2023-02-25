@@ -9,8 +9,7 @@
 #include "json/json.h"
 #include "GLFW/glfw3.h" // https://www.glfw.org/docs/3.3/window_guide.html
 
-#include <chrono>
-#include <iostream>
+#define EDITORS_ENABLED 0
 
 #define THREAD_EXPAMPLE 1
 #if THREAD_EXPAMPLE
@@ -96,13 +95,13 @@ bool Core::main() {
 	Core::init();
 	Core::resize();
 
-#if THREAD_EXPAMPLE
+#if EDITORS_ENABLED
 	UI::Init(window);
 #endif
 
 	mainLoop(window);
 
-#if THREAD_EXPAMPLE
+#if EDITORS_ENABLED
 	UI::Cleanup();
 #endif
 
@@ -264,12 +263,7 @@ void windowScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 void Core::mainLoop(GLFWwindow* window) {
 	std::atomic_bool alive = true;
 
-	/*std::thread tUpdate([&alive]() {
-	while (alive.load(std::memory_order_relaxed)) {
-		Callback::update();
-	}});*/
-
-	std::thread tDraw([&alive]() {
+	std::thread threadUpdate([&alive]() {
 	while (alive.load(std::memory_order_relaxed)) {
 		Core::update();
 	}});
@@ -283,13 +277,17 @@ void Core::mainLoop(GLFWwindow* window) {
 		}
 		whileFunctions.clear();
 
+#if EDITORS_ENABLED
+		UI::Update();
+		UI::Render();
+#endif
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
 	alive.store(false, std::memory_order_relaxed);
-	//tUpdate.join();
-	tDraw.join();
+	threadUpdate.join();
 }
 #else
 void Core::mainLoop(GLFWwindow* window) {
@@ -303,8 +301,10 @@ void Core::mainLoop(GLFWwindow* window) {
 		}
 		whileFunctions.clear();
 
+		#if EDITORS_ENABLED
 		UI::Update();
 		UI::Render();
+#endif
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
