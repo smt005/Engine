@@ -206,15 +206,13 @@ bool Shape::create(const string &name)
 	return load(getName());
 }
 
-bool Shape::load(const string& name)
-{
-	char* data = nullptr;
-	int lenght = 0;
-	Engine::FileManager::readTextFile(name, data, lenght);
+bool Shape::load(const string& name) {
+	std::string data = Engine::FileManager::readTextFile(name);
+	int lenght = data.length();
 
-	if (!data) return false;
+	if (data.empty()) return false;
 
-	int len = strlen(data);
+	int len = data.length();
 	int iChar = 0;
 
 	BlockTemporary vertexTemporary(3);

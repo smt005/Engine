@@ -15,6 +15,7 @@ public:
 
 	static bool readTextFile(const std::filesystem::path& fileName, char*& data, int& lenght);
 	static std::string readTextFile(const std::filesystem::path& fileName);
+	static std::string readTextFileRedject(const std::filesystem::path& fileName);
 
 	static bool writeFile(const std::filesystem::path& fileName, const char* data);
 	static bool writeTextFile(const std::filesystem::path& fileName, const std::string& text);

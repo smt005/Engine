@@ -2,6 +2,7 @@
 #include "FileManager.h"
 #include <algorithm>
 #include <filesystem>
+#include <fstream>
 
 using namespace Engine;
 
@@ -49,7 +50,27 @@ bool FileManager::readTextFile(const std::filesystem::path& fileName, char*& dat
 	return false;
 }
 
-std::string FileManager::readTextFile(const std::filesystem::path& fileName)
+std::string FileManager::readTextFile(const std::filesystem::path& fileName) {
+	std::filesystem::path fullFilePath = _resourcesDir / fileName;
+
+	std::ifstream fileStream(fullFilePath);
+	if (!fileStream.is_open()) {
+		return std::string();
+	}
+
+	fileStream.seekg(0, std::ios::end);
+
+	std::string fileData;
+	fileData.reserve(fileStream.tellg());
+	fileStream.seekg(0, std::ios::beg);
+
+	fileData.assign(std::istreambuf_iterator<char>(fileStream), std::istreambuf_iterator<char>());
+	fileStream.close();
+
+	return fileData;
+}
+
+std::string FileManager::readTextFileRedject(const std::filesystem::path& fileName)
 {
 	char* data = nullptr;
 	int lenght = 0;
