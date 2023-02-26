@@ -268,7 +268,7 @@ void Core::mainLoop(GLFWwindow* window) {
 		Core::update();
 	}});
 
-	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(window))) {
+	while (!glfwWindowShouldClose(window)) {
 		Callback::update();
 		Core::draw();
 
@@ -301,7 +301,7 @@ void Core::mainLoop(GLFWwindow* window) {
 		}
 		whileFunctions.clear();
 
-		#if EDITORS_ENABLED
+#if EDITORS_ENABLED
 		UI::Update();
 		UI::Render();
 #endif
