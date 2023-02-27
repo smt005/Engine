@@ -1,6 +1,10 @@
 
 #include "Shape.h"
 #include "FileManager.h"
+#include "Common/Help.h"
+#include "Platform/CompileParams.h"
+
+#include <thread>
 
 struct BlockTemporary
 {
@@ -196,14 +200,29 @@ struct BlockTemporary
 	}
 };
 
-Shape::~Shape()
-{
+bool Shape::create(const string &name) {
+	setName(name);
+
+#if THREAD_EXPAMPLE
+	loadThread(getName());
+	return true;
+#else
+	return load(getName());
+#endif
 }
 
-bool Shape::create(const string &name)
-{
-	setName(name);
-	return load(getName());
+void Shape::loadThread(const string& name) {
+	std::thread thread([this, name_(name)]() {
+
+#if LONG_LOAD_EXAMPLE
+		static long long aDuraion(1);
+		help::log(std::to_string(aDuraion));
+		std::this_thread::sleep_for(std::chrono::milliseconds((++aDuraion * 500)));
+#endif
+
+		load(name_);
+	});
+	thread.detach();
 }
 
 bool Shape::load(const string& name) {
@@ -303,6 +322,7 @@ bool Shape::load(const string& name) {
 
 	BlockTemporary::getMesh(*this, countIndexTemporary, indexTemporary, vertexTemporary, normalTemporary, textureTemporary);
 
+	_loaded = true;
 	return true;
 }
 

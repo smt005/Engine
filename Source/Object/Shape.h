@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Common/DataClass.h"
-#include <string>
 #include "Mesh.h"
+
+#include <string>
 
 using namespace std;
 
@@ -13,7 +14,7 @@ class Shape: public Mesh, public DataClass<Shape>
 {
 	friend Mesh;
 public:
-	virtual ~Shape();
+	virtual ~Shape() = default;
     
 	bool create(const string &name) override;
 	bool load(const string& name);
@@ -22,4 +23,14 @@ public:
 	void copy(const Shape& shape) {
 		Mesh::copy(shape);
 	}
+
+	bool Loaded() {
+		return _loaded;
+	}
+
+private:
+	void loadThread(const string& name);
+
+private:
+	bool _loaded = false;
 };

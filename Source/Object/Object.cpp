@@ -1,5 +1,6 @@
 
 #include "Object.h"
+#include "Platform/CompileParams.h"
 #include "Model.h"
 #include "Shape.h"
 #include "Core.h"
@@ -8,6 +9,7 @@
 #include "Physics/Physics.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include  <thread>
 
 using namespace glm;
 
@@ -142,11 +144,14 @@ void Object::setActorPos(const glm::vec3& pos) {
 }
 
 void Object::updateMatrixPhysics() {
+	if (!_actorPhyscs && _typePhysics != Engine::Physics::Type::NONE && _model->getShape().Loaded()) {
+		Engine::Physics::createActor(*this);
+	}
 	Engine::Physics::updateMatrixActor(*this);
 }
 
 bool Object::createActorPhysics() {
-	return Engine::Physics::createActor(*this);
+	return false;// Engine::Physics::createActor(*this);
 }
 
 void Object::releaseActorPhysics() {

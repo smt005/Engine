@@ -1,5 +1,6 @@
 
 #include "Core.h"
+#include "Platform/CompileParams.h"
 #include "Game.h"
 #include "Screen.h"
 #include "Callback/Callback.h"
@@ -9,9 +10,6 @@
 #include "json/json.h"
 #include "GLFW/glfw3.h" // https://www.glfw.org/docs/3.3/window_guide.html
 
-#define EDITORS_ENABLED 0
-
-#define THREAD_EXPAMPLE 1
 #if THREAD_EXPAMPLE
 #include <thread>
 #include <atomic>

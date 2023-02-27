@@ -112,8 +112,10 @@ void DrawLight::draw(Model& model)
 
 	glUniform4fv(shader.u_lightPos, 1, _lightPos);
 
-	Mesh& mesh = model.getMesh();
-	draw(mesh);
+	if (model.getShape().Loaded()) {
+		Mesh& mesh = model.getMesh();
+		draw(mesh);
+	}
 }
 
 void DrawLight::draw(Object& object)
