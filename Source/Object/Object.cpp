@@ -21,8 +21,8 @@ Object::Object()
 
 }
 
-Object::Object(const string &name, const string &modelName, const vec3 &pos)
-	: _typePhysics(Engine::Physics::Type::NONE)
+Object::Object(const string& name, const string& modelName, const vec3& pos, Engine::Physics::Type typePhysics)
+	: _typePhysics(typePhysics)
 	, _actorPhyscs(nullptr)
 {
 	set(name, modelName, pos);
@@ -151,11 +151,16 @@ void Object::updateMatrixPhysics() {
 }
 
 bool Object::createActorPhysics() {
-	return false;// Engine::Physics::createActor(*this);
+	return Engine::Physics::createActor(*this);
 }
 
 void Object::releaseActorPhysics() {
 	Engine::Physics::releaseActor(*this);
+}
+
+void Object::setMass(const float argMass) {
+	mass = argMass;
+	Engine::Physics::setMassToActor(*this, mass);
 }
 
 void Object::addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType) {

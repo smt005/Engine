@@ -160,6 +160,12 @@ namespace Engine {
 
 		return true;
 	}
+	
+	void Physics::GetGravity(const glm::vec3& vector) {
+		gravity.x = vector.x;
+		gravity.y = vector.y;
+		gravity.z = vector.z;
+	}
 
 	bool Physics::createActor(Object& object) {
 		physics::ActorPhyscs* actorPhyscs = nullptr;
@@ -240,6 +246,20 @@ namespace Engine {
 		}
 	}
 
+	void Physics::setMassToActor(Object& object, const float mass) {
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			if (!object._actorPhyscs) {
+				return;
+			}
+
+			PxRigidDynamic* pConvexActor = (PxRigidDynamic*)object._actorPhyscs;
+			if (!pConvexActor) {
+				return;
+			}
+
+			pConvexActor->setMass(mass);
+		}
+	}
 
 	void Physics::setPositionToActor(Object& object, const glm::vec3& pos) {
 		if (object._typePhysics == Physics::Type::CONVEX) {

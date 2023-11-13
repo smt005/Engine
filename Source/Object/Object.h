@@ -23,6 +23,7 @@ public:
 
 public:
 	int tag = 0;
+	float mass = 0.f;
 
 protected:
 	ModelPtr _model;
@@ -36,7 +37,7 @@ private:
 
 public:
 	Object();
-	Object(const string& name, const string& modelName, const vec3& pos = vec3(0.0f));
+	Object(const string& name, const string& modelName, const vec3& pos = vec3(0.0f), const Engine::Physics::Type typePhysics = Engine::Physics::Type::NONE);
 	virtual ~Object();
 
 	void getDataJson(Json::Value& dataJson);
@@ -57,7 +58,7 @@ public:
 	bool createActorPhysics();
 	void releaseActorPhysics();
 
-
+	void setMass(const float mass);
 	void addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);
 
 	inline bool visible() { return _visible; }

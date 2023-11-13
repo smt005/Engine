@@ -11,6 +11,8 @@ public:
 private:
 	std::string _fileName;
 	unsigned int _id = 0;
+	unsigned int _width = 0;
+	unsigned int _height = 0;
 
 public:
 	Texture() {}
@@ -25,4 +27,5 @@ public:
 
 public:
 	static unsigned int loadTexture(const char* fileName);
+	static unsigned int LoadTexture(const std::string& fileName, unsigned int& width, unsigned int& height);
 };

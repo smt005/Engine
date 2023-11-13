@@ -10,7 +10,7 @@ namespace Engine
 class Game
 {
 public:
-	typedef std::shared_ptr<Game> Ptr;
+	typedef std::unique_ptr<Game> Uptr;
 
 public:
 	virtual ~Game() = default;
@@ -22,7 +22,7 @@ public:
 	virtual void resize() {};
 	virtual void close() {};
 
-	static Game::Ptr GetGame(const std::string& params = std::string());
+	static Game::Uptr GetGame(const std::string& params = std::string());
 };
 
 };	// Engine

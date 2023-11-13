@@ -17,7 +17,7 @@ class Window;
 class Core
 {
 public:
-	static int execution(const Game::Ptr& game);
+	static int execution(Game::Uptr& game);
 	static bool main();
 	static void close();
 	static void mainLoop(GLFWwindow* window);

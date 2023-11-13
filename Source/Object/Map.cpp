@@ -169,6 +169,7 @@ void Map::updatePhysixs() {
 
 void Map::action()
 {
+	//help::log("Map::action . . .");
 	for (auto object : objects) object->action();
 }
 
@@ -189,6 +190,11 @@ Object& Map::addObject(const string& nameModel, const glm::mat4x4& mat)
 Object& Map::addObject(Object* object)
 {
 	return *objects.emplace_back(object);
+}
+
+Object::Ptr& Map::addObject(Object::Ptr& object)
+{
+	return objects.emplace_back(object);
 }
 
 Object::Ptr	Map::getObjectPtrByName(const std::string& name) {

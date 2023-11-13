@@ -37,12 +37,14 @@ namespace Engine {
 		static bool createScene();
 		static void releaseScene();
 		static bool updateScene(const float dt);
+		static void GetGravity(const glm::vec3& vector);
 
 	private:
 		static bool createActor(Object& object);
 		static void updateMatrixActor(Object& object);
 		static void releaseActor(Object& object);
 
+		static void setMassToActor(Object& object, const float mass);
 		static void setPositionToActor(Object& object, const glm::vec3& pos);
 
 		static void addForceToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType);

@@ -82,8 +82,9 @@ public:
 
 	//...
 	void Init();
-	void SetPerspective(const float zFar = 1000.f, const float zNear = 0.1f, const float fov = 45.f);
+	void SetPerspective(const float zFar = 10000.f, const float zNear = 1.f, const float fov = 45.f);
 	void SetOrtho(const float size = 1.f, const float zNear = -1.f, const float zFar = 1.f);
+	glm::vec3 corsorCoord();
 
 	void LookAt(const glm::vec3& pos, const glm::vec3& direct) {
 		_pos = pos;
@@ -106,6 +107,7 @@ public:
 		_matView = glm::lookAt(_pos, _pos + _direct, _up);
 		MakeProjectView();
 	}
+
 	virtual void Load(const Json::Value& data);
 	virtual void Save(Json::Value& data);
 

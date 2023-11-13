@@ -38,6 +38,7 @@ public:
 	void setColor(const float* const color) { _color.set(color); }
 
 private:
+public:
 	float _data[3];
 	Color _color;
 };

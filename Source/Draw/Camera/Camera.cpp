@@ -1,5 +1,7 @@
 
 #include "Camera.h"
+#include "PhysicPlane.h"
+#include "Callback/Callback.h"
 
 void Camera::Init() {
 	_matView = glm::lookAt(_pos, _pos + _direct, _up);
@@ -22,6 +24,26 @@ void Camera::SetOrtho(const float size, float zNear, float zFar) {
 	}
 
 	MakeProjectView();
+}
+
+glm::vec3 Camera::corsorCoord() {
+	glm::vec2 mousePos = Engine::Callback::mousePos();
+	//mousePos.x = Engine::Screen::width() - mousePos.x;
+
+	glm::vec3 wincoord = glm::vec3(mousePos.x - Engine::Screen::left(), (Engine::Screen::height() - mousePos.y) + Engine::Screen::top(), 1.0f);
+	glm::vec4 viewport = glm::vec4(0, 0, Engine::Screen::width(), Engine::Screen::height());
+
+	glm::vec3 coord = glm::unProject(wincoord, _matView, _matProject, viewport);
+
+	glm::vec3 vecCursor(_pos.x - coord.x, _pos.y - coord.y, _pos.z - coord.z);
+	vecCursor = normalize(vecCursor);
+
+	PhysicPlane plane;
+	plane.set(vec3(1.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), vec3(0.0f, 0.0f, 0.0f));
+
+	glm::vec3 objcoord = plane.crossVector(vecCursor, _pos);
+
+	return objcoord;
 }
 
 void Camera::Load(const Json::Value& data) {

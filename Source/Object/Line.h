@@ -51,10 +51,13 @@ public:
 			return;
 		}
 
-		_count = count;
+		delete [] _points;
+		_points = nullptr;
+		_count = 0;
 
-		_points = new Point[_count];
-		memcpy(_points, points, sizeof(Point) * _count);
+		_points = new Point[count];
+		memcpy(_points, points, sizeof(Point) * count);
+		_count = count;
 
 		_type = type;
 	}
@@ -62,7 +65,7 @@ public:
 	inline void setType(const unsigned short int type) { _type = type; }
 	inline void setLineWidth(const float lineWidth) { _lineWidth = lineWidth; }
 
-	inline float* getData() const { return (float*)_points; }
+	inline const float* const getData() const { return (float*)_points; }
 	inline unsigned int getCount() const { return _count; }
 	inline unsigned short int getType() const { return _type; }
 	inline float getLineWidth() const { return _lineWidth; }
@@ -76,7 +79,7 @@ private:
 	unsigned short int _type;	//	GL_LINES 0x0001, GL_LINE_LOOP 0x0002, GL_LINE_STRIP 0x0003
 	float _lineWidth;
 	unsigned int _count;
-	Point* _points;
+	Point* _points = nullptr;
 };
 
 

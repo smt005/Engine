@@ -1,5 +1,6 @@
 
 #include "Core.h"
+#include <windows.h>
 #include "Platform/CompileParams.h"
 #include "Game.h"
 #include "Screen.h"
@@ -17,7 +18,9 @@
 
 using namespace Engine;
 
-Game::Ptr _game = nullptr;
+#define ApplicationInfo	" v.0.0 [" __DATE__"  " __TIME__" ]"
+
+Game::Uptr _game;
 Json::Value _settingJson;
 float _deltaTime = 0.0f;
 double _lastTime = Core::currentTime();
@@ -30,19 +33,18 @@ void keyCallback(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods
 void windowSizeCallback(GLFWwindow* window, int width, int height);
 void windowPosCallback(GLFWwindow* window, int left, int top);
 void windowCloseCallback(GLFWwindow* window);
-void windowCloseCallback(GLFWwindow* window);
 void windowScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
 typedef std::function<void(GLFWwindow* window)> WhileFunction;
 std::vector<WhileFunction> whileFunctions;
 
-int Core::execution(const Game::Ptr& game)
+int Core::execution(Game::Uptr& game)
 {
 	if (!game) {
 		return -1;
 	}
 
-	_game = game;
+	std::swap(_game, game);
 
 	const std::filesystem::path sourcesDir = _game->getSourcesDir();
 	Engine::FileManager::setResourcesDir(sourcesDir);
@@ -71,7 +73,8 @@ bool Core::main() {
 
 	Screen::init();
 
-	window = glfwCreateWindow(Screen::width(), Screen::height(), Screen::title().c_str(), NULL, NULL);
+	std::string title = Screen::title() + ApplicationInfo;
+	window = glfwCreateWindow(Screen::width(), Screen::height(), title.c_str(), NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -110,8 +113,17 @@ bool Core::main() {
 
 void Core::close()
 {
-	if (!_game) return;
-	_game->close();
+	if (_game) {
+		_game->close();
+	}
+
+	// Сохранение настроек окна
+	_settingJson["window"]["width"] = Screen::width();
+	_settingJson["window"]["height"] = Screen::height();
+	_settingJson["window"]["left"] = Screen::left();
+	_settingJson["window"]["top"] = Screen::top();
+
+	help::saveJson(fileNameSetting, _settingJson);
 
 	exit(1);
 }
@@ -242,8 +254,11 @@ void windowPosCallback(GLFWwindow* window, int left, int top)
 
 void windowCloseCallback(GLFWwindow* window)
 {
-	// Сохранение настроек окна
+	if (_game) {
+		_game->close();
+	}
 
+	// Сохранение настроек окна
 	_settingJson["window"]["width"] = Screen::width();
 	_settingJson["window"]["height"] = Screen::height();
 	_settingJson["window"]["left"] = Screen::left();

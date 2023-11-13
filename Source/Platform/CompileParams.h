@@ -1,5 +1,5 @@
 #pragma once
 
-#define THREAD_EXPAMPLE 1
-#define LONG_LOAD_EXAMPLE 1
+#define THREAD_EXPAMPLE 0
+#define LONG_LOAD_EXAMPLE 0
 #define EDITORS_ENABLED 0

@@ -5,11 +5,12 @@ Line::~Line()
 {
 	if (_points) {
 		delete[] _points;
+		_points = nullptr;
 	}
 }
 
 Line& Line::operator=(const Line& line) {
-	if (line._points && line._count) {
+	if (line._points && line._count > 0) {
 		_count = line._count;
 		memcpy(_points, line._points, sizeof(Point) * _count);
 		_type = line._type;
