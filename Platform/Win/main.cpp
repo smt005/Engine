@@ -13,6 +13,6 @@ int main(int argc, char** argv)
 	FreeConsole();
 #endif
 
-	Engine::Game::Ptr gamePtr = Engine::Game::GetGame();
+	Engine::Game::Uptr gamePtr = Engine::Game::GetGame();
 	return Engine::Core::execution(gamePtr);
 }
