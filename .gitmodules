@@ -22,3 +22,6 @@
 [submodule "ThirdParty/ImGui"]
 	path = ThirdParty/ImGui
 	url = https://github.com/smt005/ImGui.git
+[submodule "ThirdParty/mystl"]
+	path = ThirdParty/mystl
+	url = https://github.com/smt005/mystl.git
