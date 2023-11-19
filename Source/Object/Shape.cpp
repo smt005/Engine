@@ -200,6 +200,11 @@ struct BlockTemporary
 	}
 };
 
+Shape::Shape(const Shape& argShape) {
+	Mesh::copy(argShape);
+	_loaded = true;
+}
+
 bool Shape::create(const string &name) {
 	setName(name);
 

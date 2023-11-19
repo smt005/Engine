@@ -14,6 +14,8 @@ class Shape: public Mesh, public DataClass<Shape>
 {
 	friend Mesh;
 public:
+	Shape() = default;
+	Shape(const Shape& argShape);
 	virtual ~Shape() = default;
     
 	bool create(const string &name) override;

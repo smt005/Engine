@@ -60,8 +60,7 @@ bool Model::load() {
 	string suffixScale;
 	float scale[3];
 
-	/*if (!dataModel["scale"].empty())
-	{
+	if (!dataModel["scale"].empty()) {
 		if (dataModel["scale"].isArray())
 		{
 			int index = 0;
@@ -92,28 +91,24 @@ bool Model::load() {
 
 			hasScalling = true;
 		}
-	}*/
-
-	//if (!hasScalling)
-	{
-		_shape = Shape::getByName(nameShape);
 	}
-	/*else
-	{
-		string nameWithSuffixScale = nameShape + "_[" + std::to_string(scale[0]) + '_' + std::to_string(scale[1]) + '_' + std::to_string(scale[2]) + '_' + "]";
 
-		if (Shape::hasByName(nameWithSuffixScale)) {
-			_shape = Shape::getByName(nameWithSuffixScale);
-		}
-		else {
-			_shape = Shape::getByName(nameWithSuffixScale);
+	if (!hasScalling) {
+		_shape = Shape::getByName(nameShape);
+	} else {
+		string nameWithSuffixScale = nameShape +"_[" + std::to_string(scale[0]) + '_' + std::to_string(scale[1]) + '_' + std::to_string(scale[2]) + "]";
 
+		if (!Shape::hasByName(nameWithSuffixScale)) {
 			ShapePtr& shape = Shape::getByName(nameShape);
-			_shape->copy(*shape);
+			_shape = std::make_shared<Shape>(*shape);
+			_shape->setName(nameWithSuffixScale);
 			_shape->setScale(scale);
+			Shape::add(_shape);
 		}
-	}*/
-	
+
+		_shape = Shape::getByName(nameWithSuffixScale);
+	}
+
 	_texture = Texture::getByName(nameTexture);
 
 	return true;

@@ -39,6 +39,8 @@ namespace Engine {
 		static bool updateScene(const float dt);
 		static void GetGravity(const glm::vec3& vector);
 
+		static glm::vec3 GetLinearVelocity(Object& object);
+
 	private:
 		static bool createActor(Object& object);
 		static void updateMatrixActor(Object& object);

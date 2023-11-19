@@ -78,7 +78,7 @@ void Callback::onReleaseTap(const int id) {
 		_tap[id] = false;
 	}
 
-	KeyCallbackEvent* callbackEvent = new KeyCallbackEvent(static_cast<VirtualKey>(id));
+	TapCallbackEvent* callbackEvent = new TapCallbackEvent(static_cast<VirtualTap>(id));
 	CallbackEventPtr callbackEventPtr(callbackEvent);
 	iteration(CallbackType::RELEASE_TAP, callbackEventPtr);
 }

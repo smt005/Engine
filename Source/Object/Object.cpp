@@ -158,6 +158,10 @@ void Object::releaseActorPhysics() {
 	Engine::Physics::releaseActor(*this);
 }
 
+glm::vec3 Object::GetLinearVelocity() {
+	return Engine::Physics::GetLinearVelocity(*this);
+}
+
 void Object::setMass(const float argMass) {
 	mass = argMass;
 	Engine::Physics::setMassToActor(*this, mass);

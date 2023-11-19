@@ -167,6 +167,19 @@ namespace Engine {
 		gravity.z = vector.z;
 	}
 
+	glm::vec3 Physics::GetLinearVelocity(Object& object) {
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			if (!object._actorPhyscs) {
+				return { 0.f, 0.f, 0.f };
+			}
+
+			PxVec3 pxVec3 = static_cast<PxRigidDynamic*>(object._actorPhyscs)->getLinearVelocity();
+			return { pxVec3.x, pxVec3.y, pxVec3.z };
+		}
+
+		return { 0.f, 0.f, 0.f };
+	}
+
 	bool Physics::createActor(Object& object) {
 		physics::ActorPhyscs* actorPhyscs = nullptr;
 
