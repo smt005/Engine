@@ -59,6 +59,7 @@ public:
 	void releaseActorPhysics();
 
 	glm::vec3 GetLinearVelocity();
+	void SetLinearVelocity(const glm::vec3& velocity);
 
 	void setMass(const float mass);
 	void addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);

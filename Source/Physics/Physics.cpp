@@ -180,6 +180,15 @@ namespace Engine {
 		return { 0.f, 0.f, 0.f };
 	}
 
+	void Physics::SetLinearVelocity(Object& object, const glm::vec3& velocity) {
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			if (object._actorPhyscs) {
+				PxVec3 pxVec3(velocity.x, velocity.y, velocity.z);
+				static_cast<PxRigidDynamic*>(object._actorPhyscs)->setLinearVelocity(pxVec3, true);
+			}
+		}
+	}
+
 	bool Physics::createActor(Object& object) {
 		physics::ActorPhyscs* actorPhyscs = nullptr;
 
