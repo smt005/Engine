@@ -21,46 +21,79 @@ Line& Line::operator=(const Line& line) {
 
 //	Greed
 
-void Greed::set(const float width, const float step)
+void Greed::set(const float width, const float step,  const std::vector<Color>& colors)
 {
 	if (width == 0.0f || step == 0.0f) {
 		return;
 	}
+	bool setUnicColor = colors.size() == 3;
 
 	{
 		generateLines(lineX, width, step, true);
-		lineX.color = Color::GREEN;
-		lineX.color.setAlpha(0.5f);
+
+		if (setUnicColor) {
+			lineX.color = colors[0];
+		} else {
+			lineX.color = Color::GREEN;
+			lineX.color.setAlpha(0.5f);
+		}
 
 		float heavyPoints[] = { 0.0f, 0.0f, 0.0f, 10.0f, 0.0f, 0.0f };
 		heavyLineX.set(heavyPoints, 2);
-		heavyLineX.color = Color::GREEN;
-		heavyLineX.color.setAlpha(0.25f);
+		if (setUnicColor) {
+			heavyLineX.color = colors[0];
+		} else {
+			heavyLineX.color = Color::GREEN;
+			heavyLineX.color.setAlpha(0.25f);
+		}
+
 		heavyLineX.setLineWidth(5.0f);
 	}
 
 	{
 		generateLines(lineY, width, step, false);
-		lineY.color = Color::BLUE;
-		lineY.color.setAlpha(0.5f);
+
+		if (setUnicColor) {
+			lineY.color = colors[1];
+		} else {
+			lineY.color = Color::BLUE;
+			lineY.color.setAlpha(0.5f);
+		}
 
 		float heavyPoints[] = { 0.0f, 0.0f, 0.0f, 0.0f, 10.0f, 0.0f };
 		heavyLineY.set(heavyPoints, 2);
-		heavyLineY.color = Color::BLUE;
-		heavyLineY.color.setAlpha(0.25f);
+
+		if (setUnicColor) {
+			heavyLineY.color = colors[1];
+		} else {
+			heavyLineY.color = Color::BLUE;
+			heavyLineY.color.setAlpha(0.25f);
+		}
+
 		heavyLineY.setLineWidth(5.0f);
 	}
 
 	{
 		float points[] = { 0.0f, 0.0f, -100.0f, 0.0f, 0.0f, 100.0f };
 		lineZ.set(points, 2);
-		lineZ.color = Color::RED;
-		lineZ.color.setAlpha(0.5f);
+
+		if (setUnicColor) {
+			lineZ.color = colors[2];
+		} else {
+			lineZ.color = Color::RED;
+			lineZ.color.setAlpha(0.5f);
+		}
 
 		float heavyPoints[] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10.0f };
 		heavyLineZ.set(heavyPoints, 2);
-		heavyLineZ.color = Color::RED;
-		heavyLineZ.color.setAlpha(0.25f);
+
+		if (setUnicColor) {
+			heavyLineZ.color = colors[2];
+		} else {
+			heavyLineZ.color = Color::RED;
+			heavyLineZ.color.setAlpha(0.25f);
+		}
+
 		heavyLineZ.setLineWidth(5.0f);
 	}
 }

@@ -46,6 +46,9 @@ public:
 		return _distOutside;
 	}
 
+public:
+	bool enableCallback = true;
+
 private:
 	glm::vec3 _posOutside = {0.f, 0.f, 0.f};
 	float _distOutside = 100.f;

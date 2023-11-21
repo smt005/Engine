@@ -47,48 +47,53 @@ void CameraControlOutside::Enable(const bool state) {
 }
 
 void CameraControlOutside::MakeCallback() {
-	_callbackPtr = new Engine::Callback(
-		Engine::CallbackType::PINCH_KEY, [this](const Engine::CallbackEventPtr& callbackEventPtr) {
-			float kForce = 1.0;
-
-			if (Engine::Callback::pressKey(Engine::VirtualKey::CONTROL)) {
-				kForce = 0.2f;
-				return;
-			} else if (Engine::Callback::pressKey(Engine::VirtualKey::SHIFT)) {
-				kForce = 5.f;
-			}
-
-			if (Engine::Callback::pressKey(Engine::VirtualKey::W)) {
-				Move(MoveDirect::FORVARD, kForce);
-			}
-			if (Engine::Callback::pressKey(Engine::VirtualKey::S)) {
-				Move(MoveDirect::BACK, kForce);
-			}
-			if (Engine::Callback::pressKey(Engine::VirtualKey::D)) {
-				Move(MoveDirect::RIGHT, kForce);
-			}
-			if (Engine::Callback::pressKey(Engine::VirtualKey::A)) {
-				Move(MoveDirect::LEFT, kForce);
-			}
-			if (Engine::Callback::pressKey(Engine::VirtualKey::R)) {
-				Move(MoveDirect::TOP, kForce);
-			}
-			if (Engine::Callback::pressKey(Engine::VirtualKey::F)) {
-				Move(MoveDirect::DOWN, kForce);
-			}
+	_callbackPtr = new Engine::Callback(Engine::CallbackType::PINCH_KEY, [this](const Engine::CallbackEventPtr& callbackEventPtr) {
+		if (!enableCallback) {
+			return;
 		}
-	);
+
+		float kForce = 1.0;
+
+		if (Engine::Callback::pressKey(Engine::VirtualKey::CONTROL)) {
+			kForce = 0.2f;
+			return;
+		} else if (Engine::Callback::pressKey(Engine::VirtualKey::SHIFT)) {
+			kForce = 5.f;
+		}
+
+		if (Engine::Callback::pressKey(Engine::VirtualKey::W)) {
+			Move(MoveDirect::FORVARD, kForce);
+		}
+		if (Engine::Callback::pressKey(Engine::VirtualKey::S)) {
+			Move(MoveDirect::BACK, kForce);
+		}
+		if (Engine::Callback::pressKey(Engine::VirtualKey::D)) {
+			Move(MoveDirect::RIGHT, kForce);
+		}
+		if (Engine::Callback::pressKey(Engine::VirtualKey::A)) {
+			Move(MoveDirect::LEFT, kForce);
+		}
+		if (Engine::Callback::pressKey(Engine::VirtualKey::R)) {
+			Move(MoveDirect::TOP, kForce);
+		}
+		if (Engine::Callback::pressKey(Engine::VirtualKey::F)) {
+			Move(MoveDirect::DOWN, kForce);
+		}
+	});
 
 	_callbackPtr->add(Engine::CallbackType::PINCH_TAP, [this](const Engine::CallbackEventPtr& callbackEventPtr) {
-			if (Engine::Callback::pressTap(Engine::VirtualTap::RIGHT)) {
-				Rotate(Engine::Callback::deltaMousePos());
-			}
-
-			if (Engine::Callback::pressTap(Engine::VirtualTap::MIDDLE)) {
-				Move(Engine::Callback::deltaMousePos() * Engine::Core::deltaTime());
-			}
+		if (!enableCallback) {
+			return;
 		}
-	);
+
+		if (Engine::Callback::pressTap(Engine::VirtualTap::RIGHT)) {
+			Rotate(Engine::Callback::deltaMousePos());
+		}
+
+		if (Engine::Callback::pressTap(Engine::VirtualTap::MIDDLE)) {
+			Move(Engine::Callback::deltaMousePos() * Engine::Core::deltaTime());
+		}
+	});
 
 }
 

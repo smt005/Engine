@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <vector>
+
 #include "glm/mat4x4.hpp"
 #include "glm/vec3.hpp"
 
@@ -88,11 +90,11 @@ class Greed : public Position
 public:
 	Greed()	{ }
 
-	Greed(const float width, const float step = 1.0f) {
-		set(width, step);
+	Greed(const float width, const float step = 1.0f, const std::vector<Color>& colors = std::vector<Color>()) {
+		set(width, step, colors);
 	}
 
-	void set(const float width, const float step = 1.0f);
+	void set(const float width, const float step = 1.0f, const std::vector<Color>& colors = std::vector<Color>());
 
 private:
 	void generateLines(Line& line, const float width, const float step, const bool planeX);
