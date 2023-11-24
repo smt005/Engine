@@ -12,6 +12,7 @@ source_group(TREE ${ENGINE_SOURCE} TREE PREFIX "" FILES ${INCLUDES} ${SOURCES})
 include_directories(${GAME_SOURCE})
 
 # ThirdPathy
+include_directories(${OPENAL_INCLUDES})
 include_directories(${GLM_INCLUDES})
 include_directories(${JSONCPP_INCLUDES})
 include_directories(${GLFW_INCLUDES})

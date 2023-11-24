@@ -25,6 +25,6 @@
 [submodule "ThirdParty/mystl"]
 	path = ThirdParty/mystl
 	url = https://github.com/smt005/mystl.git
-[submodule "ThirdParty/openal"]
-	path = ThirdParty/openal
+[submodule "ThirdParty/OpenAL"]
+	path = ThirdParty/OpenAL
 	url = https://github.com/kcat/openal-soft.git
