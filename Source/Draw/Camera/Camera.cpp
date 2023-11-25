@@ -28,7 +28,8 @@ void Camera::SetOrtho(const float size, float zNear, float zFar) {
 
 glm::vec3 Camera::corsorCoord() {
 	glm::vec2 mousePos = Engine::Callback::mousePos();
-	//mousePos.x = Engine::Screen::width() - mousePos.x;
+	mousePos.x += Engine::Screen::left();
+	mousePos.y += Engine::Screen::top();
 
 	glm::vec3 wincoord = glm::vec3(mousePos.x - Engine::Screen::left(), (Engine::Screen::height() - mousePos.y) + Engine::Screen::top(), 1.0f);
 	glm::vec4 viewport = glm::vec4(0, 0, Engine::Screen::width(), Engine::Screen::height());
