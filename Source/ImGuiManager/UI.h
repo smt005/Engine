@@ -20,7 +20,7 @@ public:
 		typedef std::shared_ptr<Window> Ptr;
 
 	public:
-		Window() : _closeBtn(true), _visible(false), _window_flags(NULL) {}
+		Window() : _closeBtn(true), _visible(false), _window_flags(NULL), _alpha(1.f) {}
 		virtual ~Window() = default;
 
 		virtual void Draw() {}
@@ -30,6 +30,8 @@ public:
 
 		inline void SetId(const std::string& id) { _id = id; }
 		inline void SetFlag(int window_flags) { _window_flags = window_flags; }
+		inline void SetAlpha(float alpha) { _alpha = alpha; }
+
 		inline const std::string& Id() { return _id; }
 		inline void VisibleCloseBtn(const bool value) { _closeBtn = value; }
 		void Close() { UI::closedWindows.emplace_back(this); }
@@ -37,7 +39,9 @@ public:
 	private:
 		bool _closeBtn;
 		bool _visible;
+		float _alpha;
 		int _window_flags;
+		
 		std::string _id;
 	};
 
@@ -49,9 +53,9 @@ private:
 	static void Render();
 
 public:	
-	template <typename T>
-	static const std::string ShowWindow() {
-		T* window = new T();
+	template <typename T, typename... Args>
+	static const std::string ShowWindow(Args&&...args) {
+		UI::Window* window = new T(std::forward<Args>(args)...);
 		std::string id = window->_id;
 		if (windows.find(id) != windows.end()) {
 			delete window;

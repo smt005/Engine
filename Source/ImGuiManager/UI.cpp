@@ -58,6 +58,10 @@ void UI::Render() {
 		if (!window) {
 			continue;
 		}
+		
+		if (window->_alpha < 1.f) {
+			ImGui::SetNextWindowBgAlpha(window->_alpha);
+		}
 
 		ImGui::Begin(window->_id.c_str(), window->_closeBtn ? &window->_closeBtn : nullptr, window->_window_flags);
 			if (!window->_visible) {
