@@ -178,3 +178,7 @@ void DrawLight::draw(const Triangle& triangle)
 
 	glDrawArrays(GL_TRIANGLES, 0, triangle.countVertex());
 }
+
+void DrawLight::SetMatrux(const glm::mat4x4& matrix) {
+	glUniformMatrix4fv(shader.u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
+}

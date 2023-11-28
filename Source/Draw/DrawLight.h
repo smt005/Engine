@@ -3,9 +3,10 @@
 
 #include <glm/glm.hpp>
 #include <glm/mat4x4.hpp>
+#include "../../Engine/Source/Object/Model.h"
 
 class Mesh;
-class Model;
+//class Model;
 class Object;
 class Map;
 class Triangle;
@@ -27,6 +28,23 @@ public:
 	static void draw(Object& object);
 	static void draw(Map& map);
 	static void draw(const Triangle& triangle);
+
+	template<typename MapT>
+	static void DrawMap(MapT& map) {
+		for (auto&& object : map.Objects()) {
+			DrawObject(*object);
+		}
+	}
+
+	template<typename ObjectT>
+	static void DrawObject(ObjectT& object) {
+		SetMatrux(object.getMatrix());
+
+		Model& model = object.getModel();
+		draw(model);
+	}
+
+	static void SetMatrux(const glm::mat4x4& matrix);
 
 private:
 	static float _clearColor[4];

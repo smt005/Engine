@@ -24,6 +24,7 @@ public:
 	static Map::Ptr& AddCurrentMap(Map::Ptr& map);
 	static void ClearCurrentMap(Map::Ptr& map);
 	static Map& GetFirstCurrentMap() { return currentMaps.empty() ? defaultMap : *currentMaps[0]; }
+	static Map::Ptr GetFirstCurrentMapPtr() { return currentMaps.empty() ? Map::Ptr() : currentMaps[0]; }
 	static std::vector<Map::Ptr>& GetCurrentMaps() { return currentMaps; }
 
 public:
