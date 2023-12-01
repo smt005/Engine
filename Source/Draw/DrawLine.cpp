@@ -78,3 +78,25 @@ void DrawLine::draw(const Greed& greed)
 	DrawLine::draw(greed.heavyLineY);
 	DrawLine::draw(greed.heavyLineZ);
 }
+
+void DrawLine::Draw(const float* data, unsigned int count, float widthLine, const float* color, unsigned short int type) {
+	glUniform4fv(lineShader.u_color, 1, color);
+	glLineWidth(widthLine);
+
+	glVertexAttribPointer(lineShader.a_position, 3, GL_FLOAT, GL_FALSE, 0, data);
+	glDrawArrays(type, 0, count);
+}
+
+void DrawLine::SetIdentityMatrix() {
+	static const glm::mat4x4 identityMatrix(1.f);
+	glUniformMatrix4fv(lineShader.u_matViewModel, 1, GL_FALSE, glm::value_ptr(identityMatrix));
+}
+
+void DrawLine::SetIdentityMatrixByPos(const float* pos) {
+	glm::mat4x4 matrix(1.f);
+	matrix[3][0] = pos[0];
+	matrix[3][1] = pos[1];
+	matrix[3][2] = pos[2];
+
+	glUniformMatrix4fv(lineShader.u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
+}

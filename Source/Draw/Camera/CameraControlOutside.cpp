@@ -91,7 +91,7 @@ void CameraControlOutside::MakeCallback() {
 		}
 
 		if (Engine::Callback::pressTap(Engine::VirtualTap::MIDDLE)) {
-			Move(Engine::Callback::deltaMousePos() * Engine::Core::deltaTime());
+			Move(Engine::Callback::deltaMousePos() * (float)Engine::Core::deltaTime());
 		}
 	});
 

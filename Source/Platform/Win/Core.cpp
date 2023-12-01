@@ -22,7 +22,7 @@ using namespace Engine;
 
 Game::Uptr _game;
 Json::Value _settingJson;
-float _deltaTime = 0.0f;
+double _deltaTime = 0.0f;
 double _lastTime = Core::currentTime();
 const std::string fileNameSetting = "Setting.json";
 
@@ -141,7 +141,7 @@ void Core::update()
 	double currentTime = Core::Core::currentTime();
 	double deltaTime = currentTime - _lastTime;
 	_lastTime = currentTime;
-	_deltaTime = static_cast<float>(deltaTime / 1000);
+	_deltaTime = deltaTime / 1000;
 
 	_game->update();
 }
@@ -187,7 +187,7 @@ double Core::currentTime()
 	return value;
 }
 
-float Core::deltaTime() {
+double Core::deltaTime() {
 	return _deltaTime;
 }
 

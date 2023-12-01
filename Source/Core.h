@@ -29,7 +29,7 @@ public:
 	static void log(const std::string& text);
 	static const Json::Value& settingJson(const std::string& key);
 	static double currentTime();
-	static float deltaTime();
+	static double deltaTime();
 
 	static void SetCursorPos(const double x, const double y);
 };
