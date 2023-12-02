@@ -11,6 +11,8 @@
 #include "json/json.h"
 #include "GLFW/glfw3.h" // https://www.glfw.org/docs/3.3/window_guide.html
 
+#include "../../Game/Source/SystemMy/Objects/SystemMapStackArr.h"
+
 #if THREAD_EXPAMPLE
 #include <thread>
 #include <atomic>
@@ -25,7 +27,6 @@ Json::Value _settingJson;
 double _deltaTime = 0.0f;
 double _lastTime = Core::currentTime();
 const std::string fileNameSetting = "Setting.json";
-
 
 void cursorPositionCallback(GLFWwindow* Window, double x, double y);
 void mouseButtonCallback(GLFWwindow* Window, int Button, int Action, int mods);
@@ -92,6 +93,11 @@ bool Core::main() {
 	glfwSetScrollCallback(window, windowScrollCallback);
 
 	glfwMakeContextCurrent(window);
+
+#if SYSTEM_MAP == 2
+	SystemStackData systemData;
+	systemData.dataPtr = &systemData;
+#endif
 
 	Core::init();
 	Core::resize();
