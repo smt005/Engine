@@ -10,6 +10,10 @@ class base_vector3 final {
 public:
 	T x, y, z;
 
+	template <typename U>
+	base_vector3(const U& vec) :x(vec.x), y(vec.y), z(vec.z) {
+	}
+
 	base_vector3() :x(0), y(0), z(0) {
 	}
 
