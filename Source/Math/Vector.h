@@ -37,7 +37,7 @@ public:
 	base_vector3(const base_vector3& vec) :x(vec.x), y(vec.y), z(vec.z) {
 	}
 
-	base_vector3(base_vector3&& vec) :x(vec.x), y(vec.y), z(vec.z) noexcept {
+	base_vector3(base_vector3&& vec) :x(vec.x), y(vec.y), z(vec.z) {
 	}
 
 	base_vector3& operator = (const base_vector3& vec) {
@@ -225,5 +225,5 @@ base_vector3<T> normalize(base_vector3<T>&& vec) {
 }
 
 using Vector3 = base_vector3<float>;
-using VectorD3 = base_vector3<double>;
+using Vector3d = base_vector3<double>;
 }
