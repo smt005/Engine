@@ -11,8 +11,6 @@
 #include "json/json.h"
 #include "GLFW/glfw3.h" // https://www.glfw.org/docs/3.3/window_guide.html
 
-#include "../../Game/Source/SystemMy/Objects/SystemMapStackArr.h"
-
 #if THREAD_EXPAMPLE
 #include <thread>
 #include <atomic>
@@ -93,11 +91,6 @@ bool Core::main() {
 	glfwSetScrollCallback(window, windowScrollCallback);
 
 	glfwMakeContextCurrent(window);
-
-#if SYSTEM_MAP == 2
-	SystemStackData systemData;
-	systemData.dataPtr = &systemData;
-#endif
 
 	Core::init();
 	Core::resize();
