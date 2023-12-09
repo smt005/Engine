@@ -7,6 +7,12 @@
 
 namespace Engine {
 	class Core;
+
+	template<typename T>
+	std::string GetClassName() {
+		std::string className = typeid(T).name();
+		return className.substr(6, (className.length() - 6)); // 'slass ' length == 6
+	}
 }
 
 class UI {
@@ -18,9 +24,18 @@ public:
 
 	public:
 		typedef std::shared_ptr<Window> Ptr;
+		typedef std::weak_ptr<Window> Wptr;
 
 	public:
-		Window() : _closeBtn(true), _visible(false), _window_flags(NULL), _alpha(1.f) {}
+		template <typename T>
+		Window(T* tPtr)
+			: _closeBtn(true)
+			, _visible(false)
+			, _window_flags(NULL)
+			, _alpha(1.f)
+			, _id(Engine::GetClassName<T>())
+		{}
+
 		virtual ~Window() = default;
 
 		virtual void Draw() {}
@@ -41,7 +56,6 @@ public:
 		bool _visible;
 		float _alpha;
 		int _window_flags;
-		
 		std::string _id;
 	};
 
@@ -72,6 +86,12 @@ public:
 	static void CloseWindow(const Window* windowPtr) { closedWindows.emplace_back(windowPtr); }
 	static void CloseWindow(const Window::Ptr windowPtr) { closedWindows.emplace_back(windowPtr.get()); }
 	static Window::Ptr GetWindow(const std::string& id);
+
+	template <typename T>
+	static bool ShowingWindow() { return windows.find(Engine::GetClassName<T>()) != windows.end(); }
+
+	template <typename T>
+	static void CloseWindowT() { CloseWindow(Engine::GetClassName<T>()); };
 
 private:
 	static void Update() { for (const std::pair<std::string, UI::Window::Ptr>& windowPair : windows) { windowPair.second->Update(); }; }

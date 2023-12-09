@@ -5,8 +5,6 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
-#include <stdio.h>
-#include <set>
 
 UI::Windows UI::windows;
 std::vector<const UI::Window*> UI::closedWindows;

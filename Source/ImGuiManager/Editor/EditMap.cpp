@@ -25,7 +25,9 @@ namespace Editor {
     }
 
     //...
-    MapEditor::MapEditor() {
+    MapEditor::MapEditor()
+        : UI::Window(this)
+    {
         SetId(windowName);
 
         _name[0] = '\0';

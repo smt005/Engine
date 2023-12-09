@@ -11,7 +11,8 @@
 namespace Editor {
 
     ModelEditor::ModelEditor()
-    : _selectNamePtr(nullptr)
+        : UI::Window(this)
+        , _selectNamePtr(nullptr)
     {
         SetId("Edit model");
 

@@ -8,7 +8,9 @@
 namespace Editor {
     bool Console::lock = false;
 
-    Console::Console() {
+    Console::Console() 
+        : UI::Window(this)
+    {
         SetId("Console");
         VisibleCloseBtn(false);
         SetFlag(ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground);
