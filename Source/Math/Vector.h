@@ -4,6 +4,8 @@
 #include <ostream>
 #include <initializer_list>
 
+# define PI           3.14159265358979323846
+
 namespace Math {
 template <typename T>
 class base_vector3 final {
