@@ -88,6 +88,9 @@ public:
 	static Window::Ptr GetWindow(const std::string& id);
 
 	template <typename T>
+	static Window::Ptr GetWindow() { auto it = windows.find(Engine::GetClassName<T>()); return it != windows.end() ? it->second : Window::Ptr(); };
+
+	template <typename T>
 	static bool ShowingWindow() { return windows.find(Engine::GetClassName<T>()) != windows.end(); }
 
 	template <typename T>
