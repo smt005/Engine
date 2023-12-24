@@ -2,7 +2,7 @@
 
 #include "ImGuiManager/UI.h"
 #include "Common/CommonPopupModal.h"
-#include "Common/Common.h"
+#include "Common/CommonUI.h"
 #include "Object/Object.h"
 
 namespace Editor {

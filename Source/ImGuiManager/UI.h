@@ -3,17 +3,7 @@
 #include <memory>
 #include <map>
 #include <vector>
-#include <string>
-
-namespace Engine {
-	class Core;
-
-	template<typename T>
-	std::string GetClassName() {
-		std::string className = typeid(T).name();
-		return className.substr(6, (className.length() - 6)); // 'slass ' length == 6
-	}
-}
+#include "Common/Common.h"
 
 class UI {
 	friend class Engine::Core;
