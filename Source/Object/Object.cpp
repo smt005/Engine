@@ -42,6 +42,10 @@ void Object::getDataJson(Json::Value& dataJson)
 	dataJson["pos"][2] = _matrix[3][2];
 }
 
+bool Object::ValidModel() {
+	return _model && _model->ValidShape();
+}
+
 Model& Object::getModel() {
 	if (!_model) _model = Model::getByName("default");
 	return *_model;

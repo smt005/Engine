@@ -23,7 +23,7 @@ using namespace Engine;
 Game::Uptr _game;
 Json::Value _settingJson;
 double _deltaTime = 0.0f;
-double _lastTime = Core::currentTime();
+double _lastTime = Engine::Core::currentTime();
 const std::string fileNameSetting = "Setting.json";
 
 void cursorPositionCallback(GLFWwindow* Window, double x, double y);
@@ -37,7 +37,7 @@ void windowScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 typedef std::function<void(GLFWwindow* window)> WhileFunction;
 std::vector<WhileFunction> whileFunctions;
 
-int Core::execution(Game::Uptr& game)
+int Engine::Core::execution(Game::Uptr& game)
 {
 	if (!game) {
 		return -1;
@@ -64,7 +64,7 @@ int Core::execution(Game::Uptr& game)
 	return 0;
 }
 
-bool Core::main() {
+bool Engine::Core::main() {
 	GLFWwindow* window;
 
 	if (!glfwInit())
@@ -110,7 +110,7 @@ bool Core::main() {
 	return true;
 }
 
-void Core::close()
+void Engine::Core::close()
 {
 	if (_game) {
 		_game->close();
@@ -127,13 +127,13 @@ void Core::close()
 	exit(1);
 }
 
-void Core::init()
+void Engine::Core::init()
 {
 	if (!_game) return;
 	_game->init();
 }
 
-void Core::update()
+void Engine::Core::update()
 {
 	if (!_game) return;
 
@@ -145,26 +145,26 @@ void Core::update()
 	_game->update();
 }
 
-void Core::draw()
+void Engine::Core::draw()
 {
 	if (!_game) return;
 	_game->draw();
 }
 
-void Core::resize()
+void Engine::Core::resize()
 {
 	if (!_game) return;
 	_game->resize();
 }
 
-void Core::log(const std::string& text)
+void Engine::Core::log(const std::string& text)
 {
 #ifdef _DEBUG
 	_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "LOG: %s\n", text.c_str());
 #endif // DEBUG
 }
 
-const Json::Value& Core::settingJson(const std::string& key)
+const Json::Value& Engine::Core::settingJson(const std::string& key)
 {
 	if (key.empty()) {
 		return _settingJson;
@@ -177,7 +177,7 @@ const Json::Value& Core::settingJson(const std::string& key)
 	return _settingJson;
 }
 
-double Core::currentTime()
+double Engine::Core::currentTime()
 {
 	std::chrono::milliseconds ms;
 	ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
@@ -186,11 +186,11 @@ double Core::currentTime()
 	return value;
 }
 
-double Core::deltaTime() {
+double Engine::Core::deltaTime() {
 	return _deltaTime;
 }
 
-void Core::SetCursorPos(const double x, const double y) {
+void Engine::Core::SetCursorPos(const double x, const double y) {
 
 	whileFunctions.emplace_back([x, y](GLFWwindow* window) {
 		Engine::Callback::setMousePos(x, y);
@@ -240,7 +240,7 @@ void windowSizeCallback(GLFWwindow* window, int width, int height)
 	Screen::setWidth(width);
 	Screen::setHeight(height);
 
-	Core::resize();
+	Engine::Core::resize();
 }
 
 void windowPosCallback(GLFWwindow* window, int left, int top)
@@ -248,7 +248,7 @@ void windowPosCallback(GLFWwindow* window, int left, int top)
 	Screen::setLeft(left);
 	Screen::setTop(top);
 
-	Core::resize();
+	Engine::Core::resize();
 }
 
 void windowCloseCallback(GLFWwindow* window)
@@ -302,7 +302,7 @@ void Core::mainLoop(GLFWwindow* window) {
 	threadUpdate.join();
 }
 #else
-void Core::mainLoop(GLFWwindow* window) {
+void Engine::Core::mainLoop(GLFWwindow* window) {
 	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(window))) {
 		Callback::update();
 		Core::update();

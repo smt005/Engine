@@ -9,13 +9,11 @@
 
 struct GLFWwindow;
 
-namespace Engine
-{
+namespace Engine {
 
 class Window;
 
-class Core
-{
+class Core {
 public:
 	static int execution(Game::Uptr& game);
 	static bool main();

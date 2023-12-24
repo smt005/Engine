@@ -14,6 +14,10 @@ Model::Model()
 
 }
 
+bool Model::ValidShape() {
+	return _shape && _shape->Loaded();
+}
+
 Shape& Model::getShape()
 {
 	if (_shape) return *_shape;

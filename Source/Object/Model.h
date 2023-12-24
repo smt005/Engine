@@ -20,6 +20,7 @@ private:
 public:
 	Model();
 
+	bool ValidShape();
 	Shape& getShape();
 	Mesh& getMesh();
 	Texture& texture();

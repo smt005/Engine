@@ -5,6 +5,10 @@
 #include <vector>
 #include "Common/Common.h"
 
+namespace Engine {
+	class Core;
+}
+
 class UI {
 	friend class Engine::Core;
 

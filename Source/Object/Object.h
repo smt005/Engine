@@ -42,6 +42,7 @@ public:
 
 	void getDataJson(Json::Value& dataJson);
 
+	bool ValidModel();
 	Model& getModel();
 	const float& getHeight();
 
