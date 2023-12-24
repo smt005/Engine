@@ -19,6 +19,7 @@ public:
 	static void setLightPos(const float x, const float y, const float z);
 
 	static void clearColor();
+	static void clearDepth();
 	static void viewport();
 	static void prepare();
 	static void resetShader();
