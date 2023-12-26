@@ -83,7 +83,7 @@ public:
 	//...
 	void Init();
 	void SetPerspective(const float zFar = 1000000.f, const float zNear = 1.f, const float fov = 45.f);
-	void SetOrtho(const float size = 1000.f, const float zNear = -1000000.f, const float zFar = 1000000.f);
+	void SetOrtho(const float size = 1.f, const float zNear = -1000000.f, const float zFar = 1000000.f);
 	glm::vec3 corsorCoord();
 
 	void LookAt(const glm::vec3& pos, const glm::vec3& direct) {
