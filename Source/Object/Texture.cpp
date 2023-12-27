@@ -96,8 +96,6 @@ unsigned int Texture::loadTexture(const char* fileName)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
 	return _textureId;
-
-	return 0;
 }
 
 unsigned int Texture::LoadTexture(const std::string& fileName, unsigned int& width, unsigned int& height) {
