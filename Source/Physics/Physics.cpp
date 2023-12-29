@@ -1,5 +1,7 @@
 
 #include "Physics/Physics.h"
+
+#if DENABLE_PHYSIC
 #include "Common/Help.h"
 #include "Object/Object.h"
 #include "Object/Model.h"
@@ -400,3 +402,23 @@ namespace Engine {
 		return pTriangleActor;
 	}
 };
+
+#else
+
+namespace Engine {
+	void Physics::release() {}
+	bool Physics::createScene() { return false; }
+	void Physics::releaseScene() {}
+	bool Physics::updateScene(const float dt) { return false; }
+	void Physics::GetGravity(const glm::vec3& vector) {}
+	glm::vec3 Physics::GetLinearVelocity(Object& object) { return glm::vec3(0.f, 0.f, 0.f); }
+	void Physics::SetLinearVelocity(Object& object, const glm::vec3& velocity) {}
+	bool Physics::createActor(Object& object) { return false; }
+	void Physics::updateMatrixActor(Object& object) {}
+	void Physics::releaseActor(Object& object) {}
+	void Physics::setMassToActor(Object& object, const float mass) {}
+	void Physics::setPositionToActor(Object& object, const glm::vec3& pos) {}
+	void Physics::addForceToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType) {}
+}
+
+#endif // DENABLE_PHYSIC
