@@ -1,7 +1,7 @@
 
 #include "Physics/Physics.h"
 
-#if DENABLE_PHYSIC
+#if ENABLE_PHYSIC
 #include "Common/Help.h"
 #include "Object/Object.h"
 #include "Object/Model.h"
@@ -406,6 +406,7 @@ namespace Engine {
 #else
 
 namespace Engine {
+	bool Physics::init() { return false; }
 	void Physics::release() {}
 	bool Physics::createScene() { return false; }
 	void Physics::releaseScene() {}
