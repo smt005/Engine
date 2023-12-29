@@ -19,8 +19,13 @@ include_directories(${GLEW_INCLUDES})
 include_directories(${FREEIMAGE_INCLUDES})
 include_directories(${PHYSX_INCLUDES})
 include_directories(${PHYSX_INCLUDES_PXSHARED})
-include_directories(${FREETYPE2_INCLUDES})
 include_directories(${IMGUI_INCLUDES})
+include_directories(${FREETYPE2_INCLUDES})
+
+if(ENABLE_PHYSIC)
+	include_directories(${PHYSX_INCLUDES})
+	include_directories(${PHYSX_INCLUDES_PXSHARED})
+endif()
 
 # Создание статической библиотеки
 add_library(${ENGINE_NAME} STATIC ${INCLUDES} ${SOURCES})
