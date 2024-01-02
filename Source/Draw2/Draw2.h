@@ -2,6 +2,11 @@
 
 class Draw2 final {
 public:
+	static void SetClearColor(float r, float g, float b, float a);
+	static void ClearColor();
+	static void ClearDepth();
+	static void Viewport();
+
 	template<typename ModelT>
 	static void Model(ModelT&& object);
 
@@ -10,4 +15,6 @@ public:
 
 	template<typename ObjectsT>
 	static void Objects(ObjectsT&& object);
+
+	static float clearColor[4];
 };

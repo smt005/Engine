@@ -190,22 +190,6 @@ void DrawLight::SetMatrux(const glm::mat4x4& matrix) {
 	glUniformMatrix4fv(shader.u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-namespace {
-// Shaders
-const GLchar* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 position;\n"
-"void main()\n"
-"{\n"
-"gl_Position = vec4(position.x, position.y, position.z, 1.0);\n"
-"}\0";
-const GLchar* fragmentShaderSource = "#version 330 core\n"
-"out vec4 color;\n"
-"void main()\n"
-"{\n"
-"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\n\0";
-}
-
 void DrawLight::Test() {
 	static bool _init_ = false;
 	static GLuint VBO, VAO, EBO;
@@ -262,7 +246,6 @@ void DrawLight::Test() {
 	{
 		// Render
 		// Clear the colorbuffer
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Draw our first triangle
