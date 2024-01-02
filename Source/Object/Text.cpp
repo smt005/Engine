@@ -7,7 +7,7 @@
 #include FT_GLYPH_H
 
 #include <LibPNG/png.h>
-#include "GL/glew.h"
+#include "glad/gl.h"
 
 namespace Engine {
 

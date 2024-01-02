@@ -1,16 +1,10 @@
 
-#include "GL/glew.h"
+#include "glad/gl.h"
 
 #include "Shader.h"
 #include "FileManager.h"
 
-unsigned int Shader::getProgram(const std::string& vertexFileName, const std::string& fragmentFileName)
-{
-	if (glewInit() != GLEW_OK)
-	{
-		return 0;
-	}
-
+unsigned int Shader::getProgram(const std::string& vertexFileName, const std::string& fragmentFileName) {
     std::string fragmentShaderSource = Engine::FileManager::readTextFile(fragmentFileName);
 	if (fragmentShaderSource.empty()) {
 		return 0;

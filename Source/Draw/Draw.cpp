@@ -1,5 +1,5 @@
 
-#include "GL/glew.h"
+#include "glad/gl.h"
 #include "Shaders/BaseShader.h"
 
 #include "Draw.h"

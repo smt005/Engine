@@ -13,9 +13,6 @@
 [submodule "ThirdParty/FreeType2"]
 	path = ThirdParty/FreeType2
 	url = https://gitlab.freedesktop.org/freetype/freetype.git
-[submodule "ThirdParty/glew"]
-	path = ThirdParty/glew
-	url = https://github.com/smt005/GLEW.git
 [submodule "ThirdParty/FreeImage"]
 	path = ThirdParty/FreeImage
 	url = https://github.com/smt005/FreeImage.git

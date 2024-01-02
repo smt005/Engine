@@ -2,7 +2,7 @@
 #pragma once
 
 #include "TextShader.h"
-#include "GL/glew.h"
+#include "glad/gl.h"
 #include "../Shader.h"
 #include "../Camera/Camera.h"
 

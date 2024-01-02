@@ -1,5 +1,5 @@
 
-#include "GL/glew.h"
+#include "glad/gl.h"
 #include "FreeImage.h"
 
 #include <filesystem>

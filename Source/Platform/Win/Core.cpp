@@ -9,6 +9,7 @@
 #include "Common/Help.h"
 #include "ImGuiManager/UI.h"
 #include "json/json.h"
+#include "glad/gl.h"
 #include "GLFW/glfw3.h" // https://www.glfw.org/docs/3.3/window_guide.html
 
 #if THREAD_EXPAMPLE
@@ -67,8 +68,15 @@ int Engine::Core::execution(Game::Uptr& game)
 bool Engine::Core::main() {
 	GLFWwindow* window;
 
-	if (!glfwInit())
+	if (!glfwInit()) {
 		return false;
+	}
+
+	// Set all the required options for GLFW
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	Screen::init();
 
@@ -91,6 +99,14 @@ bool Engine::Core::main() {
 	glfwSetScrollCallback(window, windowScrollCallback);
 
 	glfwMakeContextCurrent(window);
+
+	int version = gladLoadGL(glfwGetProcAddress);
+	printf("GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+
+	// Define the viewport dimensions
+	int width, height;
+	glfwGetFramebufferSize(window, &width, &height);
+	glViewport(0, 0, width, height);
 
 	Core::init();
 	Core::resize();

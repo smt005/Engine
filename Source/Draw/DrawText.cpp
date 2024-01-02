@@ -8,7 +8,7 @@
 #include "Screen.h"
 #include "Shader.h"
 #include "Shaders/TextShader.h"
-#include "GL/glew.h"
+#include "glad/gl.h"
 #include <glm/glm.hpp>
 #include <glm/mat4x4.hpp>
 #include "Draw/DrawLight.h"
