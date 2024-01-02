@@ -17,6 +17,7 @@
 #include "Object/Line.h"
 
 #include <iostream>
+#include <Draw2/Shader2.h>
 
 float DrawLight::_clearColor[4] = { 0.3f, 0.6f , 0.9f , 1.0f };
 float DrawLight::_lightPos[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -207,49 +208,11 @@ const GLchar* fragmentShaderSource = "#version 330 core\n"
 
 void DrawLight::Test() {
 	static bool _init_ = false;
-	static GLuint shaderProgram = 0;
 	static GLuint VBO, VAO, EBO;
+	static Shader2 shader;
 
 	if (!_init_) {
-		// Build and compile our shader program
-		// Vertex shader
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-		glCompileShader(vertexShader);
-		// Check for compile time errors
-		GLint success;
-		GLchar infoLog[512];
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-		if (!success)
-		{
-			glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-			std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-		}
-		// Fragment shader
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-		glCompileShader(fragmentShader);
-		// Check for compile time errors
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-		if (!success)
-		{
-			glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-			std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-		}
-		// Link shaders
-		shaderProgram = glCreateProgram();
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		glLinkProgram(shaderProgram);
-		// Check for linking errors
-		glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-		if (!success) {
-			glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-			std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-		}
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-
+		shader.Load("Default.vert", "Default.frag");
 
 		// Set up vertex data (and buffer(s)) and attribute pointers
 		//GLfloat vertices[] = {
@@ -292,8 +255,6 @@ void DrawLight::Test() {
 
 		glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
 
-
-
 		_init_ = true;
 	}
 
@@ -305,7 +266,7 @@ void DrawLight::Test() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Draw our first triangle
-		glUseProgram(shaderProgram);
+		shader.Bind();
 		glBindVertexArray(VAO);
 		//glDrawArrays(GL_TRIANGLES, 0, 6);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
