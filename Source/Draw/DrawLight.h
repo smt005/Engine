@@ -47,6 +47,8 @@ public:
 
 	static void SetMatrux(const glm::mat4x4& matrix);
 
+	static void Test();
+
 private:
 	static float _clearColor[4];
 	static float _lightPos[4];
