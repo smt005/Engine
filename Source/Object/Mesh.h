@@ -16,6 +16,8 @@ private:
 	unsigned int* _aIndex = nullptr;
 
 	bool _hasVBO = false;
+public:
+	unsigned int _VAO; // Vertex Array Object
 	unsigned int _buffer[4];
 
 public:

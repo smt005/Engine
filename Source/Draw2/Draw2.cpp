@@ -2,14 +2,10 @@
 #include <glad/gl.h>
 #include <Screen.h>
 
-float Draw2::clearColor[4] = { 0.333f, 0.666f , 0.999f , 1.0f };
+unsigned int Draw2::currentVAO = 0;
+unsigned int Draw2::currentTexture = 0;
 
 void Draw2::SetClearColor(float r, float g, float b, float a) {
-	clearColor[0] = r;
-	clearColor[1] = g;
-	clearColor[2] = b;
-	clearColor[3] = a;
-
 	glClearColor(r, g, b, a);
 }
 
@@ -27,15 +23,12 @@ void Draw2::Viewport() {
 	glViewport(0, 0, widthScreen, heightScreen);
 }
 
-template<typename ModelT>
-static void Draw2::Model(ModelT&& object) {
-}
+void Draw2::Draw(Shape& shape) {
+	if (!shape.hasVBO()) {
+		if (!shape.initVBO()) return;
+	}
 
-
-template<typename ObjectT>
-static void Draw2::Object(ObjectT&& object) {
-}
-
-template<typename ObjectsT>
-static void Draw2::Objects(ObjectsT&& object) {
+	glBindVertexArray(shape._VAO);
+	glDrawElements(GL_TRIANGLES, shape.countIndex(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }

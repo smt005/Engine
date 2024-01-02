@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Object/Shape.h>
+
 class Draw2 final {
 public:
 	static void SetClearColor(float r, float g, float b, float a);
@@ -7,14 +9,9 @@ public:
 	static void ClearDepth();
 	static void Viewport();
 
-	template<typename ModelT>
-	static void Model(ModelT&& object);
+	static void Draw(Shape& shape);
 
-	template<typename ObjectT>
-	static void Object(ObjectT&& object);
-
-	template<typename ObjectsT>
-	static void Objects(ObjectsT&& object);
-
-	static float clearColor[4];
+private:
+	static unsigned int currentVAO;
+	static unsigned int currentTexture;
 };

@@ -7,7 +7,8 @@ Shader2::Shader2(const std::string& vertexFileName, const std::string& fragmentF
 }
 
 Shader2::~Shader2() {
-	// TODO:
+	glDeleteProgram(_program);
+	//glDeleteShader(shader);
 }
 
 void Shader2::Bind() {
@@ -100,6 +101,9 @@ bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmen
 		_program = 0;
 		return false;
 	}
+
+	//glDeleteShader(_fragmentShader);
+	//glDeleteShader(_vertexShader);
 
 	return _program != 0;
 }
