@@ -6,8 +6,7 @@
 namespace Engine
 {
 	
-class FileManager
-{
+class FileManager {
 public:
 	static void setResourcesDir(const std::filesystem::path& resourcesDir);
 	static const std::filesystem::path& getResourcesDir();

@@ -50,11 +50,13 @@ Mesh::~Mesh()
     }
 }
 
-bool Mesh::initVBO()
+/*bool Mesh::initVBO()
 {
 	glDeleteBuffers(4, _buffer);
 
+	glGenVertexArrays(1, &_VAO);
 	glGenBuffers(4, _buffer);
+	glBindVertexArray(_VAO);
 
 	if (_countVertex == 0 || !_aVertex || _countIndex == 0 && !_aIndex) {
 		return false;
@@ -81,6 +83,58 @@ bool Mesh::initVBO()
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer[3]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _countIndex * sizeof(GLuint), _aIndex, GL_STATIC_DRAW);
+
+	// ”станавливаем указатели на вершинные атрибуты 
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	_hasVBO = true;
+	return _hasVBO;
+}*/
+
+bool Mesh::initVBO()
+{
+	glDeleteBuffers(2, _buffer);
+
+	glGenVertexArrays(1, &_VAO);
+	glGenBuffers(2, _buffer);
+	glBindVertexArray(_VAO);
+
+	if (_countVertex == 0 || !_aVertex || _countIndex == 0 && !_aIndex) {
+		return false;
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, _buffer[0]);
+	glBufferData(GL_ARRAY_BUFFER, _countVertex * 3 * sizeof(GLfloat), _aVertex, GL_STATIC_DRAW);
+
+	/*if (_aTexCoord) {
+		glBindBuffer(GL_ARRAY_BUFFER, _buffer[1]);
+		glBufferData(GL_ARRAY_BUFFER, _countVertex * 2 * sizeof(GLfloat), _aTexCoord, GL_STATIC_DRAW);
+	}
+	else {
+		_buffer[1] = 0;
+	}
+
+	if (_aNormal) {
+		glBindBuffer(GL_ARRAY_BUFFER, _buffer[2]);
+		glBufferData(GL_ARRAY_BUFFER, _countVertex * 3 * sizeof(GLfloat), _aNormal, GL_STATIC_DRAW);
+	}
+	else {
+		_buffer[2] = 0;
+	}*/
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer[1]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _countIndex * sizeof(GLuint), _aIndex, GL_STATIC_DRAW);
+
+	// ”станавливаем указатели на вершинные атрибуты 
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
 	_hasVBO = true;
 	return _hasVBO;
