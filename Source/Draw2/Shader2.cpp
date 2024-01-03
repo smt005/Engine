@@ -1,18 +1,33 @@
 #include "Shader2.h"
 #include <glad/gl.h>
 #include <FileManager.h>
+#include <Draw/Camera/Camera.h>
+
+Shader2::Ptr Shader2::current;
 
 Shader2::Shader2(const std::string& vertexFileName, const std::string& fragmentFileName) {
-	Load(vertexFileName, fragmentFileName);
+	if (Load(vertexFileName, fragmentFileName)) {
+		GetLocation();
+	}
 }
 
 Shader2::~Shader2() {
 	glDeleteProgram(_program);
-	//glDeleteShader(shader);
 }
 
-void Shader2::Bind() {
+void Shader2::Use() {
 	glUseProgram(_program);
+	glUniformMatrix4fv(u_matProjectionView, 1, GL_FALSE, Camera::GetLink().ProjectViewFloat());
+
+	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glEnableVertexAttribArray(a_position);
+	glEnableVertexAttribArray(a_texCoord);
+	glEnableVertexAttribArray(a_normal);
 }
 
 bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmentFileName) {
@@ -106,4 +121,20 @@ bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmen
 	//glDeleteShader(_vertexShader);
 
 	return _program != 0;
+}
+
+void Shader2::GetLocation() {
+	if (_program == 0) {
+		return;
+	}
+
+	u_matProjectionView = glGetUniformLocation(_program, "u_matProjectionView");
+	u_matViewModel = glGetUniformLocation(_program, "u_matViewModel");
+
+	a_position = glGetAttribLocation(_program, "a_position");
+	a_texCoord = glGetAttribLocation(_program, "a_texCoord");
+	a_normal = glGetAttribLocation(_program, "a_normal");
+
+	//s_baseMap = glGetUniformLocation(_program, "s_baseMap");
+	//u_color = glGetUniformLocation(_program, "u_color");
 }

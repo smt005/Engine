@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/mat4x4.hpp>
 #include <Object/Shape.h>
 
 class Draw2 final {
@@ -8,6 +9,7 @@ public:
 	static void ClearColor();
 	static void ClearDepth();
 	static void Viewport();
+	static void SetModelMatrix(const glm::mat4x4& matrix);
 
 	static void Draw(Shape& shape);
 
