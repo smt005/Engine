@@ -25,9 +25,8 @@ void Shader2::Use() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glEnableVertexAttribArray(a_position);
-	glEnableVertexAttribArray(a_texCoord);
-	glEnableVertexAttribArray(a_normal);
+	//glEnableVertexAttribArray(a_position);
+	//glEnableVertexAttribArray(a_texCoord);
 }
 
 bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmentFileName) {
@@ -131,10 +130,8 @@ void Shader2::GetLocation() {
 	u_matProjectionView = glGetUniformLocation(_program, "u_matProjectionView");
 	u_matViewModel = glGetUniformLocation(_program, "u_matViewModel");
 
-	a_position = glGetAttribLocation(_program, "a_position");
+	/*a_position = glGetAttribLocation(_program, "a_position");
 	a_texCoord = glGetAttribLocation(_program, "a_texCoord");
-	a_normal = glGetAttribLocation(_program, "a_normal");
 
-	//s_baseMap = glGetUniformLocation(_program, "s_baseMap");
-	//u_color = glGetUniformLocation(_program, "u_color");
+	s_texture = glGetUniformLocation(_program, "s_texture");*/
 }

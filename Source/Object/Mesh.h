@@ -18,6 +18,9 @@ private:
 	bool _hasVBO = false;
 public:
 	unsigned int _VAO; // Vertex Array Object
+	unsigned int _VBO;
+	unsigned int _TBO;
+	unsigned int _EBO;
 	unsigned int _buffer[4];
 
 public:
@@ -50,6 +53,7 @@ public:
 
 public:
 	virtual ~Mesh();
+	bool initVBO2();
 	bool initVBO();
 
 	static void MakeRectangle(Mesh& mesh);

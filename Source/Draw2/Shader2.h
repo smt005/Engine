@@ -22,10 +22,8 @@ public:
 
 	unsigned int a_position;
 	unsigned int a_texCoord;
-	unsigned int a_normal;
 
-	unsigned int s_baseMap;
-	unsigned int u_color;
+	unsigned int s_texture;
 
 private:
 	unsigned int _program = 0; // GLuint;

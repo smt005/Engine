@@ -1,7 +1,9 @@
 #pragma once
 
 #include <glm/mat4x4.hpp>
-#include <Object/Shape.h>
+
+class Mesh;
+class Model;
 
 class Draw2 final {
 public:
@@ -11,7 +13,8 @@ public:
 	static void Viewport();
 	static void SetModelMatrix(const glm::mat4x4& matrix);
 
-	static void Draw(Shape& shape);
+	static void Draw(Mesh& shape);
+	static void Draw(Model& model);
 
 private:
 	static unsigned int currentVAO;

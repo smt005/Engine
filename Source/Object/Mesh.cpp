@@ -95,13 +95,14 @@ Mesh::~Mesh()
 	return _hasVBO;
 }*/
 
-bool Mesh::initVBO()
+bool Mesh::initVBO2()
 {
 	glDeleteBuffers(2, _buffer);
 
-	glGenVertexArrays(1, &_VAO);
-	glGenBuffers(2, _buffer);
-	glBindVertexArray(_VAO);
+
+	glGenBuffers(4, _buffer);
+
+
 
 	if (_countVertex == 0 || !_aVertex || _countIndex == 0 && !_aIndex) {
 		return false;
@@ -110,7 +111,7 @@ bool Mesh::initVBO()
 	glBindBuffer(GL_ARRAY_BUFFER, _buffer[0]);
 	glBufferData(GL_ARRAY_BUFFER, _countVertex * 3 * sizeof(GLfloat), _aVertex, GL_STATIC_DRAW);
 
-	/*if (_aTexCoord) {
+	if (_aTexCoord) {
 		glBindBuffer(GL_ARRAY_BUFFER, _buffer[1]);
 		glBufferData(GL_ARRAY_BUFFER, _countVertex * 2 * sizeof(GLfloat), _aTexCoord, GL_STATIC_DRAW);
 	}
@@ -118,7 +119,7 @@ bool Mesh::initVBO()
 		_buffer[1] = 0;
 	}
 
-	if (_aNormal) {
+	/*if (_aNormal) {
 		glBindBuffer(GL_ARRAY_BUFFER, _buffer[2]);
 		glBufferData(GL_ARRAY_BUFFER, _countVertex * 3 * sizeof(GLfloat), _aNormal, GL_STATIC_DRAW);
 	}
@@ -126,15 +127,58 @@ bool Mesh::initVBO()
 		_buffer[2] = 0;
 	}*/
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer[1]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer[3]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _countIndex * sizeof(GLuint), _aIndex, GL_STATIC_DRAW);
 
-	// ”станавливаем указатели на вершинные атрибуты 
+	//...
+	glGenVertexArrays(1, &_VAO);
+	glBindVertexArray(_VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _buffer[0]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer[3]);
+
+	glEnableVertexAttribArray(0); // VERTEX_POS_INDX
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
+
+	glEnableVertexAttribArray(1); // TEX_COORD
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
 
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	_hasVBO = true;
+	return _hasVBO;
+}
+
+bool Mesh::initVBO() {
+	glGenVertexArrays(1, &_VAO);
+	glGenBuffers(1, &_VBO);
+	glGenBuffers(1, &_EBO);
+	glGenBuffers(1, &_TBO);
+
+	glBindVertexArray(_VAO);
+
+	//...
+	glBindBuffer(GL_ARRAY_BUFFER, _VBO);
+	glBufferData(GL_ARRAY_BUFFER, _countVertex * 3 * sizeof(GLfloat), _aVertex, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	//...
+	glBindBuffer(GL_ARRAY_BUFFER, _TBO);
+	glBufferData(GL_ARRAY_BUFFER, _countVertex * 2 * sizeof(GLfloat), _aTexCoord, GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(1);
+
+	//...
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _countIndex * sizeof(GLuint), _aIndex, GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
+
+	//...
+	//glBindBuffer(GL_ARRAY_BUFFER, _TBO);
+	//glBufferData(GL_ARRAY_BUFFER, _countVertex * 2 * sizeof(GLfloat), _aTexCoord, GL_STATIC_DRAW);
 
 	_hasVBO = true;
 	return _hasVBO;

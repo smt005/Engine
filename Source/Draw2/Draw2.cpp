@@ -5,6 +5,9 @@
 #include <Screen.h>
 #include <Draw2/Shader2.h>
 
+#include <Object/Shape.h>
+#include <Object/Model.h>
+
 unsigned int Draw2::currentVAO = 0;
 unsigned int Draw2::currentTexture = 0;
 
@@ -30,7 +33,7 @@ void Draw2::SetModelMatrix(const glm::mat4x4& matrix) {
 	glUniformMatrix4fv(Shader2::current->u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void Draw2::Draw(Shape& shape) {
+void Draw2::Draw(Mesh& shape) {
 	if (!shape.hasVBO()) {
 		if (!shape.initVBO()) return;
 	}
@@ -38,4 +41,15 @@ void Draw2::Draw(Shape& shape) {
 	glBindVertexArray(shape._VAO);
 	glDrawElements(GL_TRIANGLES, shape.countIndex(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+}
+
+void Draw2::Draw(Model& model) {
+	unsigned int textureId = model.textureId();
+
+	//glUniform1i(Shader2::current->s_texture, 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	Draw(model.getMesh()); // TODO:
 }
