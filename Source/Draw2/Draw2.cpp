@@ -44,12 +44,9 @@ void Draw2::Draw(Mesh& shape) {
 }
 
 void Draw2::Draw(Model& model) {
+	// TODO:
 	unsigned int textureId = model.textureId();
-
-	//glUniform1i(Shader2::current->s_texture, 0);
-	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	Draw(model.getMesh()); // TODO:
 }

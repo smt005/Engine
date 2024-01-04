@@ -25,8 +25,7 @@ void Shader2::Use() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//glEnableVertexAttribArray(a_position);
-	//glEnableVertexAttribArray(a_texCoord);
+	glEnable(GL_TEXTURE_2D);
 }
 
 bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmentFileName) {
@@ -52,17 +51,19 @@ bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmen
 	glGetShaderiv(_fragmentShader, GL_COMPILE_STATUS, &isShaderCompiled);
 
 	if (!isShaderCompiled) {
-#ifdef _DEBUG
 		int infoLogLength, charactersWritten;
 		glGetShaderiv(_fragmentShader, GL_INFO_LOG_LENGTH, &infoLogLength);
 
 		char* infoLog = new char[infoLogLength];
 		glGetShaderInfoLog(_fragmentShader, infoLogLength, &charactersWritten, infoLog);
 
+#ifdef _DEBUG
 		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader compiled fragment ERROR: %s\n", infoLog);
+#endif
+		std::cout << "Shader compiled fragment ERROR: " << infoLog << std::endl;
 
 		delete[] infoLog;
-#endif
+
 		_program = 0;
 		return false;
 	}
@@ -76,17 +77,19 @@ bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmen
 	glGetShaderiv(_vertexShader, GL_COMPILE_STATUS, &isShaderCompiled);
 
 	if (!isShaderCompiled) {
-#ifdef _DEBUG
 		int infoLogLength, charactersWritten;
 		glGetShaderiv(_vertexShader, GL_INFO_LOG_LENGTH, &infoLogLength);
 
 		char* infoLog = new char[infoLogLength];
 		glGetShaderInfoLog(_vertexShader, infoLogLength, &charactersWritten, infoLog);
 
+#ifdef _DEBUG
 		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader compiled vertex ERROR: %s\n", infoLog);
+#endif
+		std::cout << "Shader compiled vertex ERROR: " << infoLog << std::endl;
 
 		delete[] infoLog;
-#endif
+
 		_program = 0;
 		return false;
 	}
@@ -101,24 +104,27 @@ bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmen
 	glGetProgramiv(_program, GL_LINK_STATUS, &isLinked);
 
 	if (!isLinked) {
-#ifdef _DEBUG
 		int infoLogLength, charactersWritten;
 		glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &infoLogLength);
 
 		char* infoLog = new char[infoLogLength];
 		glGetProgramInfoLog(_program, infoLogLength, &charactersWritten, infoLog);
 
+#ifdef _DEBUG
 		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader linked ERROR: %s \n", infoLog);
+#endif
+		std::cout << "Shader linked ERROR: " << infoLog << std::endl;
 
 		delete[] infoLog;
-#endif
+
 		_program = 0;
 		return false;
 	}
 
-	//glDeleteShader(_fragmentShader);
-	//glDeleteShader(_vertexShader);
+	glDeleteShader(_fragmentShader);
+	glDeleteShader(_vertexShader);
 
+	std::cout << "Shader successfully." << std::endl;
 	return _program != 0;
 }
 
@@ -129,9 +135,4 @@ void Shader2::GetLocation() {
 
 	u_matProjectionView = glGetUniformLocation(_program, "u_matProjectionView");
 	u_matViewModel = glGetUniformLocation(_program, "u_matViewModel");
-
-	/*a_position = glGetAttribLocation(_program, "a_position");
-	a_texCoord = glGetAttribLocation(_program, "a_texCoord");
-
-	s_texture = glGetUniformLocation(_program, "s_texture");*/
 }

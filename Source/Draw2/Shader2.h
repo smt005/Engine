@@ -20,11 +20,6 @@ public:
 	unsigned int u_matProjectionView;
 	unsigned int u_matViewModel;
 
-	unsigned int a_position;
-	unsigned int a_texCoord;
-
-	unsigned int s_texture;
-
 private:
 	unsigned int _program = 0; // GLuint;
 

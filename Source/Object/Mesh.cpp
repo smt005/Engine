@@ -176,10 +176,6 @@ bool Mesh::initVBO() {
 
 	glBindVertexArray(0);
 
-	//...
-	//glBindBuffer(GL_ARRAY_BUFFER, _TBO);
-	//glBufferData(GL_ARRAY_BUFFER, _countVertex * 2 * sizeof(GLfloat), _aTexCoord, GL_STATIC_DRAW);
-
 	_hasVBO = true;
 	return _hasVBO;
 }
