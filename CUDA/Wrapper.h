@@ -8,6 +8,7 @@ public:
 	static void PrintInfo();
 
 	static void GetForcesStaticTest(int count, float* masses, float* positionsX, float* positionsY, float* forcesX, float* forcesY);
+	static void GetForcesStatic(int count, float* masses, float* positionsX, float* positionsY, float* forcesX, float* forcesY);
 
 public:
 	static int deviceCount;
