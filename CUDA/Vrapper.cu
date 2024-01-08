@@ -1,7 +1,14 @@
+
+#include "Vrapper.h"
+
+int CUDA::deviceCount = -1;
+int CUDA::warpSize = 0;
+
+#if ENABLE_CUDA
+
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
 #include <stdio.h>
-#include "Vrapper.h"
 
 __global__
 void saxpy(int n, float a, float* x, float* y)
@@ -10,7 +17,7 @@ void saxpy(int n, float a, float* x, float* y)
     if (i < n) y[i] = a * x[i] + y[i];
 }
 
-void mainCUDA(void)
+void testCUDA(void)
 {
     int N = 1 << 20;
     float* x, * y, * d_x, * d_y;
@@ -43,3 +50,33 @@ void mainCUDA(void)
     free(x);
     free(y);
 }
+
+void CUDA::GetProperty() {
+    if (deviceCount == -1) {
+        cudaGetDeviceCount(&deviceCount);
+    }
+}
+
+void CUDA::PrintInfo() {
+    if (deviceCount == -1) {
+        GetProperty();
+    }
+
+    printf("CUDA: deviceCount: %i\n", deviceCount);
+
+    if (deviceCount == 0) {
+        return;
+    }
+
+    cudaDeviceProp deviceProp;
+    cudaGetDeviceProperties(&deviceProp, 0);
+
+    printf("CUDA: warpSize: %i\n", deviceProp.warpSize);
+}
+
+#else
+    void testCUDA(void) {}
+
+    void CUDA::GetProperty() {}
+    void CUDA::PrintInfo() {}
+#endif
