@@ -130,10 +130,10 @@ namespace {
 }
 
 void CUDA_Prototype::GetForcesGPUStatic(int count, float* masses, float* positionsX, float* positionsY, float* forcesX, float* forcesY) {
-    unsigned int counThread = count < 1024 ? count : 1024;
+    unsigned int counThread = count < CUDA::maxThreadsPerBlock ? count : CUDA::maxThreadsPerBlock;
 
     unsigned int countBlock = (count + counThread - 1) / counThread;
-    countBlock = countBlock > 65535 ? 65535 : countBlock;
+    countBlock = countBlock > CUDA::maxGridSize[1] ? CUDA::maxGridSize[1] : countBlock;
 
     int offset = count / (counThread * countBlock);
     if ((count % (counThread * countBlock)) > 0) {

@@ -3,55 +3,20 @@
 #include <thread>
 #include <vector>
 
-int CUDA::deviceCount = -1;
-int CUDA::warpSize = 0;
+std::string CUDA::nameGPU;
+int         CUDA::deviceCount = -1;
+int         CUDA::warpSize = 0;
+int         CUDA::maxThreadsPerBlock = 0;
+int         CUDA::maxThreadsDim[3];
+int         CUDA::maxGridSize[3];
+int         CUDA::maxThreadsPerMultiProcessor = 0;
+int         CUDA::maxBlocksPerMultiProcessor = 0;
 
 #if ENABLE_CUDA
 
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
 #include <stdio.h>
-
-__global__
-void saxpy(int n, float a, float* x, float* y)
-{
-    int i = blockIdx.x * blockDim.x + threadIdx.x;
-    if (i < n) y[i] = a * x[i] + y[i];
-}
-
-void testCUDA(void)
-{
-    int N = 1 << 20;
-    float* x, * y, * d_x, * d_y;
-    x = (float*)malloc(N * sizeof(float));
-    y = (float*)malloc(N * sizeof(float));
-
-    cudaMalloc(&d_x, N * sizeof(float));
-    cudaMalloc(&d_y, N * sizeof(float));
-
-    for (int i = 0; i < N; i++) {
-        x[i] = 1.0f;
-        y[i] = 2.0f;
-    }
-
-    cudaMemcpy(d_x, x, N * sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_y, y, N * sizeof(float), cudaMemcpyHostToDevice);
-
-    // Perform SAXPY on 1M elements
-    saxpy << <(N + 255) / 256, 256 >> > (N, 2.0f, d_x, d_y);
-
-    cudaMemcpy(y, d_y, N * sizeof(float), cudaMemcpyDeviceToHost);
-
-    float maxError = 0.0f;
-    for (int i = 0; i < N; i++)
-        maxError = std::max(maxError, std::abs(y[i] - 4.0f));
-    printf("Max error: %f\n", maxError);
-
-    cudaFree(d_x);
-    cudaFree(d_y);
-    free(x);
-    free(y);
-}
 
 void CUDA::GetProperty() {
     if (deviceCount == -1) {
@@ -64,7 +29,19 @@ void CUDA::GetProperty() {
         cudaDeviceProp deviceProp;
         cudaGetDeviceProperties(&deviceProp, 0);
 
+        nameGPU = deviceProp.name;
         warpSize = deviceProp.warpSize;
+        maxThreadsPerBlock = deviceProp.maxThreadsPerBlock;
+        maxThreadsDim[0] = deviceProp.maxThreadsDim[0];
+        maxThreadsDim[1] = deviceProp.maxThreadsDim[1];
+        maxThreadsDim[2] = deviceProp.maxThreadsDim[2];
+        maxThreadsDim[3] = deviceProp.maxThreadsDim[3];
+        maxGridSize[0] = deviceProp.maxGridSize[0];
+        maxGridSize[1] = deviceProp.maxGridSize[1];
+        maxGridSize[2] = deviceProp.maxGridSize[2];
+        maxGridSize[3] = deviceProp.maxGridSize[3];
+        maxThreadsPerMultiProcessor = deviceProp.maxThreadsPerMultiProcessor;
+        maxBlocksPerMultiProcessor = deviceProp.maxBlocksPerMultiProcessor;
     }
 }
 
@@ -79,10 +56,19 @@ void CUDA::PrintInfo() {
         return;
     }
 
-    cudaDeviceProp deviceProp;
-    cudaGetDeviceProperties(&deviceProp, 0);
-
-    printf("CUDA: warpSize: %i\n", deviceProp.warpSize);
+    printf("CUDA:                     nameGPU: %s\n", nameGPU.c_str());
+    printf("CUDA:                    warpSize: %i\n", warpSize);
+    printf("CUDA:          maxThreadsPerBlock: %i\n", maxThreadsPerBlock);
+    printf("CUDA:            maxThreadsDim[0]: %i\n", maxThreadsDim[0]);
+    printf("CUDA:            maxThreadsDim[1]: %i\n", maxThreadsDim[1]);
+    printf("CUDA:            maxThreadsDim[2]: %i\n", maxThreadsDim[2]);
+    printf("CUDA:            maxThreadsDim[3]: %i\n", maxThreadsDim[3]);
+    printf("CUDA:              maxGridSize[0]: %i\n", maxGridSize[0]);
+    printf("CUDA:              maxGridSize[1]: %i\n", maxGridSize[1]);
+    printf("CUDA:              maxGridSize[2]: %i\n", maxGridSize[2]);
+    printf("CUDA:              maxGridSize[3]: %i\n", maxGridSize[3]);
+    printf("CUDA: maxThreadsPerMultiProcessor: %i\n", maxThreadsPerMultiProcessor);
+    printf("CUDA:  maxBlocksPerMultiProcessor: %i\n", maxBlocksPerMultiProcessor);
 }
 
 namespace {
