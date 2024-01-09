@@ -87,13 +87,10 @@ namespace {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 namespace {
-    // blockIdx.x threadId
     __global__
     void GetForceGPU(int* count, int* offset, float* masses, float* positionsX, float* positionsY, float* forcesX, float* forcesY) {
         double _constGravity = 0.01f;
-        //int statIndex = blockIdx.x * *offset;
-        //int statIndex = threadIdx.x * *offset;
-        int statIndex = blockIdx.x * threadIdx.x * *offset;
+        int statIndex = (threadIdx.x + blockIdx.x * blockDim.x) * *offset;
         int endIndex = statIndex + *offset;
         if (endIndex > *count) {
             endIndex = *count;
@@ -133,23 +130,15 @@ namespace {
 }
 
 void CUDA_Prototype::GetForcesGPUStatic(int count, float* masses, float* positionsX, float* positionsY, float* forcesX, float* forcesY) {
-    unsigned int counThread = 1024;
-    unsigned int counBlock = 1024;
+    unsigned int counThread = count < 1024 ? count : 1024;
 
-    int countBlock = count / counThread;
-    if ((count % counThread) > 0) {
-        ++countBlock;
-    }
+    unsigned int countBlock = (count + counThread - 1) / counThread;
+    countBlock = countBlock > 65535 ? 65535 : countBlock;
 
     int offset = count / (counThread * countBlock);
     if ((count % (counThread * countBlock)) > 0) {
         ++offset;
     }
-
-    /*int offset = count / counThread;
-    if ((count % counThread) > 0) {
-        ++offset;
-    }*/
 
     //...
     int* devCount;
@@ -176,8 +165,7 @@ void CUDA_Prototype::GetForcesGPUStatic(int count, float* masses, float* positio
     cudaMemcpy(devForcesX,      forcesX,    count * sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(devForcesY,      forcesY,    count * sizeof(float), cudaMemcpyHostToDevice);
 
-    GetForceGPU <<<counBlock, counThread>>> (devCount, devOffset, devMasses, devPositionsX, devPositionsY, devForcesX, devForcesY);
-    //GetForceGPU << <1, counThread >> > (devCount, devOffset, devMasses, devPositionsX, devPositionsY, devForcesX, devForcesY);
+    GetForceGPU <<<countBlock, counThread>>> (devCount, devOffset, devMasses, devPositionsX, devPositionsY, devForcesX, devForcesY);
 
     cudaMemcpy(forcesX, devForcesX, count * sizeof(float), cudaMemcpyDeviceToHost);
     cudaMemcpy(forcesY, devForcesY, count * sizeof(float), cudaMemcpyDeviceToHost);
