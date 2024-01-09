@@ -21,26 +21,33 @@ namespace {
         }
 
         int sizeData = *count;
+        float gravityVecX;
+        float gravityVecY;
+        double dist;
+        double force;
 
         for (int index = statIndex; index < endIndex; ++index) {
+            float& fX = forcesX[index];
+            float& fY = forcesY[index];
+
             for (size_t otherIndex = 0; otherIndex < sizeData; ++otherIndex) {
                 if (index == otherIndex) {
                     continue;
                 }
 
-                float gravityVecX = positionsX[otherIndex] - positionsX[index];
-                float gravityVecY = positionsY[otherIndex] - positionsY[index];
+                gravityVecX = positionsX[otherIndex] - positionsX[index];
+                gravityVecY = positionsY[otherIndex] - positionsY[index];
 
-                double dist = sqrt(gravityVecX * gravityVecX + gravityVecY * gravityVecY);
+                dist = sqrt(gravityVecX * gravityVecX + gravityVecY * gravityVecY);
                 gravityVecX /= dist;
                 gravityVecY /= dist;
 
-                double force = _constGravity * (masses[index] * masses[otherIndex]) / (dist * dist);
+                force = _constGravity * (masses[index] * masses[otherIndex]) / (dist * dist);
                 gravityVecX *= force;
                 gravityVecY *= force;
 
-                forcesX[index] += gravityVecX;
-                forcesY[index] += gravityVecY;
+                fX += gravityVecX;
+                fY += gravityVecY;
             }
         }
     }
@@ -84,48 +91,65 @@ namespace {
     __global__
     void GetForceGPU(int* count, int* offset, float* masses, float* positionsX, float* positionsY, float* forcesX, float* forcesY) {
         double _constGravity = 0.01f;
-        int statIndex = blockIdx.x * *offset;
+        //int statIndex = blockIdx.x * *offset;
+        //int statIndex = threadIdx.x * *offset;
+        int statIndex = blockIdx.x * threadIdx.x * *offset;
         int endIndex = statIndex + *offset;
         if (endIndex > *count) {
             endIndex = *count;
         }
 
         int sizeData = *count;
+        float gravityVecX = 0;
+        float gravityVecY = 0;
+        double dist;
+        double force;
 
         for (int index = statIndex; index < endIndex; ++index) {
+            float& fX = forcesX[index];
+            float& fY = forcesY[index];
+
             for (size_t otherIndex = 0; otherIndex < sizeData; ++otherIndex) {
                 if (index == otherIndex) {
                     continue;
                 }
 
-                float gravityVecX = positionsX[otherIndex] - positionsX[index];
-                float gravityVecY = positionsY[otherIndex] - positionsY[index];
+                gravityVecX = positionsX[otherIndex] - positionsX[index];
+                gravityVecY = positionsY[otherIndex] - positionsY[index];
 
-                double dist = sqrt(gravityVecX * gravityVecX + gravityVecY * gravityVecY);
+                dist = sqrt(gravityVecX * gravityVecX + gravityVecY * gravityVecY);
                 gravityVecX /= dist;
                 gravityVecY /= dist;
 
-                double force = _constGravity * (masses[index] * masses[otherIndex]) / (dist * dist);
+                force = _constGravity * (masses[index] * masses[otherIndex]) / (dist * dist);
                 gravityVecX *= force;
                 gravityVecY *= force;
 
-                forcesX[index] += gravityVecX;
-                forcesY[index] += gravityVecY;
+                fX += gravityVecX;
+                fY += gravityVecY;
             }
         }
     }
 }
 
 void CUDA_Prototype::GetForcesGPUStatic(int count, float* masses, float* positionsX, float* positionsY, float* forcesX, float* forcesY) {
-    unsigned int counThread = CUDA::warpSize;
-    if (counThread == 0) {
-        return;
+    unsigned int counThread = 1024;
+    unsigned int counBlock = 1024;
+
+    int countBlock = count / counThread;
+    if ((count % counThread) > 0) {
+        ++countBlock;
     }
 
-    int offst = count / counThread;
-    if ((count % counThread) > 0) {
-        ++offst;
+    int offset = count / (counThread * countBlock);
+    if ((count % (counThread * countBlock)) > 0) {
+        ++offset;
     }
+
+    /*int offset = count / counThread;
+    if ((count % counThread) > 0) {
+        ++offset;
+    }*/
 
     //...
     int* devCount;
@@ -145,14 +169,15 @@ void CUDA_Prototype::GetForcesGPUStatic(int count, float* masses, float* positio
     cudaMalloc(&devForcesY,     count * sizeof(float));
 
     cudaMemcpy(devCount,        &count,             sizeof(int), cudaMemcpyHostToDevice);
-    cudaMemcpy(devOffset,       &offst,             sizeof(int), cudaMemcpyHostToDevice);
+    cudaMemcpy(devOffset,       &offset,             sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(devMasses,       masses,     count * sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(devPositionsX,   positionsX, count * sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(devPositionsY,   positionsY, count * sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(devForcesX,      forcesX,    count * sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(devForcesY,      forcesY,    count * sizeof(float), cudaMemcpyHostToDevice);
 
-    GetForceGPU <<<counThread, 1>>> (devCount, devOffset, devMasses, devPositionsX, devPositionsY, devForcesX, devForcesY);
+    GetForceGPU <<<counBlock, counThread>>> (devCount, devOffset, devMasses, devPositionsX, devPositionsY, devForcesX, devForcesY);
+    //GetForceGPU << <1, counThread >> > (devCount, devOffset, devMasses, devPositionsX, devPositionsY, devForcesX, devForcesY);
 
     cudaMemcpy(forcesX, devForcesX, count * sizeof(float), cudaMemcpyDeviceToHost);
     cudaMemcpy(forcesY, devForcesY, count * sizeof(float), cudaMemcpyDeviceToHost);
