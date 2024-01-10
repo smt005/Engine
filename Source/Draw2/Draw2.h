@@ -10,6 +10,7 @@ public:
 	static void SetClearColor(float r, float g, float b, float a);
 	static void ClearColor();
 	static void ClearDepth();
+	static void DepthTest(bool enable);
 	static void Viewport();
 	static void SetModelMatrix(const glm::mat4x4& matrix);
 

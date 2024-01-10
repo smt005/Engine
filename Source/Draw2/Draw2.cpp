@@ -23,6 +23,15 @@ void Draw2::ClearDepth() {
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
+void Draw2::DepthTest(bool enable) {
+	if (enable) {
+		glEnable(GL_DEPTH_TEST);
+	}
+	else {
+		glDisable(GL_DEPTH_TEST);
+	}
+}
+
 void Draw2::Viewport() {
 	int widthScreen = Engine::Screen::width();
 	int heightScreen = Engine::Screen::height();

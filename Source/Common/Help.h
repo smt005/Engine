@@ -38,10 +38,9 @@ namespace help
 	}
 
 	inline int random_i(const int min = 0, const int max = 1) {
-		const int range = max - min;
+		const int range = (max + 1) - min;
 		int var = rand() % range;
-		float k = static_cast<float>(var) / static_cast<float>(range);
-		return min + range * static_cast<int>(k);
+		return min + var;
 	}
 
 	inline float areaCircle(const float radius) { return powf(radius, 2) * (float)M_PI; }
