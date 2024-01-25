@@ -46,7 +46,7 @@ void Text::MakeImageData(const std::string& fontName) {
     // Загрузка шрифта arial.ttf из текущей папки
     FT_Face ftFace = 0;
 
-    std::string fontFilaName = Engine::FileManager::getResourcesDir().u8string();
+    std::string fontFilaName = Engine::FileManager::getResourcesDir().string();
     fontFilaName += "/Fonts/";
     fontFilaName += fontName;
     FT_New_Face(ftLibrary, fontFilaName.c_str(), 0, &ftFace);

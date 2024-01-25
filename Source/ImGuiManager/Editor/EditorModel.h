@@ -25,7 +25,7 @@ namespace Editor {
 		void OpenExplorer(const std::string& name);
 		void Remove(const std::string& name);
 		void Add(const std::string& newName);
-		void Copy(std::string& newName, const std::string copyName);
+		void Copy(std::string newName, const std::string copyName);
 		void Apply();
 		void ChooseFile(Editor::TextChar& textChar);
 

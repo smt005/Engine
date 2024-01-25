@@ -290,7 +290,7 @@ namespace Editor {
         //_scale[0] = '\0';
     }
 
-    void ModelEditor::Copy(std::string& newName, const std::string copyName) {
+    void ModelEditor::Copy(std::string newName, const std::string copyName) {
         if (std::find_if(_modelNames.begin(), _modelNames.end(), [&newName](const std::string& name) { return name == newName; }) != _modelNames.end()) {
             return;
         }
@@ -369,7 +369,7 @@ namespace Editor {
         std::string fiilNameFile = Engine::SelectFile();
         std::replace(fiilNameFile.begin(), fiilNameFile.end(), '\\', '/');
 
-        std::string resourcesDir = Engine::FileManager::getResourcesDir().u8string();
+        std::string resourcesDir = Engine::FileManager::getResourcesDir().string();
         std::replace(resourcesDir.begin(), resourcesDir.end(), '\\', '/');
 
         size_t pos = fiilNameFile.find(resourcesDir);
@@ -390,7 +390,7 @@ namespace Editor {
 
     void ModelEditor::OpenExplorer(const std::string& name) {
         if (!name.empty()) {
-            Engine::OpenFolderAndSelectItems(name, Engine::FileManager::getResourcesDir().u8string());
+            Engine::OpenFolderAndSelectItems(name, Engine::FileManager::getResourcesDir().string());
         }
     }
 

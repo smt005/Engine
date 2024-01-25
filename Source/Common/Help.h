@@ -55,13 +55,13 @@ namespace help
 	template <class VecT>
 	inline float dist(const VecT& pos_0, const VecT& pos_1 = VecT(0.0f)) {
 		VecT vec = pos_0 - pos_1;
-		return glm::length(vec);
+		return vec.length();
 	}
 
 	template <class VecT>
 	inline float distXY(const VecT& pos_0, const VecT& pos_1 = VecT(0.0f)) {
 		VecT vec((pos_0.x - pos_1.x), (pos_0.y - pos_1.y), 0.0f);
-		return glm::length(vec);
+		return vec.length();
 	}
 
 	template <class ObjectT>
