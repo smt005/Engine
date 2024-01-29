@@ -51,16 +51,20 @@ public:
 		return _ptr;
 	}
 
+	T* get() {
+		return _counterPtr && *_counterPtr > 0 ? _ptr : nullptr;
+	}
+
 	operator bool () const {
-		return _ptr != nullptr ? true : false;
+		return !_counterPtr || *_counterPtr == 0 || !_ptr ? false : true;
 	}
 
 	bool operator == (const shared& ph) const {
-		return this == &ph ||  _ptr == ph._ptr;
+		return _ptr == ph._ptr;
 	}
 
 	bool operator == (const shared&& ph) const noexcept {
-		return this == &ph || _ptr == ph._ptr;
+		return _ptr == ph._ptr;
 	}
 
 	shared& operator = (const shared& ph) {
