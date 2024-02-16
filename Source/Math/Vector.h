@@ -12,14 +12,13 @@ class base_vector3 final {
 public:
 	T x, y, z;
 
-	template <typename U>
-	base_vector3(const U& vec) :x(vec.x), y(vec.y), z(vec.z) {
-	}
-
 	base_vector3() :x(0), y(0), z(0) {
 	}
 
 	base_vector3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) {
+	}
+
+	base_vector3(T&& value) :x(value), y(value), z(value) {
 	}
 
 	base_vector3(const std::initializer_list<T>& initList) {
