@@ -19,7 +19,12 @@
 
 using namespace Engine;
 
-#define ApplicationInfo	" v.0.0 [" __DATE__"  " __TIME__" ]"
+#if _DEBUG
+	#define ApplicationInfo	" v.0.0 DEBUG [" __DATE__"  " __TIME__" ]"
+#else
+	#define ApplicationInfo ""
+#endif
+
 
 Game::Uptr _game;
 Json::Value _settingJson;
@@ -48,8 +53,8 @@ int Engine::Core::execution(Game::Uptr& game)
 
 	const std::filesystem::path sourcesDir = _game->getSourcesDir();
 	Engine::FileManager::setResourcesDir(sourcesDir);
-	if (!help::loadJson(fileNameSetting, _settingJson))
-	{
+
+	if (!help::loadJson(fileNameSetting, _settingJson)) {
 		_settingJson.clear();
 		_settingJson["window"]["width"] = 960;
 		_settingJson["window"]["height"] = 540;
@@ -57,6 +62,8 @@ int Engine::Core::execution(Game::Uptr& game)
 		_settingJson["window"]["top"] = 100;
 		_settingJson["window"]["title"] = "Window_default";
 		_settingJson["window"]["fullscreen"] = false;
+		_settingJson["window"]["resizable"] = true;
+
 		help::saveJson(fileNameSetting, _settingJson);
 	}
 
@@ -73,23 +80,26 @@ bool Engine::Core::main() {
 	}
 
 	// Set all the required options for GLFW
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	int resizable = 1;
+	if (_settingJson["window"]["resizable"].isBool()) {
+		resizable = _settingJson["window"]["resizable"].asBool() ? GL_TRUE : GL_FALSE;
+	}
+	glfwWindowHint(GLFW_RESIZABLE, resizable);
 
 	Screen::init();
 
 	std::string title = Screen::title() + ApplicationInfo;
 	window = glfwCreateWindow(Screen::width(), Screen::height(), title.c_str(), NULL, NULL);
-	if (!window)
-	{
+	if (!window) {
 		glfwTerminate();
 		return false;
 	}
 
 	glfwSetWindowPos(window, Screen::left(), Screen::top());
-
 	glfwSetCursorPosCallback(window, cursorPositionCallback);
 	glfwSetMouseButtonCallback(window, mouseButtonCallback);
 	glfwSetKeyCallback(window, keyCallback);
