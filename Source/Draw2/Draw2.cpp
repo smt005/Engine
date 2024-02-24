@@ -3,11 +3,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
 #include <Screen.h>
-#include <Draw2/Shader2.h>
+#include <Draw2/Shader/ShaderLine.h>
+#include <Draw2/Shader/ShaderDefault.h>
 
 #include <Object/Shape.h>
 #include <Object/Model.h>
 
+unsigned int Draw2::u_matViewModel = 0;
 unsigned int Draw2::currentVAO = 0;
 unsigned int Draw2::currentTexture = 0;
 
@@ -39,7 +41,11 @@ void Draw2::Viewport() {
 }
 
 void Draw2::SetModelMatrix(const glm::mat4x4& matrix) {
-	glUniformMatrix4fv(Shader2::current->u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
+	glUniformMatrix4fv(ShaderDefault::u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void Draw2::SetModelMatrix(const unsigned int u_matViewModel, const glm::mat4x4& matrix) {
+	glUniformMatrix4fv(u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void Draw2::Draw(Mesh& shape) {
@@ -58,4 +64,21 @@ void Draw2::Draw(Model& model) {
 	glBindTexture(GL_TEXTURE_2D, textureId);
 
 	Draw(model.getMesh()); // TODO:
+}
+
+
+void Draw2::drawLine() {
+	float color[] = { 0.3f, 0.6f, 0.9f, 1.0f };
+	float widthLine = 5.f;
+
+	glUniform4fv(ShaderLine::u_color, 1, color);
+	glLineWidth(widthLine);
+
+	GLfloat vertices[] = { 0.f, 99.5f, 0.f,
+							-99.75f, -99.5f, 0.f,
+							0.5f, -99.75f, 0.f };
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), vertices);
+	glEnableVertexAttribArray(0);
+	glDrawArrays(GL_LINE_LOOP, 0, 3);
 }

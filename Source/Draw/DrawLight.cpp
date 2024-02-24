@@ -17,7 +17,7 @@
 #include "Object/Line.h"
 
 #include <iostream>
-#include <Draw2/Shader2.h>
+#include <Draw2/Shader/ShaderDefault.h>
 
 float DrawLight::_clearColor[4] = { 0.3f, 0.6f , 0.9f , 1.0f };
 float DrawLight::_lightPos[4] = { 0.0f, 0.0f, 0.0f, 0.0f };

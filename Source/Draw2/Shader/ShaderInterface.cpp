@@ -1,34 +1,31 @@
-#include "Shader2.h"
+#include "ShaderInterface.h"
 #include <glad/gl.h>
+#include <iostream>
 #include <FileManager.h>
-#include <Draw/Camera/Camera.h>
 
-Shader2::Ptr Shader2::current;
-
-Shader2::Shader2(const std::string& vertexFileName, const std::string& fragmentFileName) {
-	if (Load(vertexFileName, fragmentFileName)) {
-		GetLocation();
-	}
-}
-
-Shader2::~Shader2() {
+ShaderInterface::~ShaderInterface() {
 	glDeleteProgram(_program);
 }
 
-void Shader2::Use() {
+void ShaderInterface::Use() {
 	glUseProgram(_program);
-	glUniformMatrix4fv(u_matProjectionView, 1, GL_FALSE, Camera::GetLink().ProjectViewFloat());
-
-	glDepthFunc(GL_LEQUAL);
-	glEnable(GL_DEPTH_TEST);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glEnable(GL_TEXTURE_2D);
 }
 
-bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmentFileName) {
+void ShaderInterface::GetLocation() {
+	if (_program == 0) {
+		return;
+	}
+}
+
+bool ShaderInterface::Init(const std::string& vertexFileName, const std::string& fragmentFileName) {
+	if (Load(vertexFileName, fragmentFileName)) {
+		GetLocation();
+		return true;
+	}
+	return false;
+}
+
+bool ShaderInterface::Load(const std::string& vertexFileName, const std::string& fragmentFileName) {
 	static std::filesystem::path shaderFolder = "Shaders";
 
 	std::string vertexShaderSource = Engine::FileManager::readTextFile(shaderFolder / vertexFileName);
@@ -41,21 +38,21 @@ bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmen
 		return 0;
 	}
 
-	GLuint _fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
 	const char* shaderSource = fragmentShaderSource.c_str();
-	glShaderSource(_fragmentShader, 1, &shaderSource, 0);
-	glCompileShader(_fragmentShader);
+	glShaderSource(fragmentShader, 1, &shaderSource, 0);
+	glCompileShader(fragmentShader);
 
 	GLint isShaderCompiled;
-	glGetShaderiv(_fragmentShader, GL_COMPILE_STATUS, &isShaderCompiled);
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isShaderCompiled);
 
 	if (!isShaderCompiled) {
 		int infoLogLength, charactersWritten;
-		glGetShaderiv(_fragmentShader, GL_INFO_LOG_LENGTH, &infoLogLength);
+		glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &infoLogLength);
 
 		char* infoLog = new char[infoLogLength];
-		glGetShaderInfoLog(_fragmentShader, infoLogLength, &charactersWritten, infoLog);
+		glGetShaderInfoLog(fragmentShader, infoLogLength, &charactersWritten, infoLog);
 
 #ifdef _DEBUG
 		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader compiled fragment ERROR: %s\n", infoLog);
@@ -68,20 +65,20 @@ bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmen
 		return false;
 	}
 
-	GLuint _vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
 	shaderSource = vertexShaderSource.c_str();
-	glShaderSource(_vertexShader, 1, &shaderSource, 0);
-	glCompileShader(_vertexShader);
+	glShaderSource(vertexShader, 1, &shaderSource, 0);
+	glCompileShader(vertexShader);
 
-	glGetShaderiv(_vertexShader, GL_COMPILE_STATUS, &isShaderCompiled);
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isShaderCompiled);
 
 	if (!isShaderCompiled) {
 		int infoLogLength, charactersWritten;
-		glGetShaderiv(_vertexShader, GL_INFO_LOG_LENGTH, &infoLogLength);
+		glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &infoLogLength);
 
 		char* infoLog = new char[infoLogLength];
-		glGetShaderInfoLog(_vertexShader, infoLogLength, &charactersWritten, infoLog);
+		glGetShaderInfoLog(vertexShader, infoLogLength, &charactersWritten, infoLog);
 
 #ifdef _DEBUG
 		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader compiled vertex ERROR: %s\n", infoLog);
@@ -95,8 +92,8 @@ bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmen
 	}
 
 	_program = glCreateProgram();
-	glAttachShader(_program, _fragmentShader);
-	glAttachShader(_program, _vertexShader);
+	glAttachShader(_program, fragmentShader);
+	glAttachShader(_program, vertexShader);
 
 	glLinkProgram(_program);
 
@@ -121,18 +118,9 @@ bool Shader2::Load(const std::string& vertexFileName, const std::string& fragmen
 		return false;
 	}
 
-	glDeleteShader(_fragmentShader);
-	glDeleteShader(_vertexShader);
+	glDeleteShader(fragmentShader);
+	glDeleteShader(vertexShader);
 
 	std::cout << "Shader successfully." << std::endl;
 	return _program != 0;
-}
-
-void Shader2::GetLocation() {
-	if (_program == 0) {
-		return;
-	}
-
-	u_matProjectionView = glGetUniformLocation(_program, "u_matProjectionView");
-	u_matViewModel = glGetUniformLocation(_program, "u_matViewModel");
 }
