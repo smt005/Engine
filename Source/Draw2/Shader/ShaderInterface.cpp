@@ -57,7 +57,7 @@ bool ShaderInterface::Load(const std::string& vertexFileName, const std::string&
 #ifdef _DEBUG
 		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader compiled fragment ERROR: %s\n", infoLog);
 #endif
-		std::cout << "Shader compiled fragment ERROR: " << infoLog << std::endl;
+		std::cout << "Shader compiled fragment ERROR: " << infoLog << ". " << fragmentFileName << std::endl;
 
 		delete[] infoLog;
 
@@ -83,7 +83,7 @@ bool ShaderInterface::Load(const std::string& vertexFileName, const std::string&
 #ifdef _DEBUG
 		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader compiled vertex ERROR: %s\n", infoLog);
 #endif
-		std::cout << "Shader compiled vertex ERROR: " << infoLog << std::endl;
+		std::cout << "Shader compiled vertex ERROR: " << infoLog << ". " << vertexFileName << std::endl;
 
 		delete[] infoLog;
 
@@ -110,7 +110,7 @@ bool ShaderInterface::Load(const std::string& vertexFileName, const std::string&
 #ifdef _DEBUG
 		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader linked ERROR: %s \n", infoLog);
 #endif
-		std::cout << "Shader linked ERROR: " << infoLog << std::endl;
+		std::cout << "Shader linked ERROR: " << infoLog << ". " << vertexFileName << ", " << fragmentFileName << std::endl;
 
 		delete[] infoLog;
 
@@ -121,6 +121,6 @@ bool ShaderInterface::Load(const std::string& vertexFileName, const std::string&
 	glDeleteShader(fragmentShader);
 	glDeleteShader(vertexShader);
 
-	std::cout << "Shader successfully." << std::endl;
+	std::cout << "Init shader successfully. " << vertexFileName << ", "  << fragmentFileName << std::endl;
 	return _program != 0;
 }

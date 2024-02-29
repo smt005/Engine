@@ -3,7 +3,6 @@
 #include <FileManager.h>
 #include <Draw/Camera/Camera.h>
 
-ShaderDefault::Ptr ShaderDefault::current;
 unsigned int ShaderDefault::u_matProjectionView = 0;
 unsigned int ShaderDefault::u_matViewModel = 0;
 

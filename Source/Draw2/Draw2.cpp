@@ -48,6 +48,14 @@ void Draw2::SetModelMatrix(const unsigned int u_matViewModel, const glm::mat4x4&
 	glUniformMatrix4fv(u_matViewModel, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
+void Draw2::SetPointSize(const float sizePoint) {
+	glPointSize(sizePoint);
+}
+
+void Draw2::SetColor(const unsigned int u_color, const float* color) {
+	glUniform4fv(u_color, 1, color);
+}
+
 void Draw2::Draw(Mesh& shape) {
 	if (!shape.hasVBO()) {
 		if (!shape.initVBO()) return;
@@ -66,19 +74,8 @@ void Draw2::Draw(Model& model) {
 	Draw(model.getMesh()); // TODO:
 }
 
-
-void Draw2::drawLine() {
-	float color[] = { 0.3f, 0.6f, 0.9f, 1.0f };
-	float widthLine = 5.f;
-
-	glUniform4fv(ShaderLine::u_color, 1, color);
-	glLineWidth(widthLine);
-
-	GLfloat vertices[] = { 0.f, 99.5f, 0.f,
-							-99.75f, -99.5f, 0.f,
-							0.5f, -99.75f, 0.f };
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), vertices);
+void Draw2::drawPoints(const float* vertices, const unsigned int count) {
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
 	glEnableVertexAttribArray(0);
-	glDrawArrays(GL_LINE_LOOP, 0, 3);
+	glDrawArrays(GL_POINTS, 0, count);
 }

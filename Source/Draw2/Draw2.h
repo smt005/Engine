@@ -14,16 +14,23 @@ public:
 	static void Viewport();
 	static void SetModelMatrix(const glm::mat4x4& matrix);
 	static void SetModelMatrix(const unsigned int u_matViewModel, const glm::mat4x4& matrix);
+	static void SetPointSize(const float sizePoint);
+	static void SetColor(const unsigned int u_color, const float* color);
 
 	template<typename ShaderT>
 	static void SetModelMatrixClass(const glm::mat4x4& matrix) {
 		SetModelMatrix(ShaderT::u_matViewModel, matrix);
 	}
 
+	template<typename ShaderT>
+	static void SetColorClass(const float* color) {
+		SetColor(ShaderT::u_color, color);
+	}
+
 	static void Draw(Mesh& shape);
 	static void Draw(Model& model);
 
-	static void drawLine();
+	static void drawPoints(const float* vertices, const unsigned int count);
 
 public:
 	static unsigned int u_matViewModel;
