@@ -84,10 +84,11 @@ bool Engine::Core::main() {
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	int resizable = 1;
-	if (_settingJson["window"]["resizable"].isBool()) {
+	int resizable = GL_FALSE;
+	if (!_settingJson["window"]["resizable"].isNull() && _settingJson["window"]["resizable"].isBool()) {
 		resizable = _settingJson["window"]["resizable"].asBool() ? GL_TRUE : GL_FALSE;
 	}
+
 	glfwWindowHint(GLFW_RESIZABLE, resizable);
 
 	Screen::init();
