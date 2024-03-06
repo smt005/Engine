@@ -11,4 +11,5 @@ public:
 public:
 	static unsigned int u_matProjectionView;
 	static unsigned int u_matViewModel;
+	static unsigned int u_color;
 };

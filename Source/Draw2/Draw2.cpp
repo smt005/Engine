@@ -52,7 +52,7 @@ void Draw2::SetPointSize(const float sizePoint) {
 	glPointSize(sizePoint);
 }
 
-void Draw2::SetColor(const unsigned int u_color, const float* color) {
+void Draw2::SetColor(const unsigned int u_color, const float* const color) {
 	glUniform4fv(u_color, 1, color);
 }
 
@@ -63,6 +63,16 @@ void Draw2::Draw(Mesh& shape) {
 
 	glBindVertexArray(shape._VAO);
 	glDrawElements(GL_TRIANGLES, shape.countIndex(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+}
+
+void Draw2::Lines(Mesh& shape) {
+	if (!shape.hasVBO()) {
+		if (!shape.initVBO()) return;
+	}
+
+	glBindVertexArray(shape._VAO);
+	glDrawElements(GL_LINE_LOOP, shape.countIndex(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 

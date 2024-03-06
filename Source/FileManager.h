@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <filesystem>
 
 namespace Engine
@@ -18,6 +19,8 @@ public:
 
 	static bool writeFile(const std::filesystem::path& fileName, const char* data);
 	static bool writeTextFile(const std::filesystem::path& fileName, const std::string& text);
+
+	static void FindFiles(const std::filesystem::path& dir, const std::string& mask, std::vector<std::string>& result);
 
 private:
 	static std::filesystem::path _resourcesDir;

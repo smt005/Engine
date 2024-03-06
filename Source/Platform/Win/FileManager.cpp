@@ -108,3 +108,19 @@ bool FileManager::writeTextFile(const std::filesystem::path& fileName, const std
 {
 	return writeFile(fileName, text.c_str());
 }
+
+void FileManager::FindFiles(const std::filesystem::path& dir, const std::string& mask, std::vector<std::string>& result) {
+	for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(dir)) {
+		if (entry.is_directory()) {
+			FindFiles(entry, mask, result);
+		}
+		else {
+			std::string fullFilePath = entry.path().string();
+			if (fullFilePath.rfind(mask) == fullFilePath.npos) {
+				continue;
+			}
+
+			result.emplace_back(fullFilePath);
+		}
+	}
+}

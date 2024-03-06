@@ -82,7 +82,7 @@ public:
 
 	//...
 	void Init();
-	void SetPerspective(const float zFar = 1000000.f, const float zNear = 1.f, const float fov = 45.f);
+	void SetPerspective(const float zFar = std::numeric_limits<float>::min(), const float zNear = std::numeric_limits<float>::max(), const float fov = 45.f);
 	void SetOrtho(const float size = 1.f, const float zNear = -1000000.f, const float zFar = 1000000.f);
 	glm::vec3 corsorCoord();
 

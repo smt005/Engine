@@ -210,6 +210,11 @@ void Mesh::setData(	float* const aVertex,
 					unsigned int* const aIndex,
 					const unsigned int countIndex)
 {
+	if (_aVertex)   { delete[] _aVertex; }
+	if (_aNormal)   { delete[] _aNormal; }
+	if (_aTexCoord) { delete[] _aTexCoord; }
+	if (_aIndex)    { delete[] _aIndex; }
+
 	_aVertex = aVertex;
 	_aNormal = aNormal;
 	_aTexCoord = aTexCoord;
