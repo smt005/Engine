@@ -5,12 +5,22 @@
 class Mesh;
 class Model;
 
+enum class CullFaceType {
+	NONE,
+	FRONT,
+	BACK,
+	FRONT_AND_BACK,
+	FRONT_LEFT,
+	FRONT_RIGHT
+};
+
 class Draw2 final {
 public:
 	static void SetClearColor(float r, float g, float b, float a);
 	static void ClearColor();
 	static void ClearDepth();
 	static void DepthTest(bool enable);
+	static void CullFace(CullFaceType type);
 	static void Viewport();
 	static void SetModelMatrix(const glm::mat4x4& matrix);
 	static void SetModelMatrix(const unsigned int u_matViewModel, const glm::mat4x4& matrix);

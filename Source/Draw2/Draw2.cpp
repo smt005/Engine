@@ -34,6 +34,34 @@ void Draw2::DepthTest(bool enable) {
 	}
 }
 
+void Draw2::CullFace(CullFaceType type) {
+	if (type == CullFaceType::NONE) {
+		glDisable(GL_CULL_FACE);
+		return;
+	}
+
+	glEnable(GL_CULL_FACE);
+	
+	if (type == CullFaceType::FRONT) {
+		glCullFace(GL_FRONT);
+	}
+	else if (type == CullFaceType::BACK) {
+		glCullFace(GL_BACK);
+	}
+	else if (type == CullFaceType::FRONT_AND_BACK) {
+		glCullFace(GL_FRONT_AND_BACK);
+	}
+	else if (type == CullFaceType::FRONT_LEFT) {
+		glCullFace(GL_FRONT_LEFT);
+	}
+	else if (type == CullFaceType::FRONT_RIGHT) {
+		glCullFace(GL_FRONT_RIGHT);
+	}
+	else {
+		glDisable(GL_CULL_FACE);
+	}
+}
+
 void Draw2::Viewport() {
 	int widthScreen = Engine::Screen::width();
 	int heightScreen = Engine::Screen::height();
@@ -77,11 +105,8 @@ void Draw2::Lines(Mesh& shape) {
 }
 
 void Draw2::Draw(Model& model) {
-	// TODO:
-	unsigned int textureId = model.textureId();
-	glBindTexture(GL_TEXTURE_2D, textureId);
-
-	Draw(model.getMesh()); // TODO:
+	glBindTexture(GL_TEXTURE_2D, model.textureId());
+	Draw(model.getMesh());
 }
 
 void Draw2::drawPoints(const float* vertices, const unsigned int count) {
