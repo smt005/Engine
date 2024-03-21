@@ -18,6 +18,8 @@ private:
 	Texture::Ptr _texture;
 
 public:
+	using Ptr = std::shared_ptr<Model>;
+
 	Model();
 
 	bool ValidShape();
