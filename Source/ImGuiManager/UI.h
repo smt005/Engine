@@ -64,7 +64,7 @@ public:
 	template <typename T, typename... Args>
 	static const std::string ShowWindow(Args&&...args) {
 		UI::Window* window = new T(std::forward<Args>(args)...);
-		std::string id = window->_id;
+		const std::string& id = window->_id;
 		if (windows.find(id) != windows.end()) {
 			delete window;
 			return id;
