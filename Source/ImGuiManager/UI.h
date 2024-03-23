@@ -1,3 +1,4 @@
+// ◦ Xyz ◦
 #pragma once
 
 #include <memory>
@@ -25,24 +26,24 @@ public:
 		Window(T* tPtr)
 			: _closeBtn(true)
 			, _visible(false)
-			, _window_flags(NULL)
+			, _window_flags(0)
 			, _alpha(1.f)
 			, _id(Engine::GetClassName<T>())
 		{}
 
 		virtual ~Window() = default;
 
-		virtual void Draw() {}
+		virtual void Draw() = 0;
 		virtual void OnOpen() {}
 		virtual void OnClose() {}
 		virtual void Update() {}
 
-		inline void SetId(const std::string& id) { _id = id; }
-		inline void SetFlag(int window_flags) { _window_flags = window_flags; }
-		inline void SetAlpha(float alpha) { _alpha = alpha; }
+		void SetId(const std::string& id) { _id = id; }
+		void SetFlag(int window_flags) { _window_flags = window_flags; }
+		void SetAlpha(float alpha) { _alpha = alpha; }
 
-		inline const std::string& Id() { return _id; }
-		inline void VisibleCloseBtn(const bool value) { _closeBtn = value; }
+		const std::string& Id() { return _id; }
+		void VisibleCloseBtn(const bool value) { _closeBtn = value; }
 		void Close() { UI::closedWindows.emplace_back(this); }
 
 	private:

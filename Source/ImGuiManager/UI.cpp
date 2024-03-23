@@ -1,3 +1,4 @@
+// ◦ Xyz ◦
 
 #include "UI.h"
 
@@ -34,7 +35,7 @@ void UI::Render() {
 	if (windows.empty()) {
 		return;
 	}
-	
+
 	if (!closedWindows.empty()) {
 		for (const Window* windowPtr : closedWindows) {
 			auto itErase = std::find_if(windows.begin(), windows.end(), [windowPtr](const auto& pair) { return pair.second.get() == windowPtr; });
