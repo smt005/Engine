@@ -17,11 +17,6 @@ public:
 	}
 
 	void Add(const std::string& id, std::function<void()> function) {
-		if (_observers.end() != std::find_if(_observers.begin(), _observers.end(), [&id](const std::pair<std::string, std::function<void()>>& pair) {
-			return pair.first == id;
-		})) {
-			return;
-		}
 		_observers.emplace_back(id, function);
 	}
 

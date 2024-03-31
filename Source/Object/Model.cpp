@@ -135,3 +135,20 @@ void Model::removeData()
 {
 	_data.clear();
 }
+
+std::vector<std::string> Model::GetListModels()
+{
+	if (_data.empty()) {
+		help::loadJson(FILE_NAME_MODEL_DATA, _data);
+	}
+
+	std::vector<std::string> listModels;
+
+	if (!_data.empty() && _data.isObject()) {
+		for (auto&& jsonKey : _data.getMemberNames()) {
+			listModels.emplace_back(jsonKey);
+		}
+	}
+
+	return listModels;
+}

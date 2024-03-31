@@ -12,7 +12,6 @@ namespace Editor {
     Console::Console() 
         : UI::Window(this)
     {
-        SetId("Console");
         VisibleCloseBtn(false);
         SetFlag(ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground);
         ImGui::SetWindowPos(Id().c_str(), { 0.f, 0.f });

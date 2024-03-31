@@ -156,13 +156,18 @@ void Engine::Core::close()
 
 void Engine::Core::init()
 {
-	if (!_game) return;
+	if (!_game) {
+		return;
+	}
+
 	_game->init();
 }
 
 void Engine::Core::update()
 {
-	if (!_game) return;
+	if (!_game) {
+		return;
+	}
 
 	double currentTime = Core::Core::currentTime();
 	double deltaTime = currentTime - _lastTime;
@@ -174,13 +179,19 @@ void Engine::Core::update()
 
 void Engine::Core::draw()
 {
-	if (!_game) return;
+	if (!_game) {
+		return;
+	}
+
 	_game->draw();
 }
 
 void Engine::Core::resize()
 {
-	if (!_game) return;
+	if (!_game) {
+		return;
+	}
+
 	_game->resize();
 }
 
@@ -238,13 +249,10 @@ void mouseButtonCallback(GLFWwindow* Window, int Button, int Action, int mods)
 	{
 	case GLFW_PRESS: {
 		Callback::onPressTap(Button);
-	}
-					 break;
-
+	} break;
 	case GLFW_RELEASE: {
 		Callback::onReleaseTap(Button);
-	}
-					   break;
+	} break;
 	}
 }
 
@@ -341,8 +349,8 @@ void Engine::Core::mainLoop(GLFWwindow* window) {
 		whileFunctions.clear();
 
 #if EDITORS_ENABLED
-		UI::Update();
 		UI::Render();
+		UI::Update();
 #endif
 
 		glfwSwapBuffers(window);

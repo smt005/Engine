@@ -149,6 +149,8 @@ namespace help
 		std::cout << "LOG: " << text << std::endl;
 	}
 
+	void Log(const std::string& text);
+
 	template <typename Tchar, typename Tstring>
 	void CopyToArrayChar(Tchar& arrayChar, const Tstring& text) { // Пример, std::array<char, 128>* arrayChar
 		strncpy(arrayChar.data(), text.data(), arrayChar.size());

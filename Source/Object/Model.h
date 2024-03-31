@@ -39,4 +39,5 @@ public:
 public:
 	static Json::Value& data(const std::string &name);
 	static void removeData();
+	static std::vector<std::string> GetListModels();
 };

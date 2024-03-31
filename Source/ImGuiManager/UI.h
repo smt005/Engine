@@ -37,8 +37,8 @@ public:
 		virtual void OnOpen() {}
 		virtual void OnClose() {}
 		virtual void Update() {}
+		virtual void Resize() {}
 
-		void SetId(const std::string& id) { _id = id; }
 		void SetFlag(int window_flags) { _window_flags = window_flags; }
 		void SetAlpha(float alpha) { _alpha = alpha; }
 

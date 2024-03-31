@@ -1,7 +1,5 @@
 
-#define WINDOWS_HIDE_CONSOLE 0
-
-#if WINDOWS_HIDE_CONSOLE
+#if !_DEBUG
 	#include <Windows.h>
 #endif
 
@@ -9,7 +7,7 @@
 
 int main(int argc, char** argv)
 {
-#if WINDOWS_HIDE_CONSOLE
+#if !_DEBUG
 	FreeConsole();
 #endif
 
