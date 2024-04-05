@@ -50,8 +50,8 @@ bool FileManager::readTextFile(const std::filesystem::path& fileName, char*& dat
 	return false;
 }
 
-std::string FileManager::readTextFile(const std::filesystem::path& fileName) {
-	std::filesystem::path fullFilePath = _resourcesDir / fileName;
+std::string FileManager::readTextFile(const std::filesystem::path& fileName, const std::filesystem::path& resourcesDir) {
+	std::filesystem::path fullFilePath = resourcesDir / fileName;
 
 	std::ifstream fileStream(fullFilePath);
 	if (!fileStream.is_open()) {
@@ -82,9 +82,9 @@ std::string FileManager::readTextFileRedject(const std::filesystem::path& fileNa
 	return std::string();
 }
 
-bool FileManager::writeFile(const std::filesystem::path& fileName, const char* data)
+bool FileManager::writeFile(const std::filesystem::path& fileName, const char* data, const std::filesystem::path& resourcesDir)
 {
-	std::filesystem::path fullFilePath = _resourcesDir / fileName;
+	std::filesystem::path fullFilePath = resourcesDir / fileName;
 	std::filesystem::path realFileName;
 	std::filesystem::path fullPath;
 
@@ -104,9 +104,9 @@ bool FileManager::writeFile(const std::filesystem::path& fileName, const char* d
 	return true;
 }
 
-bool FileManager::writeTextFile(const std::filesystem::path& fileName, const std::string& text)
+bool FileManager::writeTextFile(const std::filesystem::path& fileName, const std::string& text, const std::filesystem::path& resourcesDir)
 {
-	return writeFile(fileName, text.c_str());
+	return writeFile(fileName, text.c_str(), resourcesDir);
 }
 
 void FileManager::FindFiles(const std::filesystem::path& dir, const std::string& mask, std::vector<std::string>& result) {

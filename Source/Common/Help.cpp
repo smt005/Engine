@@ -1,4 +1,5 @@
 
+#include <filesystem>
 #include <glm/glm.hpp>
 #include "Help.h"
 #include "FileManager.h"
@@ -7,9 +8,9 @@
 
 using namespace glm;
 
-bool help::loadJson(const std::string& fileName, Json::Value& value)
+bool help::loadJson(const std::string& fileName, Json::Value& value, bool toResource)
 {
-	std::string mystring = Engine::FileManager::readTextFile(fileName);
+	std::string mystring = Engine::FileManager::readTextFile(fileName, toResource ? Engine::FileManager ::getResourcesDir() : std::filesystem::current_path());
 
 	Json::CharReaderBuilder readerBuilder;
 	Json::CharReader *reader = readerBuilder.newCharReader();
@@ -21,10 +22,10 @@ bool help::loadJson(const std::string& fileName, Json::Value& value)
 	return false;
 }
 
-bool help::saveJson(const std::string& fileName, const Json::Value& value, const std::string& indentation)
+bool help::saveJson(const std::string& fileName, const Json::Value& value, const std::string& indentation, bool toResource)
 {
 	const std::string valueString = stringFroJson(value, indentation);
-	return Engine::FileManager::writeTextFile(fileName, valueString);
+	return Engine::FileManager::writeTextFile(fileName, valueString, toResource ? Engine::FileManager::getResourcesDir() : std::filesystem::current_path());
 }
 
 std::string help::stringFroJson(const Json::Value& value, const std::string& indentation)

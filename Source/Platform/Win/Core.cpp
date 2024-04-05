@@ -54,7 +54,7 @@ int Engine::Core::execution(Game::Uptr& game)
 	const std::filesystem::path sourcesDir = _game->getSourcesDir();
 	Engine::FileManager::setResourcesDir(sourcesDir);
 
-	if (!help::loadJson(fileNameSetting, _settingJson)) {
+	if (!help::loadJson(fileNameSetting, _settingJson, false)) {
 		_settingJson.clear();
 		_settingJson["window"]["width"] = 960;
 		_settingJson["window"]["height"] = 540;
@@ -64,7 +64,7 @@ int Engine::Core::execution(Game::Uptr& game)
 		_settingJson["window"]["fullscreen"] = false;
 		_settingJson["window"]["resizable"] = true;
 
-		help::saveJson(fileNameSetting, _settingJson);
+		help::saveJson(fileNameSetting, _settingJson, "\t", false);
 	}
 
 	main();
@@ -149,7 +149,7 @@ void Engine::Core::close()
 	_settingJson["window"]["left"] = Screen::left();
 	_settingJson["window"]["top"] = Screen::top();
 
-	help::saveJson(fileNameSetting, _settingJson);
+	help::saveJson(fileNameSetting, _settingJson, "\t", false);
 
 	exit(1);
 }
@@ -298,7 +298,7 @@ void windowCloseCallback(GLFWwindow* window)
 	_settingJson["window"]["left"] = Screen::left();
 	_settingJson["window"]["top"] = Screen::top();
 
-	help::saveJson(fileNameSetting, _settingJson);
+	help::saveJson(fileNameSetting, _settingJson, "\t", false);
 }
 
 void windowScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
