@@ -5,7 +5,8 @@
 #include <functional>
 #include "MyStl/Singleton.h"
 
-class Event : public mystd::Singleton<Event> {
+template<typename T>
+class Event : public mystd::Singleton<T> {
 public:
 	Event() = default;
 	virtual ~Event() = default;
