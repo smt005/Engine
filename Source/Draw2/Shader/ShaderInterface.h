@@ -14,6 +14,7 @@ public:
 
 	bool Init(const std::string& vertexFileName, const std::string& fragmentFileName);
 	bool Load(const std::string& vertexFileName, const std::string& fragmentFileName);
+	bool Inited() { return _program != 0; };
 
 protected:
 	unsigned int _program = 0; // GLuint;

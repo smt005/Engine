@@ -33,3 +33,12 @@ public:
 	static unsigned int u_color;
 };
 
+class ShaderGravityPoint final : public ShaderInterface, public mystd::Singleton<ShaderGravityPoint> {
+public:
+	void Use() override;
+	void GetLocation() override;
+
+public:
+	static unsigned int u_matProjectionView;
+	static unsigned int u_color;
+};
