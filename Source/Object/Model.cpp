@@ -57,13 +57,14 @@ bool Model::load() {
 	if (dataModel.empty())
 		return false;
 
-	const string &nameShape = dataModel["shape"].empty() ? FILE_NAME_SHAPE_FILE : dataModel["shape"].asString();
-	const string &nameTexture = dataModel["texture"].empty() ? FILE_NAME_TEXTURE_FILE : dataModel["texture"].asString();
+	const string& nameShape = dataModel["shape"].empty() ? FILE_NAME_SHAPE_FILE : dataModel["shape"].asString();
+	const string& nameTexture = dataModel["texture"].empty() ? FILE_NAME_TEXTURE_FILE : dataModel["texture"].asString();
 
 	bool hasScalling = false;
 	string suffixScale;
 	float scale[3];
 
+	// Scale
 	if (!dataModel["scale"].empty()) {
 		if (dataModel["scale"].isArray())
 		{
@@ -99,8 +100,9 @@ bool Model::load() {
 
 	if (!hasScalling) {
 		_shape = Shape::getByName(nameShape);
-	} else {
-		string nameWithSuffixScale = nameShape +"_[" + std::to_string(scale[0]) + '_' + std::to_string(scale[1]) + '_' + std::to_string(scale[2]) + "]";
+	}
+	else {
+		string nameWithSuffixScale = nameShape + "_[" + std::to_string(scale[0]) + '_' + std::to_string(scale[1]) + '_' + std::to_string(scale[2]) + "]";
 
 		if (!Shape::hasByName(nameWithSuffixScale)) {
 			ShapePtr& shape = Shape::getByName(nameShape);
@@ -113,6 +115,30 @@ bool Model::load() {
 		_shape = Shape::getByName(nameWithSuffixScale);
 	}
 
+	// Color
+	auto& arrayColor = dataModel["color"];
+	if (!arrayColor.empty() && arrayColor.isArray()) {
+		int indexColor = 0;
+
+		for (auto it = arrayColor.begin(); it != arrayColor.end(); ++it) {
+			float value = it->asFloat();
+			value = value > 1.f ? 1.f : value;
+			value = value < 0.f ? 0.f : value;
+
+			switch (indexColor)
+			{
+			case 0: { setRed(value); } break;
+			case 1: { setGreen(value); } break;
+			case 2: { setBlue(value); } break;
+			case 3: { setAlpha(value); } break;
+			default:
+				break;
+			}
+
+			++indexColor;
+		}
+	}
+	
 	_texture = Texture::getByName(nameTexture);
 
 	return true;
