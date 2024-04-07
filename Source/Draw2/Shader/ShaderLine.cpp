@@ -17,6 +17,8 @@ unsigned int ShaderGravityPoint::u_color = 0;
 unsigned int ShaderGravityPoint::u_factor = 0;
 unsigned int ShaderGravityPoint::u_range = 0;
 unsigned int ShaderGravityPoint::u_rangeZ = 0;
+unsigned int ShaderGravityPoint::u_body_position = 0;
+unsigned int ShaderGravityPoint::u_body_color = 0;
 
 //...
 void ShaderLine::Use() {
@@ -127,4 +129,7 @@ void ShaderGravityPoint::GetLocation() {
 	u_factor = glGetUniformLocation(_program, "u_factor");
 	u_range = glGetUniformLocation(_program, "u_range");
 	u_rangeZ = glGetUniformLocation(_program, "u_rangeZ");
+
+	u_body_position = glGetUniformLocation(_program, "u_body_position");
+	u_body_color = glGetUniformLocation(_program, "u_body_color");
 }

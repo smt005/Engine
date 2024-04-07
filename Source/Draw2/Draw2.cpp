@@ -88,6 +88,18 @@ void Draw2::SetUniform1f(const unsigned int uniform, const float value) {
 	glUniform1f(uniform, value);
 }
 
+void Draw2::SetUniform2fv(const unsigned int uniform, const float* color) {
+	glUniform2fv(uniform, 1, color);
+}
+
+void Draw2::SetUniform3fv(const unsigned int uniform, const float* color) {
+	glUniform3fv(uniform, 1, color);
+}
+
+void Draw2::SetUniform4fv(const unsigned int uniform, const float* color) {
+	glUniform4fv(uniform, 1, color);
+}
+
 void Draw2::Draw(Mesh& shape) {
 	if (!shape.hasVBO()) {
 		if (!shape.initVBO()) return;

@@ -44,4 +44,7 @@ public:
 	static unsigned int u_factor;
 	static unsigned int u_range;
 	static unsigned int u_rangeZ;
+
+	static unsigned int u_body_position;
+	static unsigned int u_body_color;
 };
