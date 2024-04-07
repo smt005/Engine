@@ -1,7 +1,9 @@
+﻿// ◦ Xyz ◦
 #pragma once
 
 #include <string>
 #include <vector>
+#include <set>
 #include <functional>
 #include "MyStl/Singleton.h"
 
@@ -11,9 +13,22 @@ public:
 	Event() = default;
 	virtual ~Event() = default;
 
-	void Action() {
+	void Action()
+	{
+		_inActive = true;
+
 		for (auto& pairObserver : _observers) {
 			pairObserver.second();
+		}
+
+		_inActive = false;
+
+		// TODO: оптимизировать
+		if (!_deleteObservers.empty()) {
+			for (const std::string& id : _deleteObservers) {
+				RemoveFromVector(id);
+			}
+			_deleteObservers.clear();
 		}
 	}
 
@@ -22,15 +37,27 @@ public:
 	}
 
 	void Remove(const std::string& id) {
-		auto it = std::find_if(_observers.begin(), _observers.end(), [&id](const std::pair<std::string, std::function<void()>>& pair) {
-			return pair.first == id;
-		});
-		if (it == _observers.end()) {
-			return;
+		if (_inActive) {
+			_deleteObservers.emplace_back(id);
 		}
-		_observers.erase(it);
+		else {
+			RemoveFromVector(id);
+		}
 	}
 
 private:
+	void RemoveFromVector(const std::string& id)
+	{
+		auto it = std::find_if(_observers.begin(), _observers.end(), [&id](const std::pair<std::string, std::function<void()>>& pair) {
+			return pair.first == id;
+		});
+		if (it != _observers.end()) {
+			_observers.erase(it);
+		}
+	}
+
+private:
+	bool _inActive = false;
 	std::vector<std::pair<std::string, std::function<void()>>> _observers;
+	std::list<std::string> _deleteObservers;
 };
