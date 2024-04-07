@@ -41,4 +41,7 @@ public:
 public:
 	static unsigned int u_matProjectionView;
 	static unsigned int u_color;
+	static unsigned int u_factor;
+	static unsigned int u_range;
+	static unsigned int u_rangeZ;
 };

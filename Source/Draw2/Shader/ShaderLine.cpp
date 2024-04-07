@@ -14,6 +14,9 @@ unsigned int ShaderLinePM::u_color = 0;
 
 unsigned int ShaderGravityPoint::u_matProjectionView = 0;
 unsigned int ShaderGravityPoint::u_color = 0;
+unsigned int ShaderGravityPoint::u_factor = 0;
+unsigned int ShaderGravityPoint::u_range = 0;
+unsigned int ShaderGravityPoint::u_rangeZ = 0;
 
 //...
 void ShaderLine::Use() {
@@ -121,4 +124,7 @@ void ShaderGravityPoint::GetLocation() {
 
 	u_matProjectionView = glGetUniformLocation(_program, "u_matProjectionView");
 	u_color = glGetUniformLocation(_program, "u_color");
+	u_factor = glGetUniformLocation(_program, "u_factor");
+	u_range = glGetUniformLocation(_program, "u_range");
+	u_rangeZ = glGetUniformLocation(_program, "u_rangeZ");
 }

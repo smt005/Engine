@@ -84,6 +84,10 @@ void Draw2::SetColor(const unsigned int u_color, const float* const color) {
 	glUniform4fv(u_color, 1, color);
 }
 
+void Draw2::SetUniform1f(const unsigned int uniform, const float value) {
+	glUniform1f(uniform, value);
+}
+
 void Draw2::Draw(Mesh& shape) {
 	if (!shape.hasVBO()) {
 		if (!shape.initVBO()) return;
@@ -113,4 +117,10 @@ void Draw2::drawPoints(const float* vertices, const unsigned int count) {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
 	glEnableVertexAttribArray(0);
 	glDrawArrays(GL_POINTS, 0, count);
+}
+
+void Draw2::drawLines(const float* vertices, const unsigned int count) {
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+	glEnableVertexAttribArray(0);
+	glDrawArrays(GL_LINE_LOOP, 0, count);
 }

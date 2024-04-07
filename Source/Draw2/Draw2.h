@@ -26,6 +26,7 @@ public:
 	static void SetModelMatrix(const unsigned int u_matViewModel, const glm::mat4x4& matrix);
 	static void SetPointSize(const float sizePoint);
 	static void SetColor(const unsigned int u_color, const float* const color);
+	static void SetUniform1f(const unsigned int uniform, const float value);
 
 	template<typename ShaderT>
 	static void SetModelMatrixClass(const glm::mat4x4& matrix) {
@@ -42,6 +43,7 @@ public:
 	static void Draw(Model& model);
 
 	static void drawPoints(const float* vertices, const unsigned int count);
+	static void drawLines(const float* vertices, const unsigned int count);
 
 public:
 	static unsigned int u_matViewModel;
