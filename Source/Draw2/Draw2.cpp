@@ -77,7 +77,12 @@ void Draw2::SetModelMatrix(const unsigned int u_matViewModel, const glm::mat4x4&
 }
 
 void Draw2::SetPointSize(const float sizePoint) {
-	glPointSize(sizePoint);
+	if (sizePoint >= 0.f) {
+		glPointSize(sizePoint);
+	}
+	else {
+		glEnable(GL_PROGRAM_POINT_SIZE);
+	}
 }
 
 void Draw2::SetColor(const unsigned int u_color, const float* const color) {
