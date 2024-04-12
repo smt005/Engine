@@ -156,4 +156,14 @@ namespace help
 		strncpy(arrayChar.data(), text.data(), arrayChar.size());
 	};
 
+	template <typename Tchar, typename Tstring>
+	Tchar* CopyToCharsPtr(const Tstring& text)
+	{
+		size_t len = text.length();
+		Tchar* charsPtr = new char[len + 1];
+		memcpy(charsPtr, text.c_str(), len);
+		charsPtr[len] = '\0';
+		return charsPtr;
+	}
+
 }; // help
