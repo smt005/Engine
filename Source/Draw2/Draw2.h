@@ -27,9 +27,12 @@ public:
 	static void SetPointSize(const float sizePoint);
 	static void SetColor(const unsigned int u_color, const float* const color);
 	static void SetUniform1f(const unsigned int uniform, const float value);
-	static void SetUniform2fv(const unsigned int uniform, const float* color);
-	static void SetUniform3fv(const unsigned int uniform, const float* color);
-	static void SetUniform4fv(const unsigned int uniform, const float* color);
+	static void SetUniform1fv(const unsigned int uniform, const float* color, int count = 1);
+	static void SetUniform2fv(const unsigned int uniform, const float* color, int count = 1);
+	static void SetUniform3fv(const unsigned int uniform, const float* color, int count = 1);
+	static void SetUniform4fv(const unsigned int uniform, const float* color, int count = 1);
+
+	static void SetUniform1i(const unsigned int uniform, const int value);
 
 	template<typename ShaderT>
 	static void SetModelMatrixClass(const glm::mat4x4& matrix) {

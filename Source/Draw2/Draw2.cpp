@@ -93,16 +93,24 @@ void Draw2::SetUniform1f(const unsigned int uniform, const float value) {
 	glUniform1f(uniform, value);
 }
 
-void Draw2::SetUniform2fv(const unsigned int uniform, const float* color) {
-	glUniform2fv(uniform, 1, color);
+void Draw2::SetUniform1fv(const unsigned int uniform, const float* color, int count) {
+	glUniform1fv(uniform, count, color);
 }
 
-void Draw2::SetUniform3fv(const unsigned int uniform, const float* color) {
-	glUniform3fv(uniform, 1, color);
+void Draw2::SetUniform2fv(const unsigned int uniform, const float* color, int count) {
+	glUniform2fv(uniform, count, color);
 }
 
-void Draw2::SetUniform4fv(const unsigned int uniform, const float* color) {
-	glUniform4fv(uniform, 1, color);
+void Draw2::SetUniform3fv(const unsigned int uniform, const float* color, int count) {
+	glUniform3fv(uniform, count, color);
+}
+
+void Draw2::SetUniform4fv(const unsigned int uniform, const float* color, int count) {
+	glUniform4fv(uniform, count, color);
+}
+
+void Draw2::SetUniform1i(const unsigned int uniform, const int value) {
+	glUniform1i(uniform, value);
 }
 
 void Draw2::Draw(Mesh& shape) {
