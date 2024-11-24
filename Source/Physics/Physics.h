@@ -40,6 +40,7 @@ namespace Engine {
 		static void GetGravity(const glm::vec3& vector);
 
 		static glm::vec3 GetLinearVelocity(Object& object);
+		static glm::vec3 GetAngularVelocity(Object& object);
 		static void SetLinearVelocity(Object& object, const glm::vec3& velocity);
 		static void SetAngularVelocity(Object& object, const glm::vec3& velocity);
 

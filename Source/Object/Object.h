@@ -60,6 +60,7 @@ public:
 	void releaseActorPhysics();
 
 	glm::vec3 GetLinearVelocity();
+	glm::vec3 GetAngularVelocity();
 	void SetLinearVelocity(const glm::vec3& velocity);
 
 	void SetAngularVelocity(const glm::vec3& velocity);

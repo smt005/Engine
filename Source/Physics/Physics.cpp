@@ -182,6 +182,19 @@ namespace Engine {
 		return { 0.f, 0.f, 0.f };
 	}
 
+	glm::vec3 Physics::GetAngularVelocity(Object& object) {
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			if (!object._actorPhyscs) {
+				return { 0.f, 0.f, 0.f };
+			}
+
+			PxVec3 pxVec3 = static_cast<PxRigidDynamic*>(object._actorPhyscs)->getAngularVelocity();
+			return { pxVec3.x, pxVec3.y, pxVec3.z };
+		}
+
+		return { 0.f, 0.f, 0.f };
+	}
+
 	void Physics::SetLinearVelocity(Object& object, const glm::vec3& velocity) {
 		if (object._typePhysics == Physics::Type::CONVEX) {
 			if (object._actorPhyscs) {

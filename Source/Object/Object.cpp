@@ -166,6 +166,10 @@ glm::vec3 Object::Object::GetLinearVelocity() {
 	return Engine::Physics::GetLinearVelocity(*this);
 }
 
+glm::vec3 Object::Object::GetAngularVelocity() {
+	return Engine::Physics::GetAngularVelocity(*this);
+}
+
 void Object::SetLinearVelocity(const glm::vec3& velocity) {
 	Engine::Physics::SetLinearVelocity(*this, velocity);
 }
