@@ -43,7 +43,7 @@ public:
 	void getDataJson(Json::Value& dataJson);
 
 	bool ValidModel();
-	Model& getModel();
+	virtual Model& getModel();
 	const float& getHeight();
 
 	float hit(const int x, const int y, const glm::mat4x4& matCamera);
@@ -62,8 +62,11 @@ public:
 	glm::vec3 GetLinearVelocity();
 	void SetLinearVelocity(const glm::vec3& velocity);
 
+	void SetAngularVelocity(const glm::vec3& velocity);
+
 	void setMass(const float mass);
 	void addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);
+	void addTorque(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);
 
 	inline bool visible() { return _visible; }
 	inline void setVisible(const bool visible) { _visible = visible; }

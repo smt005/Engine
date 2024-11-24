@@ -41,6 +41,7 @@ namespace Engine {
 
 		static glm::vec3 GetLinearVelocity(Object& object);
 		static void SetLinearVelocity(Object& object, const glm::vec3& velocity);
+		static void SetAngularVelocity(Object& object, const glm::vec3& velocity);
 
 	private:
 		static bool createActor(Object& object);
@@ -51,6 +52,7 @@ namespace Engine {
 		static void setPositionToActor(Object& object, const glm::vec3& pos);
 
 		static void addForceToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType);
+		static void addTorqueToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType);
 	};
 	
 };	// Engine

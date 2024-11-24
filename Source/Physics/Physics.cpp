@@ -186,7 +186,17 @@ namespace Engine {
 		if (object._typePhysics == Physics::Type::CONVEX) {
 			if (object._actorPhyscs) {
 				PxVec3 pxVec3(velocity.x, velocity.y, velocity.z);
-				static_cast<PxRigidDynamic*>(object._actorPhyscs)->setLinearVelocity(pxVec3, true);
+				static_cast<PxRigidDynamic*>(object._actorPhyscs)->setLinearVelocity(pxVec3);
+			}
+		}
+	}
+
+	void Physics::SetAngularVelocity(Object& object, const glm::vec3& velocity)
+	{
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			if (object._actorPhyscs) {
+				PxVec3 pxVec3(velocity.x, velocity.y, velocity.z);
+				static_cast<PxRigidDynamic*>(object._actorPhyscs)->setAngularVelocity(pxVec3);
 			}
 		}
 	}
@@ -265,6 +275,22 @@ namespace Engine {
 					case Engine::Physics::Force::IMPULSE: pConvexActor->addForce(force, PxForceMode::Enum::eIMPULSE, true); break;
 					case Engine::Physics::Force::VELOCITY_CHANGE: pConvexActor->addForce(force, PxForceMode::Enum::eVELOCITY_CHANGE, true); break;
 					default: pConvexActor->addForce(force, PxForceMode::Enum::eIMPULSE, true);
+				}
+			}
+		}
+	}
+
+	void Physics::addTorqueToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType) {
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			if (PxRigidDynamic* pConvexActor = (PxRigidDynamic*)object._actorPhyscs) {
+				PxVec3 force = PxVec3(vector.x, vector.y, vector.z);
+
+				switch (forceType) {
+				case Engine::Physics::Force::ACCELERATION: pConvexActor->addTorque(force, PxForceMode::Enum::eACCELERATION, true); break;
+				case Engine::Physics::Force::FORCE: pConvexActor->addTorque(force, PxForceMode::Enum::eFORCE, true); break;
+				case Engine::Physics::Force::IMPULSE: pConvexActor->addTorque(force, PxForceMode::Enum::eIMPULSE, true); break;
+				case Engine::Physics::Force::VELOCITY_CHANGE: pConvexActor->addTorque(force, PxForceMode::Enum::eVELOCITY_CHANGE, true); break;
+				default: pConvexActor->addTorque(force, PxForceMode::Enum::eIMPULSE, true);
 				}
 			}
 		}

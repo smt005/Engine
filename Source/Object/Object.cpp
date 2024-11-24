@@ -170,6 +170,10 @@ void Object::SetLinearVelocity(const glm::vec3& velocity) {
 	Engine::Physics::SetLinearVelocity(*this, velocity);
 }
 
+void Object::SetAngularVelocity(const glm::vec3& velocity) {
+	Engine::Physics::SetAngularVelocity(*this, velocity);
+}
+
 void Object::setMass(const float argMass) {
 	mass = argMass;
 	Engine::Physics::setMassToActor(*this, mass);
@@ -177,6 +181,10 @@ void Object::setMass(const float argMass) {
 
 void Object::addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType) {
 	Engine::Physics::addForceToActor(*this, vector, forceType);
+}
+
+void Object::addTorque(const glm::vec3& vector, const Engine::Physics::Force& forceType) {
+	Engine::Physics::addTorqueToActor(*this, vector, forceType);
 }
 
 // Virtual
