@@ -23,7 +23,6 @@ public:
 
 public:
 	int tag = 0;
-	float mass = 0.f;
 
 protected:
 	ModelPtr _model;
@@ -65,6 +64,7 @@ public:
 
 	void SetAngularVelocity(const glm::vec3& velocity);
 
+	float getMass();
 	void setMass(const float mass);
 	void addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);
 	void addTorque(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);

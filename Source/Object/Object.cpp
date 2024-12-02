@@ -178,9 +178,12 @@ void Object::SetAngularVelocity(const glm::vec3& velocity) {
 	Engine::Physics::SetAngularVelocity(*this, velocity);
 }
 
+float Object::Object::getMass() {
+	return Engine::Physics::getMassActor(*this);
+}
+
 void Object::setMass(const float argMass) {
-	mass = argMass;
-	Engine::Physics::setMassToActor(*this, mass);
+	Engine::Physics::setMassToActor(*this, argMass);
 }
 
 void Object::addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType) {

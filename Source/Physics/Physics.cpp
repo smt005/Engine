@@ -44,7 +44,7 @@ namespace Engine {
 	// Scene
 	static PxVec3 gravity(0.0f, 0.0f, -9.81f);
 	static PxReal accumulatorTime = 0.0f;
-	static PxReal stepSizeTime = 1.0f / 60.0f;
+	static PxReal stepSizeTime = 1.0f / 120.0f;
 	static PxScene* pScene = nullptr;
 
 	// Actor
@@ -60,6 +60,7 @@ namespace Engine {
 			return false;
 		}
 
+		/* VISUAL DEBUG
 		pPvd = PxCreatePvd(*pFoundation);
 		pTransport = PxDefaultPvdSocketTransportCreate("localhost", 5425, 10);
 		debugVisualizing = pPvd->connect(*pTransport, PxPvdInstrumentationFlag::eALL);
@@ -67,7 +68,7 @@ namespace Engine {
 			help::log("PhysX PVD connect");
 		} else {
 			help::log("PhysX PVD connect FAIL");
-		}
+		}*/
 
 		pPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *pFoundation, PxTolerancesScale(), false, pPvd); // trackOutstandingAllocations, для чего этот параметр
 		if (!pPhysics) {
@@ -82,6 +83,8 @@ namespace Engine {
 		}
 
 		physXInited = true;
+		const std::string infoText = "PhysX inited ["s + std::to_string((int)PX_PHYSICS_VERSION) + "]";
+		help::log(infoText);
 		return true;
 	}
 
@@ -155,8 +158,8 @@ namespace Engine {
 		if (accumulatorTime < stepSizeTime) {
 			return false;
 		}
-
 		accumulatorTime -= stepSizeTime;
+
 		pScene->simulate(stepSizeTime);
 		pScene->fetchResults(true);
 
@@ -167,6 +170,29 @@ namespace Engine {
 		gravity.x = vector.x;
 		gravity.y = vector.y;
 		gravity.z = vector.z;
+	}
+
+	glm::vec3 Physics::Raycast(const glm::vec3& pos, const glm::vec3& vector)
+	{
+		glm::vec3 hitPos;
+		if (!pScene) {
+			return hitPos;
+		}
+
+		const PxVec3 origin(pos.x, pos.y, pos.z);
+		const PxVec3 unitDir(vector.x, vector.y, vector.z);
+		const PxReal maxDistance = 10000.0f;
+		PxRaycastBuffer hit;
+		PxQueryFilterData filterData(PxQueryFlag::eSTATIC);
+
+		if (pScene->raycast(origin, unitDir, maxDistance, hit, PxHitFlag::eDEFAULT, filterData)) {
+			const auto& position = hit.block.position;
+			hitPos.x = position.x;
+			hitPos.y = position.y;
+			hitPos.z = position.z;
+		}
+
+		return hitPos;
 	}
 
 	glm::vec3 Physics::GetLinearVelocity(Object& object) {
@@ -307,6 +333,23 @@ namespace Engine {
 				}
 			}
 		}
+	}
+
+	float Physics::getMassActor(Object& object) {
+		if (object._typePhysics != Physics::Type::CONVEX) {
+			return 0;
+		}
+
+		if (!object._actorPhyscs) {
+			return 0;
+		}
+
+		PxRigidDynamic* pConvexActor = (PxRigidDynamic*)object._actorPhyscs;
+		if (!pConvexActor) {
+			return 0;
+		}
+
+		return pConvexActor->getMass();
 	}
 
 	void Physics::setMassToActor(Object& object, const float mass) {

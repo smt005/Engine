@@ -22,6 +22,15 @@ namespace Engine {
 			TRIANGLE
 		};
 
+		enum class FilterFlag {
+			STATIC,
+			DYNAMIC,
+			ePREFILTER,
+			POSTFILTER,
+			MESH_MULTIPLE,
+			BACKFACE
+		};
+
 		enum class Force
 		{
 			ACCELERATION,
@@ -38,6 +47,7 @@ namespace Engine {
 		static void releaseScene();
 		static bool updateScene(const float dt);
 		static void GetGravity(const glm::vec3& vector);
+		static glm::vec3 Raycast(const glm::vec3& pos, const glm::vec3& vector);
 
 		static glm::vec3 GetLinearVelocity(Object& object);
 		static glm::vec3 GetAngularVelocity(Object& object);
@@ -48,6 +58,8 @@ namespace Engine {
 		static bool createActor(Object& object);
 		static void updateMatrixActor(Object& object);
 		static void releaseActor(Object& object);
+
+		static float getMassActor(Object& object);
 
 		static void setMassToActor(Object& object, const float mass);
 		static void setPositionToActor(Object& object, const glm::vec3& pos);
