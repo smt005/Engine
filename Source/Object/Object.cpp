@@ -145,6 +145,7 @@ void Object::setHeight(const float &height)
 
 void Object::setActorPos(const glm::vec3& pos) {
 	Engine::Physics::setPositionToActor(*this, pos);
+	setPos(pos);
 }
 
 void Object::updateMatrixPhysics() {
@@ -194,12 +195,11 @@ void Object::addTorque(const glm::vec3& vector, const Engine::Physics::Force& fo
 	Engine::Physics::addTorqueToActor(*this, vector, forceType);
 }
 
-// Virtual
-
-void Object::action()
-{
-
+void Object::SetMatrix(const glm::mat4x4& matrix) {
+	Engine::Physics::SetMatrixToActor(*this, matrix);
 }
+
+// Virtual
 
 Object* Object::_default = nullptr;
 

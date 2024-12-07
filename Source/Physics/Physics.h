@@ -2,6 +2,7 @@
 #pragma once
 
 #include "glm/vec3.hpp"
+#include "glm/mat4x4.hpp"
 
 class Position;
 class Object;
@@ -21,7 +22,9 @@ namespace Engine {
 			CONVEX,
 			TRIANGLE
 		};
-
+		/// <summary>
+		/// 
+		/// </summary>
 		enum class FilterFlag {
 			STATIC,
 			DYNAMIC,
@@ -54,7 +57,6 @@ namespace Engine {
 		static void SetLinearVelocity(Object& object, const glm::vec3& velocity);
 		static void SetAngularVelocity(Object& object, const glm::vec3& velocity);
 
-	private:
 		static bool createActor(Object& object);
 		static void updateMatrixActor(Object& object);
 		static void releaseActor(Object& object);
@@ -63,6 +65,7 @@ namespace Engine {
 
 		static void setMassToActor(Object& object, const float mass);
 		static void setPositionToActor(Object& object, const glm::vec3& pos);
+		static void SetMatrixToActor(Object& object, const glm::mat4x4& matrix);
 
 		static void addForceToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType);
 		static void addTorqueToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType);

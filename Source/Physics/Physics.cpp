@@ -222,21 +222,17 @@ namespace Engine {
 	}
 
 	void Physics::SetLinearVelocity(Object& object, const glm::vec3& velocity) {
-		if (object._typePhysics == Physics::Type::CONVEX) {
-			if (object._actorPhyscs) {
-				PxVec3 pxVec3(velocity.x, velocity.y, velocity.z);
-				static_cast<PxRigidDynamic*>(object._actorPhyscs)->setLinearVelocity(pxVec3);
-			}
+		if (object._typePhysics == Physics::Type::CONVEX && object._actorPhyscs) {
+			PxVec3 pxVec3(velocity.x, velocity.y, velocity.z);
+			static_cast<PxRigidDynamic*>(object._actorPhyscs)->setLinearVelocity(pxVec3);
 		}
 	}
 
 	void Physics::SetAngularVelocity(Object& object, const glm::vec3& velocity)
 	{
-		if (object._typePhysics == Physics::Type::CONVEX) {
-			if (object._actorPhyscs) {
-				PxVec3 pxVec3(velocity.x, velocity.y, velocity.z);
-				static_cast<PxRigidDynamic*>(object._actorPhyscs)->setAngularVelocity(pxVec3);
-			}
+		if (object._typePhysics == Physics::Type::CONVEX && object._actorPhyscs) {
+			PxVec3 pxVec3(velocity.x, velocity.y, velocity.z);
+			static_cast<PxRigidDynamic*>(object._actorPhyscs)->setAngularVelocity(pxVec3);
 		}
 	}
 
@@ -384,6 +380,20 @@ namespace Engine {
 			transform.p[2] = pos[2];
 
 			pConvexActor->setGlobalPose(transform);
+		}
+	}
+
+	void Physics::SetMatrixToActor(Object& object, const glm::mat4x4& matrix) {
+		if (object._typePhysics != Physics::Type::NONE && object._actorPhyscs) {
+			glm::vec3 position(matrix[3][0], matrix[3][1], matrix[3][2]);
+			PxVec3 pxPosition(position.x, position.y, position.z);
+
+			glm::mat3 rotationMatrix(matrix);
+			glm::quat rotation = glm::quat_cast(rotationMatrix);
+			PxQuat pxRotation(rotation.x, rotation.y, rotation.z, rotation.w);
+
+			PxTransform pxTransform(pxPosition, pxRotation);
+			static_cast<PxRigidActor*>(object._actorPhyscs)->setGlobalPose(pxTransform);
 		}
 	}
 

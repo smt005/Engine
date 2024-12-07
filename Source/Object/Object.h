@@ -68,6 +68,7 @@ public:
 	void setMass(const float mass);
 	void addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);
 	void addTorque(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);
+	void SetMatrix(const glm::mat4x4& matrix);
 
 	inline bool visible() { return _visible; }
 	inline void setVisible(const bool visible) { _visible = visible; }
@@ -75,7 +76,7 @@ public:
 	inline double getCreateTime() { return _createTime; }
 
 public:
-	virtual void action();
+	virtual void action() {}
 
 public:
 	static Object* _default;
