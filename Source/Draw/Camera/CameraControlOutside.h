@@ -46,6 +46,10 @@ public:
 		return _distOutside;
 	}
 
+	Engine::Callback* GetCallbackPtr() {
+		return _callbackPtr;
+	}
+
 public:
 	bool enableCallback = true;
 
