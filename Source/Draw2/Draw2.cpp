@@ -12,6 +12,7 @@
 unsigned int Draw2::u_matViewModel = 0;
 unsigned int Draw2::currentVAO = 0;
 unsigned int Draw2::currentTexture = 0;
+std::vector<std::function<bool()>> Draw2::_functions;
 
 void Draw2::SetClearColor(float r, float g, float b, float a) {
 	glClearColor(r, g, b, a);
@@ -149,3 +150,34 @@ void Draw2::drawLines(const float* vertices, const unsigned int count) {
 	glEnableVertexAttribArray(0);
 	glDrawArrays(GL_LINE_LOOP, 0, count);
 }
+
+void Draw2::AddFunction(std::function<bool()> fun)
+{
+	if (fun) {
+		_functions.emplace_back(fun);
+	}
+}
+
+void Draw2::DrawFunctions(std::function<bool()> fun)
+{
+	if (fun) {
+		_functions.emplace_back(fun);
+	}
+
+	size_t size = _functions.size();
+	deque<int> removeIndexes;
+
+	for (int i = 0; i < size; ++i) {
+		if (!_functions[i]()) {
+			removeIndexes.emplace_front(i);
+		}
+	}
+
+	for (int index : removeIndexes) {
+		auto it = std::next(_functions.begin(), index);
+		if (it != _functions.end()) {
+			_functions.erase(it);
+		}
+	}
+}
+

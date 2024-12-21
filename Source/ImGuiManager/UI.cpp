@@ -67,9 +67,9 @@ void UI::Render() {
 				window->OnOpen();
 				window->_visible = true;
 			}
-			if (!window->_closeBtn) {
+			/*if (!window->_closeBtn) {
 				CloseWindow(window);
-			}
+			}*/
 			window->Draw();
 		ImGui::End();
 	}

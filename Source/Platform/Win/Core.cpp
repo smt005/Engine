@@ -339,7 +339,6 @@ void Core::mainLoop(GLFWwindow* window) {
 #else
 void Engine::Core::mainLoop(GLFWwindow* window) {
 	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(window))) {
-		Callback::update();
 		Core::update();
 		Core::draw();
 
@@ -353,6 +352,7 @@ void Engine::Core::mainLoop(GLFWwindow* window) {
 		UI::Update();
 #endif
 
+		Callback::update();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

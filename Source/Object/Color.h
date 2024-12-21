@@ -40,6 +40,7 @@ public:
 	inline void setBlue(float const b)	{ _data[BLUE] = b;	}
 	inline void setAlpha(float const a) { _data[ALPHA] = a;	}
 
+	inline float* GetColor() { return _data; }
 	inline float getRed()	const { return _data[RED];	}
 	inline float getGreen()	const { return _data[GREEN];	}
 	inline float getBlue()	const { return _data[BLUE];	}

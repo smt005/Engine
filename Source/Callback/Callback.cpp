@@ -4,7 +4,19 @@
 
 using namespace Engine;
 
-std::map<int, Callback*> Callback::_objects;
+static bool stateCallbackObjects = false;
+
+struct CallbackObjects {
+	CallbackObjects() {
+		stateCallbackObjects = true;
+	}
+	~CallbackObjects() {
+		stateCallbackObjects = false;
+	}
+	std::map<int, Callback*> _objects;
+};
+
+static CallbackObjects callbackObjects;
 glm::vec2 Callback::_mousePos;
 glm::vec2 Callback::_deltaMousePos;
 bool Callback::_key[CALLBACK_COUNT_KEY];
@@ -17,24 +29,20 @@ int keyPinch = 0;
 void Callback::addObject(Callback& object)
 {
 	int id = object.getId();
-	_objects[id] = &object;
+	callbackObjects._objects[id] = &object;
 }
 
 void Callback::removeObject(Callback& object)
 {
-	if (&object._objects == &_objects) {
-		return;
-	}
-
-	if (_objects.empty()) {
+	if (!stateCallbackObjects || callbackObjects._objects.empty()) {
 		return;
 	}
 
 	int id = object.getId();
-	auto it = _objects.find(id);
+	auto it = callbackObjects._objects.find(id);
 
-	if (it != _objects.end()) {
-		_objects.erase(it);
+	if (it != callbackObjects._objects.end()) {
+		callbackObjects._objects.erase(it);
 	}
 }
 
@@ -120,7 +128,7 @@ void Callback::update()
 
 inline void Callback::iteration(const CallbackType& type, const CallbackEventPtr& callbackEventPtr)
 {
-	for (auto& pair : _objects) {
+	for (auto& pair : callbackObjects._objects) {
 		auto& object = pair.second;
 		object->action(type, callbackEventPtr);
 	}

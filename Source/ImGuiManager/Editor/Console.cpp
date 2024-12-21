@@ -12,6 +12,22 @@ namespace Editor {
     Console::Console() 
         : UI::Window(this)
     {
+        //VisibleCloseBtn(false);
+        //SetFlag(ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground);
+        //ImGui::SetWindowPos(Id().c_str(), { 0.f, 0.f });
+
+        //_buf = new char[128];
+        //_buf[0] = '\0';
+        //lock = true;
+    }
+
+    Console::~Console() {
+        delete[] _buf;
+        lock = false;
+    }
+
+    void Console::OnOpen()
+    {
         VisibleCloseBtn(false);
         SetFlag(ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground);
         ImGui::SetWindowPos(Id().c_str(), { 0.f, 0.f });
@@ -19,11 +35,6 @@ namespace Editor {
         _buf = new char[128];
         _buf[0] = '\0';
         lock = true;
-    }
-
-    Console::~Console() {
-        delete[] _buf;
-        lock = false;
     }
 
     void Console::Draw() {

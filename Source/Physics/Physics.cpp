@@ -44,7 +44,7 @@ namespace Engine {
 	// Scene
 	static PxVec3 gravity(0.0f, 0.0f, -9.81f);
 	static PxReal accumulatorTime = 0.0f;
-	static PxReal stepSizeTime = 1.0f / 60.0f;
+	static PxReal stepSizeTime = 1.0f / 120.0f;
 	static PxScene* pScene = nullptr;
 
 	// Actor
@@ -60,6 +60,7 @@ namespace Engine {
 			return false;
 		}
 
+		/* VISUAL DEBUG
 		pPvd = PxCreatePvd(*pFoundation);
 		pTransport = PxDefaultPvdSocketTransportCreate("localhost", 5425, 10);
 		debugVisualizing = pPvd->connect(*pTransport, PxPvdInstrumentationFlag::eALL);
@@ -67,7 +68,7 @@ namespace Engine {
 			help::log("PhysX PVD connect");
 		} else {
 			help::log("PhysX PVD connect FAIL");
-		}
+		}*/
 
 		pPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *pFoundation, PxTolerancesScale(), false, pPvd); // trackOutstandingAllocations, для чего этот параметр
 		if (!pPhysics) {
@@ -82,6 +83,8 @@ namespace Engine {
 		}
 
 		physXInited = true;
+		const std::string infoText = "PhysX inited ["s + std::to_string((int)PX_PHYSICS_VERSION) + "]";
+		help::log(infoText);
 		return true;
 	}
 
@@ -155,8 +158,8 @@ namespace Engine {
 		if (accumulatorTime < stepSizeTime) {
 			return false;
 		}
-
 		accumulatorTime -= stepSizeTime;
+
 		pScene->simulate(stepSizeTime);
 		pScene->fetchResults(true);
 
@@ -167,6 +170,29 @@ namespace Engine {
 		gravity.x = vector.x;
 		gravity.y = vector.y;
 		gravity.z = vector.z;
+	}
+
+	glm::vec3 Physics::Raycast(const glm::vec3& pos, const glm::vec3& vector)
+	{
+		glm::vec3 hitPos;
+		if (!pScene) {
+			return hitPos;
+		}
+
+		const PxVec3 origin(pos.x, pos.y, pos.z);
+		const PxVec3 unitDir(vector.x, vector.y, vector.z);
+		const PxReal maxDistance = 10000.0f;
+		PxRaycastBuffer hit;
+		PxQueryFilterData filterData(PxQueryFlag::eSTATIC);
+
+		if (pScene->raycast(origin, unitDir, maxDistance, hit, PxHitFlag::eDEFAULT, filterData)) {
+			const auto& position = hit.block.position;
+			hitPos.x = position.x;
+			hitPos.y = position.y;
+			hitPos.z = position.z;
+		}
+
+		return hitPos;
 	}
 
 	glm::vec3 Physics::GetLinearVelocity(Object& object) {
@@ -182,12 +208,31 @@ namespace Engine {
 		return { 0.f, 0.f, 0.f };
 	}
 
-	void Physics::SetLinearVelocity(Object& object, const glm::vec3& velocity) {
+	glm::vec3 Physics::GetAngularVelocity(Object& object) {
 		if (object._typePhysics == Physics::Type::CONVEX) {
-			if (object._actorPhyscs) {
-				PxVec3 pxVec3(velocity.x, velocity.y, velocity.z);
-				static_cast<PxRigidDynamic*>(object._actorPhyscs)->setLinearVelocity(pxVec3, true);
+			if (!object._actorPhyscs) {
+				return { 0.f, 0.f, 0.f };
 			}
+
+			PxVec3 pxVec3 = static_cast<PxRigidDynamic*>(object._actorPhyscs)->getAngularVelocity();
+			return { pxVec3.x, pxVec3.y, pxVec3.z };
+		}
+
+		return { 0.f, 0.f, 0.f };
+	}
+
+	void Physics::SetLinearVelocity(Object& object, const glm::vec3& velocity) {
+		if (object._typePhysics == Physics::Type::CONVEX && object._actorPhyscs) {
+			PxVec3 pxVec3(velocity.x, velocity.y, velocity.z);
+			static_cast<PxRigidDynamic*>(object._actorPhyscs)->setLinearVelocity(pxVec3);
+		}
+	}
+
+	void Physics::SetAngularVelocity(Object& object, const glm::vec3& velocity)
+	{
+		if (object._typePhysics == Physics::Type::CONVEX && object._actorPhyscs) {
+			PxVec3 pxVec3(velocity.x, velocity.y, velocity.z);
+			static_cast<PxRigidDynamic*>(object._actorPhyscs)->setAngularVelocity(pxVec3);
 		}
 	}
 
@@ -270,6 +315,39 @@ namespace Engine {
 		}
 	}
 
+	void Physics::addTorqueToActor(const Object& object, const glm::vec3& vector, const Engine::Physics::Force& forceType) {
+		if (object._typePhysics == Physics::Type::CONVEX) {
+			if (PxRigidDynamic* pConvexActor = (PxRigidDynamic*)object._actorPhyscs) {
+				PxVec3 force = PxVec3(vector.x, vector.y, vector.z);
+
+				switch (forceType) {
+				case Engine::Physics::Force::ACCELERATION: pConvexActor->addTorque(force, PxForceMode::Enum::eACCELERATION, true); break;
+				case Engine::Physics::Force::FORCE: pConvexActor->addTorque(force, PxForceMode::Enum::eFORCE, true); break;
+				case Engine::Physics::Force::IMPULSE: pConvexActor->addTorque(force, PxForceMode::Enum::eIMPULSE, true); break;
+				case Engine::Physics::Force::VELOCITY_CHANGE: pConvexActor->addTorque(force, PxForceMode::Enum::eVELOCITY_CHANGE, true); break;
+				default: pConvexActor->addTorque(force, PxForceMode::Enum::eIMPULSE, true);
+				}
+			}
+		}
+	}
+
+	float Physics::getMassActor(Object& object) {
+		if (object._typePhysics != Physics::Type::CONVEX) {
+			return 0;
+		}
+
+		if (!object._actorPhyscs) {
+			return 0;
+		}
+
+		PxRigidDynamic* pConvexActor = (PxRigidDynamic*)object._actorPhyscs;
+		if (!pConvexActor) {
+			return 0;
+		}
+
+		return pConvexActor->getMass();
+	}
+
 	void Physics::setMassToActor(Object& object, const float mass) {
 		if (object._typePhysics == Physics::Type::CONVEX) {
 			if (!object._actorPhyscs) {
@@ -302,6 +380,20 @@ namespace Engine {
 			transform.p[2] = pos[2];
 
 			pConvexActor->setGlobalPose(transform);
+		}
+	}
+
+	void Physics::SetMatrixToActor(Object& object, const glm::mat4x4& matrix) {
+		if (object._typePhysics != Physics::Type::NONE && object._actorPhyscs) {
+			glm::vec3 position(matrix[3][0], matrix[3][1], matrix[3][2]);
+			PxVec3 pxPosition(position.x, position.y, position.z);
+
+			glm::mat3 rotationMatrix(matrix);
+			glm::quat rotation = glm::quat_cast(rotationMatrix);
+			PxQuat pxRotation(rotation.x, rotation.y, rotation.z, rotation.w);
+
+			PxTransform pxTransform(pxPosition, pxRotation);
+			static_cast<PxRigidActor*>(object._actorPhyscs)->setGlobalPose(pxTransform);
 		}
 	}
 

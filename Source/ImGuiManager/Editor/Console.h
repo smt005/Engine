@@ -9,6 +9,7 @@ namespace Editor {
 		Console();
 		~Console();
 		void Draw() override;
+		void OnOpen() override;
 		inline static bool IsLock() { return lock; }
 
 	private:

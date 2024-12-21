@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <glm/mat4x4.hpp>
 
 class Mesh;
@@ -51,10 +52,14 @@ public:
 	static void drawPoints(const float* vertices, const unsigned int count);
 	static void drawLines(const float* vertices, const unsigned int count);
 
+	static void AddFunction(std::function<bool()> fun);
+	static void DrawFunctions(std::function<bool()> fun = nullptr);
+
 public:
 	static unsigned int u_matViewModel;
 
 private:
 	static unsigned int currentVAO;
 	static unsigned int currentTexture;
+	static std::vector<std::function<bool()>> _functions;
 };

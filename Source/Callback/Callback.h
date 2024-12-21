@@ -4,6 +4,7 @@
 #include <vector>
 #include <functional>
 #include <memory>
+#include <string>
 #include "glm/vec2.hpp"
 
 #include "CallbackEvent.h"
@@ -99,6 +100,11 @@ public:
 
 private:
 	std::map<CallbackType, std::map<int, std::function<void(const CallbackEventPtr& callbackEventPtr)>>> _map;
+
+#if _DEBUG
+public:
+	std::string debugName;
+#endif
 };
 
 };	// Engine

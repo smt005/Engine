@@ -145,6 +145,7 @@ void Object::setHeight(const float &height)
 
 void Object::setActorPos(const glm::vec3& pos) {
 	Engine::Physics::setPositionToActor(*this, pos);
+	setPos(pos);
 }
 
 void Object::updateMatrixPhysics() {
@@ -166,25 +167,39 @@ glm::vec3 Object::Object::GetLinearVelocity() {
 	return Engine::Physics::GetLinearVelocity(*this);
 }
 
+glm::vec3 Object::Object::GetAngularVelocity() {
+	return Engine::Physics::GetAngularVelocity(*this);
+}
+
 void Object::SetLinearVelocity(const glm::vec3& velocity) {
 	Engine::Physics::SetLinearVelocity(*this, velocity);
 }
 
+void Object::SetAngularVelocity(const glm::vec3& velocity) {
+	Engine::Physics::SetAngularVelocity(*this, velocity);
+}
+
+float Object::Object::getMass() {
+	return Engine::Physics::getMassActor(*this);
+}
+
 void Object::setMass(const float argMass) {
-	mass = argMass;
-	Engine::Physics::setMassToActor(*this, mass);
+	Engine::Physics::setMassToActor(*this, argMass);
 }
 
 void Object::addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType) {
 	Engine::Physics::addForceToActor(*this, vector, forceType);
 }
 
-// Virtual
-
-void Object::action()
-{
-
+void Object::addTorque(const glm::vec3& vector, const Engine::Physics::Force& forceType) {
+	Engine::Physics::addTorqueToActor(*this, vector, forceType);
 }
+
+void Object::SetMatrix(const glm::mat4x4& matrix) {
+	Engine::Physics::SetMatrixToActor(*this, matrix);
+}
+
+// Virtual
 
 Object* Object::_default = nullptr;
 

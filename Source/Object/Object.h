@@ -23,7 +23,6 @@ public:
 
 public:
 	int tag = 0;
-	float mass = 0.f;
 
 protected:
 	ModelPtr _model;
@@ -43,7 +42,7 @@ public:
 	void getDataJson(Json::Value& dataJson);
 
 	bool ValidModel();
-	Model& getModel();
+	virtual Model& getModel();
 	const float& getHeight();
 
 	float hit(const int x, const int y, const glm::mat4x4& matCamera);
@@ -60,10 +59,16 @@ public:
 	void releaseActorPhysics();
 
 	glm::vec3 GetLinearVelocity();
+	glm::vec3 GetAngularVelocity();
 	void SetLinearVelocity(const glm::vec3& velocity);
 
+	void SetAngularVelocity(const glm::vec3& velocity);
+
+	float getMass();
 	void setMass(const float mass);
 	void addForce(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);
+	void addTorque(const glm::vec3& vector, const Engine::Physics::Force& forceType = Engine::Physics::Force::IMPULSE);
+	void SetMatrix(const glm::mat4x4& matrix);
 
 	inline bool visible() { return _visible; }
 	inline void setVisible(const bool visible) { _visible = visible; }
@@ -71,7 +76,7 @@ public:
 	inline double getCreateTime() { return _createTime; }
 
 public:
-	virtual void action();
+	virtual void action() {}
 
 public:
 	static Object* _default;
