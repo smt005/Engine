@@ -90,6 +90,9 @@ void CameraControl::MakeCallback() {
 		}
 	);
 
+#if _DEBUG
+	_callbackPtr->debugName = "CameraControl";
+#endif
 }
 
 void CameraControl::Move(const MoveDirect direct, const float kForce) {

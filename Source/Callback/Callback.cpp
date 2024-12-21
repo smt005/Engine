@@ -22,10 +22,6 @@ void Callback::addObject(Callback& object)
 
 void Callback::removeObject(Callback& object)
 {
-	if (&object._objects == &_objects) {
-		return;
-	}
-
 	if (_objects.empty()) {
 		return;
 	}

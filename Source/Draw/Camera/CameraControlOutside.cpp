@@ -95,6 +95,9 @@ void CameraControlOutside::MakeCallback() {
 		}
 	});
 
+#if _DEBUG
+	_callbackPtr->debugName = "CameraControlOutside";
+#endif
 }
 
 void CameraControlOutside::Move(const MoveDirect direct, const float kForce) {
