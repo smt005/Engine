@@ -24,7 +24,6 @@ public:
 	static void update();
 	static void draw();
 	static void resize();
-	static void log(const std::string& text);
 	static const Json::Value& settingJson(const std::string& key);
 	static double currentTime();
 	static double deltaTime();

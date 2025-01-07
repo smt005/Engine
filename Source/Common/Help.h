@@ -144,18 +144,6 @@ namespace help
 		return ObjectT::defaultItem();
 	}
 
-	template <class TextT>
-	void log(const TextT& text) {
-		std::cout << "LOG: " << text << std::endl;
-	}
-
-	void Log(const std::string& text);
-
-	template <typename Tchar, typename Tstring>
-	void CopyToArrayChar(Tchar& arrayChar, const Tstring& text) { // Пример, std::array<char, 128>* arrayChar
-		strncpy(arrayChar.data(), text.data(), arrayChar.size());
-	};
-
 	template <typename Tchar, typename Tstring>
 	Tchar* CopyToCharsPtr(const Tstring& text)
 	{
@@ -166,4 +154,4 @@ namespace help
 		return charsPtr;
 	}
 
-}; // help
+} // help

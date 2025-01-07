@@ -195,13 +195,6 @@ void Engine::Core::resize()
 	_game->resize();
 }
 
-void Engine::Core::log(const std::string& text)
-{
-#ifdef _DEBUG
-	_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "LOG: %s\n", text.c_str());
-#endif // DEBUG
-}
-
 const Json::Value& Engine::Core::settingJson(const std::string& key)
 {
 	if (key.empty()) {

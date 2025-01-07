@@ -65,11 +65,3 @@ bool help::intersection(vec3 start1, vec3 end1, vec3 start2, vec3 end2, vec3& ou
 
 	return true;
 }
-
-void help::Log(const std::string& text) {
-	std::cout << "LOG: " << text << std::endl;
-
-#ifdef _DEBUG
-	_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "LOG: %s\n", text.c_str());
-#endif // DEBUG
-}

@@ -1,6 +1,7 @@
 #include "ShaderInterface.h"
 #include <glad/gl.h>
 #include <iostream>
+#include <Log.h>
 #include <FileManager.h>
 
 ShaderInterface::~ShaderInterface() {
@@ -54,11 +55,7 @@ bool ShaderInterface::Load(const std::string& vertexFileName, const std::string&
 		char* infoLog = new char[infoLogLength];
 		glGetShaderInfoLog(fragmentShader, infoLogLength, &charactersWritten, infoLog);
 
-#ifdef _DEBUG
-		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader compiled fragment ERROR: %s\n", infoLog);
-#endif
-		std::cout << "Shader compiled fragment ERROR: " << infoLog << ". " << fragmentFileName << std::endl;
-
+		Log("Shader compiled fragment ERROR: {}", infoLog);
 		delete[] infoLog;
 
 		_program = 0;
@@ -80,11 +77,7 @@ bool ShaderInterface::Load(const std::string& vertexFileName, const std::string&
 		char* infoLog = new char[infoLogLength];
 		glGetShaderInfoLog(vertexShader, infoLogLength, &charactersWritten, infoLog);
 
-#ifdef _DEBUG
-		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader compiled vertex ERROR: %s\n", infoLog);
-#endif
-		std::cout << "Shader compiled vertex ERROR: " << infoLog << ". " << vertexFileName << std::endl;
-
+		Log("Shader compiled vertex ERROR: {}", infoLog);
 		delete[] infoLog;
 
 		_program = 0;
@@ -107,11 +100,7 @@ bool ShaderInterface::Load(const std::string& vertexFileName, const std::string&
 		char* infoLog = new char[infoLogLength];
 		glGetProgramInfoLog(_program, infoLogLength, &charactersWritten, infoLog);
 
-#ifdef _DEBUG
-		_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader linked ERROR: %s \n", infoLog);
-#endif
-		std::cout << "Shader linked ERROR: " << infoLog << ". " << vertexFileName << ", " << fragmentFileName << std::endl;
-
+		Log("Shader linked ERROR: {}", infoLog);
 		delete[] infoLog;
 
 		_program = 0;
@@ -121,6 +110,6 @@ bool ShaderInterface::Load(const std::string& vertexFileName, const std::string&
 	glDeleteShader(fragmentShader);
 	glDeleteShader(vertexShader);
 
-	std::cout << "Init shader successfully. " << vertexFileName << ", "  << fragmentFileName << std::endl;
+	Log("Init shader successfully. {}, {}", vertexFileName, fragmentFileName);
 	return _program != 0;
 }

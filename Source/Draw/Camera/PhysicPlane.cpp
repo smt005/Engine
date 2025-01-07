@@ -64,9 +64,7 @@ bool PhysicPlane::entryPointToPlane(vec3& pos)
 {
 	float dist = distPointToPlane(pos);
 
-	if (dist > 0)
-	{
-		//_CrtDbgReport(0, NULL, 0, NULL, "LOG: dist: %f = %s\n", dist, "NO");
+	if (dist > 0) {
 		return false;
 	}
 
@@ -82,14 +80,11 @@ bool PhysicPlane::entryPointToPlane(vec3& pos)
 	pos = posOnPlane;
 
 	bool res = areaTriangles <= _area ? true : false;
-	//_CrtDbgReport(0, NULL, 0, NULL, "LOG: dist: %f - %fm %f = %s\n", dist, areaTriangles,  _area, (res ? "yes" : "NO"));
 	return res;
-	//		return areaTriangles <= _area ? true : false;
 }
 
 vec3 PhysicPlane::reflect(const vec3& vectorTarget, const float elasticity)
 {
-	//if (length(vectorTarget) == 0.0f)
 	if (length(vectorTarget) < 0.01f)
 		return vec3(0.0f);
 

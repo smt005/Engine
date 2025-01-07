@@ -169,8 +169,8 @@ void Map::updatePhysixs() {
 
 void Map::action()
 {
-	//help::log("Map::action . . .");
 	for (auto object : objects) object->action();
+	for (auto object : additObjects) object->Action();
 }
 
 Object& Map::addObjectToPos(const string& nameModel, const glm::vec3& pos)
@@ -201,7 +201,6 @@ Object::Ptr	Map::getObjectPtrByName(const std::string& name) {
 	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object::Ptr& object) { return object->getName() == name ? true : false; });
 	if (it == objects.end()) {
 		return nullptr;
-		//help::log("Map::getObjectByName(" + name  + ") not found.");
 	}
 
 	return *it;

@@ -1,6 +1,6 @@
 
 #include "glad/gl.h"
-
+#include <Log.h>
 #include "Shader.h"
 #include "FileManager.h"
 
@@ -33,10 +33,7 @@ unsigned int Shader::getProgram(const std::string& vertexFileName, const std::st
 		char* infoLog = new char[infoLogLength];
 		glGetShaderInfoLog(_fragmentShader, infoLogLength, &charactersWritten, infoLog);
         
-        #ifdef _DEBUG
-			_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader compiled fragment ERROR: %s\n", infoLog);
-        #endif
-        
+		Log("Shader compiled fragment ERROR: {}", infoLog);
 		delete[] infoLog;
 		return false;
 	}
@@ -82,10 +79,7 @@ unsigned int Shader::getProgram(const std::string& vertexFileName, const std::st
 		char* infoLog = new char[infoLogLength];
 		glGetProgramInfoLog(program, infoLogLength, &charactersWritten, infoLog);
 
-        #ifdef _DEBUG
-			_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "Shader linked ERROR: %s \n", infoLog);
-        #endif
-
+		Log("Shader linked ERROR: {}", infoLog);
 		delete[] infoLog;
 		return false;
 	}

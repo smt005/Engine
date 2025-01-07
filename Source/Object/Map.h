@@ -1,14 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <vector>
 #include "json/json.h"
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
 #include "Common/DataClass.h"
 #include "Object/Color.h"
 #include  "Object/Object.h"
-
-#include <memory>
-#include <vector>
+#include  "Object/Item.h"
 
 class Camera;
 class Map;
@@ -57,6 +57,9 @@ public:
 
 protected:
 	std::vector<Object::Ptr> objects;
+
+public:
+	std::vector<Item::Ptr> additObjects;
 
 private:
 	static std::vector<Map::Ptr> currentMaps;

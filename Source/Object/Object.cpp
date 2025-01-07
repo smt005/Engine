@@ -40,6 +40,22 @@ void Object::getDataJson(Json::Value& dataJson)
 	dataJson["pos"][0] =_matrix[3][0];
 	dataJson["pos"][1] = _matrix[3][1];
 	dataJson["pos"][2] = _matrix[3][2];
+
+	switch (_typePhysics)
+	{
+	case Engine::Physics::Type::CONVEX:
+		dataJson["physics"] = "convex";
+		break;
+	case Engine::Physics::Type::TRIANGLE:
+		dataJson["physics"] = "triangle";
+		break;
+	case Engine::Physics::Type::NONE:
+		break;
+	default:
+		break;
+	}
+
+	
 }
 
 bool Object::ValidModel() {

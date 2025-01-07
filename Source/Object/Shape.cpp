@@ -1,10 +1,10 @@
 
 #include "Shape.h"
+#include <thread>
+#include <Log.h>
 #include "FileManager.h"
 #include "Common/Help.h"
 #include "Platform/CompileParams.h"
-
-#include <thread>
 
 struct BlockTemporary
 {
@@ -221,7 +221,7 @@ void Shape::loadThread(const string& name) {
 
 #if LONG_LOAD_EXAMPLE
 		static long long aDuraion(1);
-		help::log(std::to_string(aDuraion));
+		Log(aDuraion);
 		std::this_thread::sleep_for(std::chrono::milliseconds((++aDuraion * 500)));
 #endif
 

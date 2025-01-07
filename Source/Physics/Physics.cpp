@@ -1,18 +1,17 @@
 
 #include "Physics/Physics.h"
+#include <Log.h>
 
 #if ENABLE_PHYSIC
+#include <memory>
+#include "PxConfig.h"
+#include "PxPhysicsAPI.h"
+#include "cooking/PxCooking.h"
 #include "Common/Help.h"
 #include "Object/Object.h"
 #include "Object/Model.h"
 #include "Object/Mesh.h"
 #include "Object/Position.h"
-
-#include <memory>
-
-#include "PxConfig.h"
-#include "PxPhysicsAPI.h"
-#include "cooking/PxCooking.h"
 
 namespace Engine {
 	using namespace physx;
@@ -22,7 +21,7 @@ namespace Engine {
 		{
 		public:
 			virtual void reportError(PxErrorCode::Enum code, const char* message, const char* file, int line) {
-				help::log("PhysX: " + std::string(message) + " file: " + std::string(file) + " line: " + std::to_string(line));
+				Log("PhysX: {} file: {} line: {}", message, file, line);
 			}
 		};
 
@@ -83,8 +82,7 @@ namespace Engine {
 		}
 
 		physXInited = true;
-		const std::string infoText = "PhysX inited ["s + std::to_string((int)PX_PHYSICS_VERSION) + "]";
-		help::log(infoText);
+		Log("PhysX inited [{}]", PX_PHYSICS_VERSION);
 		return true;
 	}
 
