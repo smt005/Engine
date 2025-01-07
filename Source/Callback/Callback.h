@@ -53,6 +53,7 @@ public:
 
 	inline static const glm::vec2& mousePos() { return _mousePos; }
 	inline static void setMousePos(const double x, const double y) { _mousePos.x = x; _mousePos.y = y; }
+	inline static void SetResetMouseToCenter(bool state) { _resetMouseToCenter = state; }
 	inline static const glm::vec2& deltaMousePos() { return _deltaMousePos; }
 
 	inline static bool pressKey(const VirtualKey id) { return _key[static_cast<int>(id)]; }
@@ -66,6 +67,7 @@ private:
 	static std::map<int, Callback*> _objects;
 	static glm::vec2 _mousePos;
 	static glm::vec2 _deltaMousePos;
+	static bool _resetMouseToCenter;
 	static bool _key[CALLBACK_COUNT_KEY];
 	static bool _tap[CALLBACK_COUNT_TAP];
 

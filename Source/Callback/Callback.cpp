@@ -1,6 +1,7 @@
 
 #include "Callback.h"
-#include "Core.h"
+#include <Core.h>
+#include <Screen.h>
 
 using namespace Engine;
 
@@ -19,6 +20,7 @@ struct CallbackObjects {
 static CallbackObjects callbackObjects;
 glm::vec2 Callback::_mousePos;
 glm::vec2 Callback::_deltaMousePos;
+bool Callback::_resetMouseToCenter = true;
 bool Callback::_key[CALLBACK_COUNT_KEY];
 bool Callback::_tap[CALLBACK_COUNT_TAP];
 CallbackEventPtr emptyCallbackEventPtr;
@@ -124,6 +126,10 @@ void Callback::update()
 
 	_deltaMousePos.x = 0.0f;
 	_deltaMousePos.y = 0.0f;
+
+	if (_resetMouseToCenter) {
+		Core::SetCursorPos(static_cast<double>(Screen::width() / 2), static_cast<double>(Screen::height() / 2));
+	}
 }
 
 inline void Callback::iteration(const CallbackType& type, const CallbackEventPtr& callbackEventPtr)
