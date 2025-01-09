@@ -49,8 +49,11 @@ public:
 	Object& addObject(Object* object);
 	Object::Ptr& addObject(Object::Ptr& object);
 
+	void RemoveObject(const std::string& name);
+
 	Object::Ptr getObjectPtrByName(const std::string& name);
 	Object&	getObjectByName(const std::string& name);
+	const Item::Ptr& GetAdditObjectsByName(const std::string& name) const;
 
 	std::shared_ptr<Camera>& getCamera() { return _cameraPtr; }
 	std::vector<Object::Ptr>& GetObjects() { return objects; }

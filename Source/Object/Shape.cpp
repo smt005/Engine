@@ -1,7 +1,6 @@
 
 #include "Shape.h"
 #include <thread>
-#include <Log.h>
 #include "FileManager.h"
 #include "Common/Help.h"
 #include "Platform/CompileParams.h"

@@ -197,6 +197,14 @@ Object::Ptr& Map::addObject(Object::Ptr& object)
 	return objects.emplace_back(object);
 }
 
+void Map::RemoveObject(const std::string& name)
+{
+	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object::Ptr& object) { return object->getName() == name ? true : false; });
+	if (it != objects.end()) {
+		objects.erase(it);
+	}
+}
+
 Object::Ptr	Map::getObjectPtrByName(const std::string& name) {
 	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object::Ptr& object) { return object->getName() == name ? true : false; });
 	if (it == objects.end()) {
@@ -213,4 +221,13 @@ Object& Map::getObjectByName(const std::string& name) {
 	}
 
 	return *(*it);
+}
+
+const Item::Ptr& Map::GetAdditObjectsByName(const std::string& name) const
+{
+	auto it = std::find_if(additObjects.begin(), additObjects.end(), [name](const auto& object) { return object->GetName() == name; });
+	if (it == additObjects.end()) {
+		return Item::defaultItemPtr;
+	}
+	return *it;
 }

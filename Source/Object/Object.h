@@ -20,6 +20,7 @@ class Object : public Position, public Name
 
 public:
 	typedef std::shared_ptr<Object> Ptr;
+	typedef std::weak_ptr<Object> Wptr;
 
 public:
 	int tag = 0;

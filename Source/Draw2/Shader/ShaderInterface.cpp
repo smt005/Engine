@@ -1,8 +1,8 @@
 #include "ShaderInterface.h"
 #include <glad/gl.h>
 #include <iostream>
-#include <Log.h>
 #include <FileManager.h>
+#include <Log.h>
 
 ShaderInterface::~ShaderInterface() {
 	glDeleteProgram(_program);

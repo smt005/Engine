@@ -10,12 +10,12 @@ namespace Trigger {
 	public:
 		typename std::shared_ptr<BaseTrigger> Ptr;
 
-		void AddObject(const Object::Ptr& object, const std::function<void(void)> callback) {
+		void AddObject(const Object::Wptr& object, const std::function<void(void)> callback) {
 			_objects.emplace_back(object, callback);
 		}
 
 	protected:
-		std::vector<std::pair<Object::Ptr, std::function<void(void)>>> _objects;
+		std::vector<std::pair<Object::Wptr, std::function<void(void)>>> _objects;
 	};
 
 	// CenterDistance
@@ -31,6 +31,7 @@ namespace Trigger {
 		{}
 		
 		void Action() override;
+		const std::string& GetName() const override { return _name; }
 
 		void SetDistance(float distance) {
 			_distance = distance;
