@@ -87,3 +87,15 @@ void Log(const std::string_view format, const Args&... args) {
 	_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "LOG: %s\n", text.c_str());
 #endif // DEBUG
 }
+
+template<typename T>
+void Log(const T& value) {
+	std::ostringstream oss;
+	LogType<T>(value, oss);
+	const std::string text = oss.str();
+	std::cout << text << std::endl;
+
+#ifdef _DEBUG
+	_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "LOG: %s\n", text.c_str());
+#endif // DEBUG
+}

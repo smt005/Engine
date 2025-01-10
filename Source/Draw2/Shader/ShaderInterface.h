@@ -10,7 +10,7 @@ public:
 	virtual ~ShaderInterface();
 
 	virtual void Use();
-	virtual void GetLocation();
+	virtual void GetLocation() {};
 
 	bool Init(const std::string& vertexFileName, const std::string& fragmentFileName);
 	bool Load(const std::string& vertexFileName, const std::string& fragmentFileName);

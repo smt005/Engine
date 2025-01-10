@@ -43,7 +43,7 @@ namespace Engine {
 	// Scene
 	static PxVec3 gravity(0.0f, 0.0f, -9.81f);
 	static PxReal accumulatorTime = 0.0f;
-	static PxReal stepSizeTime = 1.0f / 120.0f;
+	static PxReal stepSizeTime = 1.0f / 60.0f;
 	static PxScene* pScene = nullptr;
 
 	// Actor
@@ -82,7 +82,7 @@ namespace Engine {
 		}
 
 		physXInited = true;
-		Log("PhysX inited [{}]", PX_PHYSICS_VERSION);
+		Log("PhysX inited '{}'", PX_PHYSICS_VERSION);
 		return true;
 	}
 
@@ -152,14 +152,11 @@ namespace Engine {
 			return false;
 		}
 
-		accumulatorTime += dt;
-		if (accumulatorTime < stepSizeTime) {
-			return false;
+		// TODO:
+		for (int i = 0; i < 10; ++i) {
+			pScene->simulate(0.001f);
+			pScene->fetchResults(true);
 		}
-		accumulatorTime -= stepSizeTime;
-
-		pScene->simulate(stepSizeTime);
-		pScene->fetchResults(true);
 
 		return true;
 	}
@@ -433,10 +430,17 @@ namespace Engine {
 		PxRigidDynamic* pConvexActor = pPhysics->createRigidDynamic(PxTransform(mat44));
 		PxShape* pConvexShape = PxRigidActorExt::createExclusiveShape(*pConvexActor, PxConvexMeshGeometry(convexMesh), *pMaterial);
 
-		// TODO проверки
 		if (!pConvexShape) {
-			pConvexActor->release();
+			return nullptr;
 		}
+
+		PxReal contactOffset = pConvexShape->getContactOffset();
+		contactOffset = 1;
+		pConvexShape->setContactOffset(contactOffset);
+
+		/*PxReal restOffset = pConvexShape->getRestOffset();
+		restOffset = 1;
+		pConvexShape->setRestOffset(restOffset);*/
 
 		pScene->addActor(*pConvexActor);
 		return pConvexActor;
@@ -482,11 +486,17 @@ namespace Engine {
 		PxRigidStatic* pTriangleActor = pPhysics->createRigidStatic(PxTransform(mat44));
 		PxShape* pTriangleShape = PxRigidActorExt::createExclusiveShape(*pTriangleActor, PxTriangleMeshGeometry(triangleMesh), *pMaterial);
 
-		// TODO проверки
 		if (!pTriangleShape) {
-			pTriangleActor->release();
 			return nullptr;
 		}
+
+		PxReal contactOffset = pTriangleShape->getContactOffset();
+		contactOffset = 1;
+		pTriangleShape->setContactOffset(contactOffset);
+
+		/*PxReal restOffset = pTriangleShape->getRestOffset();
+		restOffset = 1;
+		pTriangleShape->setRestOffset(restOffset);*/
 
 		pScene->addActor(*pTriangleActor);
 		return pTriangleActor;

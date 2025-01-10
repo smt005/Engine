@@ -25,3 +25,4 @@ private:
 private:
 	static Event* _eventPtr;
 };
+

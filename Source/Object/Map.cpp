@@ -205,6 +205,51 @@ void Map::RemoveObject(const std::string& name)
 	}
 }
 
+void Map::RemoveObject(const Object::Ptr& objectPtr)
+{
+	auto it = std::find_if(objects.begin(), objects.end(), [&objectPtr](const Object::Ptr& object) { return object == objectPtr ? true : false; });
+	if (it != objects.end()) {
+	objects.erase(it);
+	}
+}
+
+void Map::RemoveObject(const Object* objectPtr)
+{
+	auto it = std::find_if(objects.begin(), objects.end(), [objectPtr](const Object::Ptr& object) { return object.get() == objectPtr ? true : false; });
+	if (it != objects.end()) {
+	objects.erase(it);
+	}
+}
+
+void Map::AddToRemoveObject(const std::string& name)
+{
+	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object::Ptr& object) { return object->getName() == name ? true : false; });
+	if (it != objects.end()) {
+		_toRemoveObject.emplace(it->get());
+	}
+}
+
+void Map::AddToRemoveObject(const Object::Ptr& objectPtr)
+{
+	_toRemoveObject.emplace(objectPtr.get());
+}
+
+void Map::AddToRemoveObject(const Object* objectPtr)
+{
+	_toRemoveObject.emplace(const_cast<Object*>(objectPtr));
+}
+
+void Map::RemoveDeferredObjects()
+{
+	if (!_toRemoveObject.empty()) {
+		objects.erase(std::remove_if(objects.begin(), objects.end(), [this](const Object::Ptr& objectPtr) {
+			return _toRemoveObject.find(objectPtr.get()) != _toRemoveObject.end();
+		}), objects.end());
+
+		_toRemoveObject.clear();
+	}
+}
+
 Object::Ptr	Map::getObjectPtrByName(const std::string& name) {
 	auto it = std::find_if(objects.begin(), objects.end(), [name](const Object::Ptr& object) { return object->getName() == name ? true : false; });
 	if (it == objects.end()) {

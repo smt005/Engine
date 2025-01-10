@@ -12,12 +12,6 @@ void ShaderInterface::Use() {
 	glUseProgram(_program);
 }
 
-void ShaderInterface::GetLocation() {
-	if (_program == 0) {
-		return;
-	}
-}
-
 bool ShaderInterface::Init(const std::string& vertexFileName, const std::string& fragmentFileName) {
 	if (Load(vertexFileName, fragmentFileName)) {
 		GetLocation();

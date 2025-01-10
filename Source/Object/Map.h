@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_set>
 #include "json/json.h"
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
@@ -50,6 +51,12 @@ public:
 	Object::Ptr& addObject(Object::Ptr& object);
 
 	void RemoveObject(const std::string& name);
+	void RemoveObject(const Object::Ptr& objectPtr);
+	void RemoveObject(const Object* objectPtr);
+	void AddToRemoveObject(const std::string& name);
+	void AddToRemoveObject(const Object::Ptr& objectPtr);
+	void AddToRemoveObject(const Object* objectPtr);
+	void RemoveDeferredObjects();
 
 	Object::Ptr getObjectPtrByName(const std::string& name);
 	Object&	getObjectByName(const std::string& name);
@@ -72,4 +79,5 @@ private:
 	bool _physicsState;
 	std::shared_ptr<Camera> _cameraPtr;
 	Object _defaultObject;
+	std::unordered_set<Object*> _toRemoveObject;
 };

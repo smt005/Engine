@@ -164,6 +164,19 @@ void Object::setActorPos(const glm::vec3& pos) {
 	setPos(pos);
 }
 
+void Object::setTypeActorPhysics(const Engine::Physics::Type typePhysics)
+{
+	_typePhysics = typePhysics;
+
+	/*if (_typePhysics != Engine::Physics::Type::NONE && !_actorPhyscs && _model->getShape().Loaded()) {
+		Engine::Physics::createActor(*this);
+	}
+
+	if (_typePhysics == Engine::Physics::Type::NONE && _actorPhyscs) {
+		releaseActorPhysics();
+	}*/
+}
+
 void Object::updateMatrixPhysics() {
 	if (!_actorPhyscs && _typePhysics != Engine::Physics::Type::NONE && _model->getShape().Loaded()) {
 		Engine::Physics::createActor(*this);

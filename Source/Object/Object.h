@@ -54,7 +54,7 @@ public:
 	void setActorPos(const glm::vec3& pos);
 	
 	// Physics
-	void setTypeActorPhysics(const Engine::Physics::Type typePhysics) { _typePhysics = typePhysics; }
+	void setTypeActorPhysics(const Engine::Physics::Type typePhysics);
 	void updateMatrixPhysics();
 	bool createActorPhysics();
 	void releaseActorPhysics();
