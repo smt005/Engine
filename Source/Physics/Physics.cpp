@@ -428,6 +428,7 @@ namespace Engine {
 						PxVec4(matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3]),
 						PxVec4(matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]));
 		PxRigidDynamic* pConvexActor = pPhysics->createRigidDynamic(PxTransform(mat44));
+		pConvexActor->setAngularDamping(0.5f);
 		PxShape* pConvexShape = PxRigidActorExt::createExclusiveShape(*pConvexActor, PxConvexMeshGeometry(convexMesh), *pMaterial);
 
 		if (!pConvexShape) {
@@ -484,6 +485,7 @@ namespace Engine {
 						PxVec4(matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3]),
 						PxVec4(matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]));
 		PxRigidStatic* pTriangleActor = pPhysics->createRigidStatic(PxTransform(mat44));
+
 		PxShape* pTriangleShape = PxRigidActorExt::createExclusiveShape(*pTriangleActor, PxTriangleMeshGeometry(triangleMesh), *pMaterial);
 
 		if (!pTriangleShape) {
