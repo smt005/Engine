@@ -1,14 +1,16 @@
 
 #pragma once
 
+#include <random>
+#include <algorithm>
+#include <corecrt_math_defines.h>
 #include <string>
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #include "json/json.h"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
-#include <corecrt_math_defines.h>
+
 
 namespace help
 {
@@ -19,28 +21,17 @@ namespace help
 
 	bool intersection(glm::vec3 start1, glm::vec3 end1, glm::vec3 start2, glm::vec3 end2, glm::vec3& out_intersection);
 
-	/*
-	v1 = rand() % 100;         // v1 in the range 0 to 99
-	v2 = rand() % 100 + 1;     // v2 in the range 1 to 100
-	v3 = rand() % 30 + 1985;   // v3 in the range 1985-2014
-	*/
+	template <typename T>
+	int random(T lowerBound, T upperBound) {
+		if (lowerBound > upperBound) {
+			std::swap(lowerBound, upperBound);
+		}
 
-	template <class T>
-	inline T random(const T& min = 0.0f, const T& max = 1.0f, const int accuracy = 32000) {
-		int randVar = rand();
-		int var = randVar % accuracy;
-		T k = static_cast<T>(var) / static_cast<T>(accuracy);
-		T range = max - min;
-		T value = range * k;
-		T res = min + value;
-		return res;
-		//return min + range * k;
-	}
+		std::random_device rd; // Инициализация случайного устройства
+		std::mt19937 gen(rd()); // Генератор с использованием устройства
+		std::uniform_int_distribution<> distrib(lowerBound, upperBound); // Равномерное распределение
 
-	inline int random_i(const int min = 0, const int max = 1) {
-		const int range = (max + 1) - min;
-		int var = rand() % range;
-		return min + var;
+		return distrib(gen);
 	}
 
 	inline float areaCircle(const float radius) { return powf(radius, 2) * (float)M_PI; }
