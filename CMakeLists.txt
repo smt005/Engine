@@ -22,7 +22,7 @@ include_directories(${FREEIMAGE_INCLUDES})
 include_directories(${PHYSX_INCLUDES})
 include_directories(${PHYSX_INCLUDES_PXSHARED})
 include_directories(${IMGUI_INCLUDES})
-include_directories(${FREETYPE2_INCLUDES})
+#include_directories(${FREETYPE2_INCLUDES})
 
 if(ENABLE_PHYSIC)
 	include_directories(${PHYSX_INCLUDES})
